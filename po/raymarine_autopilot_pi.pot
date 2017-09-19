@@ -1,14 +1,14 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
-# This file is distributed under the same license as the autopilot_pi package.
+# This file is distributed under the same license as the raymarine_autopilot_pi package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: autopilot_pi 0.1\n"
+"Project-Id-Version: raymarine_autopilot_pi 0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-09-18 11:21+0200\n"
+"POT-Creation-Date: 2017-09-19 13:37-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,15 +17,19 @@ msgstr ""
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: src/autopilot_pi.cpp:108 src/autopilot_pi.cpp:190
-msgid "autopilot"
+#: src/autopilot_pi.cpp:106
+msgid "Raymarine Autopilot"
 msgstr ""
 
-#: src/autopilot_pi.cpp:196
-msgid "autopilot Control for Raymarine Smartpilot"
+#: src/autopilot_pi.cpp:188
+msgid "Raymarine autopilot"
 msgstr ""
 
-#: src/autopilot_pi.cpp:201
+#: src/autopilot_pi.cpp:194
+msgid "Raymarine autopilot Control for Raymarine Smartpilot"
+msgstr ""
+
+#: src/autopilot_pi.cpp:199
 msgid ""
 "Autopilot Control for Raymarine Smartpilot\r\n"
 "Simulates a Remote Control (Commandos from ST6002), by sending Seatalk(1) "
@@ -36,7 +40,7 @@ msgid ""
 "Preferences."
 msgstr ""
 
-#: src/autopilot_pi.cpp:327
+#: src/autopilot_pi.cpp:325
 msgid "Autopilot Preferences"
 msgstr ""
 
@@ -68,14 +72,14 @@ msgstr ""
 msgid "NMEA Sentencename to Seatalk bus converted by SeatalkLink"
 msgstr ""
 
-#: src/autopilotgui_impl.cpp:152
+#: src/autopilotgui_impl.cpp:151
 msgid "No Value selected"
 msgstr ""
 
-#: src/autopilotgui_impl.cpp:157
+#: src/autopilotgui_impl.cpp:156
 msgid "No Parameter selected"
 msgstr ""
 
-#: src/autopilotgui_impl.cpp:160
+#: src/autopilotgui_impl.cpp:159
 msgid "is set to  "
 msgstr ""
