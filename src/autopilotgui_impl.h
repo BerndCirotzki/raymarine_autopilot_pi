@@ -40,7 +40,7 @@
 
 using namespace std;
 
-class autopilot_pi;
+class raymarine_autopilot_pi;
 
 class Position;
 
@@ -72,7 +72,7 @@ public:
 		void OnSetParameterValue(wxCommandEvent& event);
 		void OnSelectParameter(wxCommandEvent& event);
 
-		autopilot_pi *plugin; 
+		raymarine_autopilot_pi *plugin; 
 
 		wxString rte_start;
 	    wxString rte_end;

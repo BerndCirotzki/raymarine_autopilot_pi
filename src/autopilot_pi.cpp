@@ -32,13 +32,11 @@
 #include "autopilotgui.h"
 
 
-class autopilot_pi;
-
 // the class factories, used to create and destroy instances of the PlugIn
 
 extern "C" DECL_EXP opencpn_plugin* create_pi(void *ppimgr)
 {
-    return new autopilot_pi(ppimgr);
+    return new raymarine_autopilot_pi(ppimgr);
 }
 
 extern "C" DECL_EXP void destroy_pi(opencpn_plugin* p)
@@ -60,7 +58,7 @@ extern "C" DECL_EXP void destroy_pi(opencpn_plugin* p)
 //
 //---------------------------------------------------------------------------------------------------------
 
-autopilot_pi::autopilot_pi(void *ppimgr) :opencpn_plugin_17 (ppimgr)
+raymarine_autopilot_pi::raymarine_autopilot_pi(void *ppimgr) :opencpn_plugin_17 (ppimgr)
 {
       // Create the PlugIn icons
       initialize_images();
@@ -69,14 +67,14 @@ autopilot_pi::autopilot_pi(void *ppimgr) :opencpn_plugin_17 (ppimgr)
 	  StandbySelfPressed = FALSE;
 }
 
-autopilot_pi::~autopilot_pi(void)
+raymarine_autopilot_pi::~raymarine_autopilot_pi(void)
 {
      delete _img_autopilot_pi;
      delete _img_autopilot;
      
 }
 
-int autopilot_pi::Init(void)
+int raymarine_autopilot_pi::Init(void)
 {
       AddLocaleCatalog( _T("opencpn-autopilot_pi") );
 
@@ -105,7 +103,7 @@ int autopilot_pi::Init(void)
 	  //    This PlugIn needs a toolbar icon, so request its insertion
 	  if(m_bautopilotShowIcon)
 		m_leftclick_tool_id  = InsertPlugInTool(_T(""), _img_autopilot, _img_autopilot, wxITEM_CHECK,
-            _("autopilot"), _T(""), NULL,
+            _("Raymarine Autopilot"), _T(""), NULL,
              CALCULATOR_TOOL_POSITION, 0, this);
 
       m_pDialog = NULL;
@@ -132,7 +130,7 @@ int autopilot_pi::Init(void)
         */ 
 }
 
-bool autopilot_pi::DeInit(void)
+bool raymarine_autopilot_pi::DeInit(void)
 {
       //    Record the dialog position
       if (NULL != m_pDialog)
@@ -160,43 +158,43 @@ bool autopilot_pi::DeInit(void)
     return true;
 }
 
-int autopilot_pi::GetAPIVersionMajor()
+int raymarine_autopilot_pi::GetAPIVersionMajor()
 {
       return MY_API_VERSION_MAJOR;
 }
 
-int autopilot_pi::GetAPIVersionMinor()
+int raymarine_autopilot_pi::GetAPIVersionMinor()
 {
       return MY_API_VERSION_MINOR;
 }
 
-int autopilot_pi::GetPlugInVersionMajor()
+int raymarine_autopilot_pi::GetPlugInVersionMajor()
 {
       return PLUGIN_VERSION_MAJOR;
 }
 
-int autopilot_pi::GetPlugInVersionMinor()
+int raymarine_autopilot_pi::GetPlugInVersionMinor()
 {
       return PLUGIN_VERSION_MINOR;
 }
 
-wxBitmap *autopilot_pi::GetPlugInBitmap()
+wxBitmap *raymarine_autopilot_pi::GetPlugInBitmap()
 {
       return _img_autopilot_pi;
 }
 
-wxString autopilot_pi::GetCommonName()
+wxString raymarine_autopilot_pi::GetCommonName()
 {
-      return _("autopilot");
+      return _("Raymarine autopilot");
 }
 
 
-wxString autopilot_pi::GetShortDescription()
+wxString raymarine_autopilot_pi::GetShortDescription()
 {
-      return _("autopilot Control for Raymarine Smartpilot");
+      return _("Raymarine autopilot Control for Raymarine Smartpilot");
 }
 
-wxString autopilot_pi::GetLongDescription()
+wxString raymarine_autopilot_pi::GetLongDescription()
 {
       return _("Autopilot Control for Raymarine Smartpilot\r\n\
 Simulates a Remote Control (Commandos from ST6002), by sending Seatalk(1) Data.\r\n\
@@ -205,12 +203,12 @@ Allow \".TALK\" to NMEA Input Sequenz from Autopilot COMx and\r\n\
 \".TALK\" and \"SNBSE\" to the NMEA Output Sequenz. Name them in the Preferences.");
 }
 
-int autopilot_pi::GetToolbarToolCount(void)
+int raymarine_autopilot_pi::GetToolbarToolCount(void)
 {
       return 1;
 }
 
-void autopilot_pi::SetColorScheme(PI_ColorScheme cs)
+void raymarine_autopilot_pi::SetColorScheme(PI_ColorScheme cs)
 {
       if (NULL == m_pDialog)
             return;
@@ -220,7 +218,7 @@ void autopilot_pi::SetColorScheme(PI_ColorScheme cs)
 
 
 
-void autopilot_pi::OnToolbarToolCallback(int id)
+void raymarine_autopilot_pi::OnToolbarToolCallback(int id)
 {
     
 	  if(NULL == m_pDialog)
@@ -274,13 +272,13 @@ void autopilot_pi::OnToolbarToolCallback(int id)
       RequestRefresh(m_parent_window); // refresh main window
 }
 
-bool autopilot_pi::LoadConfig(void)
+bool raymarine_autopilot_pi::LoadConfig(void)
 {
       wxFileConfig *pConf = (wxFileConfig *)m_pconfig;
 
       if(pConf)
       {
-            pConf->SetPath ( _T( "/Settings/autopilot_pi" ) );
+            pConf->SetPath ( _T( "/Settings/raymarine_autopilot_pi" ) );
 			 pConf->Read ( _T( "ShowautopilotIcon" ), &m_bautopilotShowIcon, 1 );
            
             m_route_dialog_x =  pConf->Read ( _T ( "DialogPosX" ), 20L );
@@ -298,13 +296,13 @@ bool autopilot_pi::LoadConfig(void)
             return false;
 }
 
-bool autopilot_pi::SaveConfig(void)
+bool raymarine_autopilot_pi::SaveConfig(void)
 {
       wxFileConfig *pConf = (wxFileConfig *)m_pconfig;
 
       if(pConf)
       {
-            pConf->SetPath ( _T ( "/Settings/autopilot_pi" ) );
+            pConf->SetPath ( _T ( "/Settings/raymarine_autopilot_pi" ) );
 			pConf->Write ( _T ( "ShowautopilotIcon" ), m_bautopilotShowIcon );
           
             pConf->Write ( _T ( "DialogPosX" ),   m_route_dialog_x );
@@ -322,7 +320,7 @@ bool autopilot_pi::SaveConfig(void)
             return false;
 }
 
-void autopilot_pi::ShowPreferencesDialog(wxWindow* parent)
+void raymarine_autopilot_pi::ShowPreferencesDialog(wxWindow* parent)
 {
 	m_Parameterdialog *dialog = new m_Parameterdialog(parent, wxID_ANY, _("Autopilot Preferences"), wxPoint(m_route_dialog_x, m_route_dialog_y), wxDefaultSize, wxDEFAULT_DIALOG_STYLE);
 	dialog->Fit();
@@ -360,7 +358,7 @@ void autopilot_pi::ShowPreferencesDialog(wxWindow* parent)
 	// DimeWindow(m_pDialog);
 }
 
-void autopilot_pi::SetAutopilotparametersChangeable()
+void raymarine_autopilot_pi::SetAutopilotparametersChangeable()
 {
 	// Parameterbar visible or not
 	if (ShowParameters)
@@ -382,7 +380,7 @@ void autopilot_pi::SetAutopilotparametersChangeable()
 	}
 }
 
-void autopilot_pi::OnautopilotDialogClose()
+void raymarine_autopilot_pi::OnautopilotDialogClose()
 {
     m_bShowautopilot = false;
     SetToolbarItemState( m_leftclick_tool_id, m_bShowautopilot );
@@ -392,7 +390,7 @@ void autopilot_pi::OnautopilotDialogClose()
     RequestRefresh(m_parent_window); // refresh main window
 }
 
-void autopilot_pi::SetNMEASentence(wxString &sentence)
+void raymarine_autopilot_pi::SetNMEASentence(wxString &sentence)
 {
 	wxString Lsentence = "$" + STALKReceiveName + ",84";
 
@@ -478,7 +476,7 @@ void autopilot_pi::SetNMEASentence(wxString &sentence)
 
 }
 
-int autopilot_pi::GetAutopilotMode(wxString &sentence)
+int raymarine_autopilot_pi::GetAutopilotMode(wxString &sentence)
 {
 	wxString s = sentence, HexValue;
 
@@ -526,7 +524,7 @@ int autopilot_pi::GetAutopilotMode(wxString &sentence)
 	return ReturnStatus; 
 }
 
-char autopilot_pi::GetHexValue(char AsChar)
+char raymarine_autopilot_pi::GetHexValue(char AsChar)
 {
 	char HexT[] = "0123456789ABCDEF";
 	char a = toupper(AsChar), i = 0;
@@ -541,7 +539,7 @@ char autopilot_pi::GetHexValue(char AsChar)
 }
 
 
-wxString autopilot_pi::GetAutopilotCompassCourse(wxString &sentence)
+wxString raymarine_autopilot_pi::GetAutopilotCompassCourse(wxString &sentence)
 {
 	
 	wxString s = sentence, HexValue;
@@ -585,7 +583,7 @@ wxString autopilot_pi::GetAutopilotCompassCourse(wxString &sentence)
 	return ("---"); // Nicht def
 }
 
-wxString autopilot_pi::GetAutopilotMAGCourse(wxString &sentence)
+wxString raymarine_autopilot_pi::GetAutopilotMAGCourse(wxString &sentence)
 {
 
 	wxString s = sentence, HexValue;
@@ -633,7 +631,7 @@ wxString autopilot_pi::GetAutopilotMAGCourse(wxString &sentence)
 
 
 
-void autopilot_pi::SendNMEASentence(wxString sentence)
+void raymarine_autopilot_pi::SendNMEASentence(wxString sentence)
 {
 	wxString Checksum = ComputeChecksum(sentence);
 	sentence = sentence.Append(wxT("*"));
@@ -642,7 +640,7 @@ void autopilot_pi::SendNMEASentence(wxString sentence)
 	PushNMEABuffer(sentence);
 }
 
-wxString autopilot_pi::ComputeChecksum(wxString sentence)
+wxString raymarine_autopilot_pi::ComputeChecksum(wxString sentence)
 {
 	unsigned char calculated_checksum = 0;
 	for (wxString::const_iterator i = sentence.begin() + 1; i != sentence.end() && *i != '*'; ++i)
@@ -651,7 +649,7 @@ wxString autopilot_pi::ComputeChecksum(wxString sentence)
 	return(wxString::Format("%02X", calculated_checksum));
 }
 
-localTimer::localTimer(autopilot_pi *pAuto)
+localTimer::localTimer(raymarine_autopilot_pi *pAuto)
 {
 	pAutopilot = pAuto;
 }
