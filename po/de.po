@@ -1,0 +1,83 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: opencpn\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2017-09-18 11:21+0200\n"
+"PO-Revision-Date: 2017-09-15 13:25+0200\n"
+"Last-Translator: nohal <B.Cirotzki@t-Online.de>\n"
+"Language-Team: German\n"
+"Language: de_DE\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 2.0.3\n"
+"X-Crowdin-Project: opencpn\n"
+"X-Crowdin-Language: de\n"
+"X-Crowdin-File: /plugins/autopilot_pi/po/autopilot_pi.pot\n"
+#
+msgid ""
+"Autopilot Control for Raymarine Smartpilot\r\n"
+"Simulates a Remote Control (Commandos from ST6002), by sending Seatalk(1) "
+"Data.\r\n"
+"Requires Seatalk <-> NMEA Converter (SeataLkLink) http://www.gadgetPool.de\r\n"
+"Allow \".TALK\" to NMEA Input Sequenz from Autopilot COMx and\r\n"
+"\".TALK\" and \"SNBSE\" to the NMEA Output Sequenz. Name them in the "
+"Preferences."
+msgstr ""
+"Autopilot Control für Raymarine Smartpilot\n"
+"Simuliert ein Remote Control (Kommandos wie ST6002) , durch das Senden von "
+"Seatalk(1) Daten.\n"
+"Benötigt Seatalk <-> NMEA Converter (SeatalkLink).  http://www.gadgetPool.de\n"
+"Erlaube \".TALK\" Sequenz als Eingang vom Autopilot COMx Port und\n"
+"\".TALK\" und \"SNBSE\" als NMEA Output Sequenz. Vergebe die Namen in den "
+"Eigenschaften."
+#
+#
+msgid "Autopilot Parameters changeable"
+msgstr "Autopilot Parameter änderbar (Leiste einblenden)"
+#
+msgid "Autopilot Preferences"
+msgstr "Autopilot Eigenschaften"
+#
+msgid "NMEA Sentencename from  Seatalk bus converted by SeatalkLink"
+msgstr "NMEA Sequenzname vom Seatalk Bus, gesendet von  SeatalkLink"
+#
+msgid "NMEA Sentencename to Seatalk bus converted by SeatalkLink"
+msgstr "NMEA Sequenzname zum Seatalk Bus, der von  SeatalkLink umgewandelt wird"
+#
+msgid "No Parameter selected"
+msgstr "Kein Autopilotparameter ausgewählt"
+#
+msgid "No Value selected"
+msgstr "Kein Wert ausgewählt"
+#
+msgid ""
+"Send $SNBSE message to switch sending $STALK messages from SeatalkLink off, "
+"when Autopilot in not visible"
+msgstr ""
+"Sende $SNBSE-Nachricht, um das Senden von $STALK-Nachrichten von SeatalkLink "
+"auszuschalten, wenn Autopilot nicht sichtbar ist"
+#
+#
+msgid "Send new \"Auto Wind\" Command when Wind Shift ( be careful with This)"
+msgstr ""
+"Bei Empfang eines \"Wind-Shift\" vom Kurscomputer neues Auto-Wind senden. "
+"(Vorsicht)"
+#
+#
+msgid ""
+"Send new \"Auto\" or \"Auto Wind\" Command, when Standby is not send from "
+"here.  ( be careful with This)"
+msgstr ""
+"Sende neuen \"Auto\" oder \"Auto Wind\" Befehl, wenn Standby nicht von hier "
+"gesendet wird. (Vorsicht)"
+#
+msgid "autopilot"
+msgstr "Autopilot"
+#
+msgid "autopilot Control for Raymarine Smartpilot"
+msgstr "Autopilot Bedienterminal für Raymarine Smartpilot"
+#
+msgid "is set to  "
+msgstr "gesetzt auf  "

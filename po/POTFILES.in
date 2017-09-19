@@ -1,0 +1,3 @@
+src/autopilot_pi.cpp
+src/autopilotgui.cpp
+src/autopilotgui_impl.cpp
