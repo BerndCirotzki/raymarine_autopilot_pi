@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: opencpn\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-09-18 11:21+0200\n"
+"POT-Creation-Date: 2017-09-19 13:37-0300\n"
 "PO-Revision-Date: 2017-09-15 13:25+0200\n"
 "Last-Translator: nohal <B.Cirotzki@t-Online.de>\n"
 "Language-Team: German\n"
@@ -52,6 +52,18 @@ msgstr "Kein Autopilotparameter ausgewählt"
 msgid "No Value selected"
 msgstr "Kein Wert ausgewählt"
 #
+#, fuzzy
+msgid "Raymarine Autopilot"
+msgstr "Autopilot"
+#
+#, fuzzy
+msgid "Raymarine autopilot"
+msgstr "Autopilot"
+#
+#, fuzzy
+msgid "Raymarine autopilot Control for Raymarine Smartpilot"
+msgstr "Autopilot Bedienterminal für Raymarine Smartpilot"
+#
 msgid ""
 "Send $SNBSE message to switch sending $STALK messages from SeatalkLink off, "
 "when Autopilot in not visible"
@@ -72,12 +84,6 @@ msgid ""
 msgstr ""
 "Sende neuen \"Auto\" oder \"Auto Wind\" Befehl, wenn Standby nicht von hier "
 "gesendet wird. (Vorsicht)"
-#
-msgid "autopilot"
-msgstr "Autopilot"
-#
-msgid "autopilot Control for Raymarine Smartpilot"
-msgstr "Autopilot Bedienterminal für Raymarine Smartpilot"
 #
 msgid "is set to  "
 msgstr "gesetzt auf  "

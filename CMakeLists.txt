@@ -6,11 +6,11 @@
 # define minimum cmake version
 CMAKE_MINIMUM_REQUIRED(VERSION 2.6.2)
 
-PROJECT(autopilot_pi)
+PROJECT(raymarine_autopilot_pi)
 
-SET(PACKAGE_NAME autopilot_pi)
-SET(VERBOSE_NAME autopilot)
-SET(TITLE_NAME autopilot)
+SET(PACKAGE_NAME raymarine_autopilot_pi)
+SET(VERBOSE_NAME raymarine_autopilot)
+SET(TITLE_NAME raymarine_autopilot)
 SET(CPACK_PACKAGE_CONTACT "Bernd Cirotzki")
 
 SET(VERSION_MAJOR "0")

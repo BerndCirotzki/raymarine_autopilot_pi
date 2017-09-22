@@ -34,7 +34,6 @@
 
 
 class Position;
-class autopilot_pi;
 
 #define FAIL(X) do { error = X; goto failed; } while(0)
 

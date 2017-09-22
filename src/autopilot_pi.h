@@ -62,12 +62,12 @@ class localTimer;
 
 #define CALCULATOR_TOOL_POSITION    -1          // Request default positioning of toolbar tool
 
-class autopilot_pi : public opencpn_plugin_17
+class raymarine_autopilot_pi : public opencpn_plugin_17
 {
 	
 public:
-      autopilot_pi(void *ppimgr);
-	   ~autopilot_pi(void);
+      raymarine_autopilot_pi(void *ppimgr);
+	   ~raymarine_autopilot_pi(void);
 	  void SendNMEASentence(wxString sentence);
 
 	  wxString ComputeChecksum(wxString sentence);
@@ -123,7 +123,7 @@ private:
 	  wxString GetAutopilotMAGCourse(wxString &sentence);
 	  char GetHexValue(char AsChar);
 	  void SetAutopilotparametersChangeable();
-	  autopilot_pi *plugin;
+	  raymarine_autopilot_pi *plugin;
   
 	  wxFileConfig      *m_pconfig;
       wxWindow          *m_parent_window;
@@ -142,11 +142,11 @@ private:
 class localTimer :public wxTimer
 {
 public:
-	localTimer(autopilot_pi *pAuto);
+	localTimer(raymarine_autopilot_pi *pAuto);
 	~localTimer(){};
 	void Notify();
 private:
-		autopilot_pi *pAutopilot;
+		raymarine_autopilot_pi *pAutopilot;
 };
 
 
