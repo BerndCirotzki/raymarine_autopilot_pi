@@ -76,7 +76,7 @@ raymarine_autopilot_pi::~raymarine_autopilot_pi(void)
 
 int raymarine_autopilot_pi::Init(void)
 {
-      AddLocaleCatalog( _T("opencpn-autopilot_pi") );
+      AddLocaleCatalog( _T("opencpn-raymarine_autopilot_pi") );
 
       // Set some default private member parameters
       m_route_dialog_x = 0;
@@ -247,7 +247,7 @@ void raymarine_autopilot_pi::OnToolbarToolCallback(int id)
 		  if (NULL == p_Resettimer)
 		  {
 			  p_Resettimer = new localTimer(this);
-			  p_Resettimer->StartOnce(6000);
+			  p_Resettimer->StartOnce(12000);
 		  }
 		  // Seatalk Daten senden von Bridge einschalten
 		  if (SendSNBSE)
@@ -399,7 +399,7 @@ void raymarine_autopilot_pi::SetNMEASentence(wxString &sentence)
 	if (NULL != p_Resettimer)
 	{
 		p_Resettimer->Stop();
-		p_Resettimer->Start(6000);
+		p_Resettimer->Start(12000);
 	}
 	if (DisplayShow > 0)
 	{

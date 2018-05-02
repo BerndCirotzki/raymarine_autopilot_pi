@@ -15,9 +15,9 @@
         <property name="first_id">1000</property>
         <property name="help_provider">none</property>
         <property name="internationalize">0</property>
-        <property name="name">autopilot</property>
+        <property name="name">raymarineautopilot</property>
         <property name="namespace"></property>
-        <property name="path">C:\Users\bc\Documents\OpenCPN Source\Plugins Entwicklung\autopilot</property>
+        <property name="path">C:\Users\Home PC Windows 10\Documents\OpenCPN Entwicklung\Plugins\raymarineAutopilot-Plugin vs2017 wx3.0.4 V0.2</property>
         <property name="precompiled_header"></property>
         <property name="relative_path">1</property>
         <property name="skip_lua_events">1</property>
@@ -674,7 +674,7 @@
                                 <property name="enabled">1</property>
                                 <property name="fg"></property>
                                 <property name="floatable">1</property>
-                                <property name="font">Arial,90,92,9,74,0</property>
+                                <property name="font">Arial,90,92,8,74,0</property>
                                 <property name="gripper">0</property>
                                 <property name="hidden">0</property>
                                 <property name="id">wxID_ANY</property>
@@ -857,7 +857,7 @@
                                 <property name="enabled">1</property>
                                 <property name="fg"></property>
                                 <property name="floatable">1</property>
-                                <property name="font">Arial,90,92,12,74,0</property>
+                                <property name="font">Arial,90,92,11,74,0</property>
                                 <property name="gripper">0</property>
                                 <property name="hidden">0</property>
                                 <property name="id">wxID_ANY</property>
@@ -945,7 +945,7 @@
                                 <property name="enabled">1</property>
                                 <property name="fg"></property>
                                 <property name="floatable">1</property>
-                                <property name="font">Arial,90,92,11,74,0</property>
+                                <property name="font">Arial,90,92,10,74,0</property>
                                 <property name="gripper">0</property>
                                 <property name="hidden">0</property>
                                 <property name="id">wxID_ANY</property>
@@ -966,7 +966,7 @@
                                 <property name="pos"></property>
                                 <property name="resize">Resizable</property>
                                 <property name="show">1</property>
-                                <property name="size">34,34</property>
+                                <property name="size">37,37</property>
                                 <property name="style"></property>
                                 <property name="subclass"></property>
                                 <property name="toolbar_pane">0</property>
@@ -1033,7 +1033,7 @@
                                 <property name="enabled">1</property>
                                 <property name="fg"></property>
                                 <property name="floatable">1</property>
-                                <property name="font">Arial,90,92,11,74,0</property>
+                                <property name="font">Arial,90,92,10,74,0</property>
                                 <property name="gripper">0</property>
                                 <property name="hidden">0</property>
                                 <property name="id">wxID_ANY</property>
@@ -1054,7 +1054,7 @@
                                 <property name="pos"></property>
                                 <property name="resize">Resizable</property>
                                 <property name="show">1</property>
-                                <property name="size">32,32</property>
+                                <property name="size">37,37</property>
                                 <property name="style"></property>
                                 <property name="subclass"></property>
                                 <property name="toolbar_pane">0</property>
@@ -1121,7 +1121,7 @@
                                 <property name="enabled">1</property>
                                 <property name="fg"></property>
                                 <property name="floatable">1</property>
-                                <property name="font">Arial,90,92,12,74,0</property>
+                                <property name="font">Arial,90,92,11,74,0</property>
                                 <property name="gripper">0</property>
                                 <property name="hidden">0</property>
                                 <property name="id">wxID_ANY</property>
@@ -1223,7 +1223,7 @@
                                 <property name="enabled">1</property>
                                 <property name="fg"></property>
                                 <property name="floatable">1</property>
-                                <property name="font">Arial,90,92,11,74,0</property>
+                                <property name="font">Arial,90,92,10,74,0</property>
                                 <property name="gripper">0</property>
                                 <property name="hidden">0</property>
                                 <property name="id">wxID_ANY</property>
@@ -1311,7 +1311,7 @@
                                 <property name="enabled">1</property>
                                 <property name="fg"></property>
                                 <property name="floatable">1</property>
-                                <property name="font">Arial,90,92,11,74,0</property>
+                                <property name="font">Arial,90,92,10,74,0</property>
                                 <property name="gripper">0</property>
                                 <property name="hidden">0</property>
                                 <property name="id">wxID_ANY</property>
@@ -1399,7 +1399,7 @@
                                 <property name="enabled">1</property>
                                 <property name="fg"></property>
                                 <property name="floatable">1</property>
-                                <property name="font">Arial,90,92,11,74,0</property>
+                                <property name="font">Arial,90,92,10,74,0</property>
                                 <property name="gripper">0</property>
                                 <property name="hidden">0</property>
                                 <property name="id">wxID_ANY</property>
@@ -1487,7 +1487,7 @@
                                 <property name="enabled">1</property>
                                 <property name="fg"></property>
                                 <property name="floatable">1</property>
-                                <property name="font">Arial,93,92,11,74,0</property>
+                                <property name="font">Arial,93,92,10,74,0</property>
                                 <property name="gripper">0</property>
                                 <property name="hidden">0</property>
                                 <property name="id">wxID_ANY</property>
