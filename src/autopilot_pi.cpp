@@ -108,12 +108,16 @@ int raymarine_autopilot_pi::Init(void)
 
       m_pDialog = NULL;
 	  DisplayShow = 0; 
-	 
+	  m_pDialog = new Dlg(m_parent_window);
+	  m_pDialog->plugin = this;
+	  m_pDialog->Move(wxPoint(m_route_dialog_x, m_route_dialog_y));
 	  // Senden von Seatalkdaten ausschalten.
 	  if (SendSNBSE)
 		SendNMEASentence("$SNBSE,0,0");
 	  
 	  return (WANTS_PREFERENCES |
+		      WANTS_TOOLBAR_CALLBACK |
+		      WANTS_NMEA_EVENTS |
 			  WANTS_NMEA_SENTENCES );
 	
 	  /*
@@ -220,8 +224,7 @@ void raymarine_autopilot_pi::SetColorScheme(PI_ColorScheme cs)
 
 void raymarine_autopilot_pi::OnToolbarToolCallback(int id)
 {
-    
-	  if(NULL == m_pDialog)
+      if(NULL == m_pDialog)
       {
             m_pDialog = new Dlg(m_parent_window);
             m_pDialog->plugin = this;
@@ -392,6 +395,8 @@ void raymarine_autopilot_pi::OnautopilotDialogClose()
 
 void raymarine_autopilot_pi::SetNMEASentence(wxString &sentence)
 {
+	if (m_pDialog == NULL)
+		return;
 	wxString Lsentence = "$" + STALKReceiveName + ",84";
 
 	if (sentence.Left(9) != Lsentence)
