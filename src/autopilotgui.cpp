@@ -222,7 +222,7 @@ m_Parameterdialog::m_Parameterdialog( wxWindow* parent, wxWindowID id, const wxS
 	#endif
 	fgSizer2->Add( m_NoStandbyCounter, 0, wxALL, 5 );
 
-	m_NoStandbyCounterValueText = new wxStaticText( this, wxID_ANY, wxT("Counter for Autopilot is in Standby Mode, but without \"Standby\" Command received"), wxDefaultPosition, wxSize( 500,-1 ), 0 );
+	m_NoStandbyCounterValueText = new wxStaticText( this, wxID_ANY, _("Counter for Autopilot is in Standby Mode, but without \"Standby\" Command received"), wxDefaultPosition, wxSize( 500,-1 ), 0 );
 	m_NoStandbyCounterValueText->Wrap( -1 );
 	fgSizer2->Add( m_NoStandbyCounterValueText, 0, wxALL, 5 );
 
