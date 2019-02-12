@@ -37,6 +37,44 @@ class Position;
 
 #define FAIL(X) do { error = X; goto failed; } while(0)
 
+ParameterDialog::ParameterDialog(raymarine_autopilot_pi* p, wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style) : m_Parameterdialog(parent, id, title, pos, size, style)
+{
+	ptoPlugin = p;
+}
+
+void ParameterDialog::OnStandbyCounterReset(wxCommandEvent& event)
+{
+	m_NoStandbyCounter->SetValue(wxString::Format(wxT("%i"), 0));
+	ptoPlugin->NoStandbyCounter = 0;
+	if(ptoPlugin->m_pDialog != NULL)
+		ptoPlugin->m_pDialog->SetBackgroundColour(wxColour(255,255,225));
+	ptoPlugin->Standbycommandreceived = TRUE;
+}
+
+void ParameterDialog::OnNewAuto(wxCommandEvent& event)
+{
+	if (m_SendNewAutoonStandby->GetValue() == TRUE)
+	{
+		m_NewStandbyNoStandbyReceived->Enable(false);
+		m_NoStandbyCounter->Enable(false);
+		m_NoStandbyCounterValueText->Enable(false);
+		m_SelectCounterStandby->Enable(false);
+		m_ResetStandbyCounter->Enable(false);
+		m_SelectCounterStandby->Enable(false);
+		m_Text->Enable(false);
+		ptoPlugin->NewStandbyNoStandbyReceived = FALSE;
+	}
+	else
+	{
+		m_NewStandbyNoStandbyReceived->Enable(true);
+		m_NoStandbyCounter->Enable(true);
+		m_NoStandbyCounterValueText->Enable(true);
+		m_SelectCounterStandby->Enable(true);
+		m_ResetStandbyCounter->Enable(true);
+		m_SelectCounterStandby->Enable(true);
+		m_Text->Enable(true);
+	}
+}
 
 Dlg::Dlg( wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style ) : m_dialog( parent, id, title, pos, size, style )
 {	
@@ -55,12 +93,17 @@ void Dlg::SetCompassText(wxString Text)
 
 void Dlg::SetCopmpassTextColor(wxColour Color)
 {
-	this->TextCompass->SetForegroundColour(wxColour(0, 0, 64));
+	this->TextCompass->SetForegroundColour(Color);
 }
 
 void Dlg::SetTextStatusColor(wxColour Color)
 {
-	this->TextStatus->SetForegroundColour(wxColour(0, 0, 128));
+	this->TextStatus->SetForegroundColour(Color);
+}
+
+void Dlg::SetBgTextStatusColor(wxColour Color)
+{
+	this->TextStatus->SetBackgroundColour(Color);
 }
 
 
@@ -91,8 +134,10 @@ void Dlg::OnStandby(wxCommandEvent& event)
 {
 	wxString sentence;
 	plugin->StandbySelfPressed = TRUE;
-	if (plugin->Autopilot_Status == AUTOWIND)
+	plugin->Standbycommandreceived = TRUE;
+	if (plugin->Autopilot_Status == AUTOWIND || plugin->Autopilot_Status == AUTOTRACK)
 	{
+		// Muss erst nach AUTO gehen. sonst funktioniert es nicht.
 		sentence = "$" + plugin->STALKSendName + ",86,21,01,FE";
 		plugin->SendNMEASentence(sentence);
 	}
@@ -163,7 +208,6 @@ void Dlg::OnSetParameterValue(wxCommandEvent& event)
 	this->TextCompass->SetValue(i);
 	this->TextCompass->SetForegroundColour(wxColour(255, 0, 0));
 	this->TextStatus->SetForegroundColour(wxColour(255, 0, 0));
-	plugin->DisplayShow = 2;
 
 	switch (this->ParameterChoise->GetSelection())
 	{
@@ -190,6 +234,7 @@ void Dlg::OnSetParameterValue(wxCommandEvent& event)
 
 void Dlg::OnSelectParameter(wxCommandEvent& event)
 {
+	wxString Sentence;
 	// Set To DefaultValue because the aktive is not konwn.
 	switch (this->ParameterChoise->GetSelection())
 	{
@@ -197,13 +242,19 @@ void Dlg::OnSelectParameter(wxCommandEvent& event)
 		this->ParameterValue->SetSelection(0);
 		break;
 	case	1:	// Response
-		this->ParameterValue->SetSelection(5);
+		// old : this->ParameterValue->SetSelection(plugin->ResponseLevel);
+		// Anzeige auf ST6002 Display für 5 Sekunden
+		Sentence = "$" + plugin->STALKSendName + ",86,21,2E,D1";
+		plugin->SendNMEASentence(Sentence);
 		break;
 	case	2:	// WindTrim
 		this->ParameterValue->SetSelection(5);
 		break;
 	case	3:  // Ruddergain
-		this->ParameterValue->SetSelection(2);
+		// old : this->ParameterValue->SetSelection(2);
+		// Anzeige auf ST6002 Display für 5 Sekunden
+		Sentence = "$" + plugin->STALKSendName + ",86,21,6E,91";
+		plugin->SendNMEASentence(Sentence);
 		break;
 	}
 }

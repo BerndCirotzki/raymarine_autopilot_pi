@@ -110,10 +110,17 @@ public:
 	  bool			   NewAutoWindCommand;
 	  bool			   NewAutoOnStandby;
 	  bool			   SendSNBSE;
+	  bool             NewStandbyNoStandbyReceived;
 	  wxString	       STALKSendName;
 	  wxString		   STALKReceiveName;
 	  bool			   StandbySelfPressed;
-	  Dlg				*m_pDialog;
+	  bool             Standbycommandreceived;
+	  int			   CounterStandbySentencesReceived;
+	  int			   NoStandbyCounter;
+	  int			   SelectCounterStandby;
+	  int			   ResponseLevel;
+	  int              RudderLevel;
+	  Dlg			   *m_pDialog;
 
 private:
       
@@ -121,6 +128,7 @@ private:
 	  int GetAutopilotMode(wxString &sentence);
 	  wxString GetAutopilotCompassCourse(wxString &sentence);
 	  wxString GetAutopilotMAGCourse(wxString &sentence);
+	  wxString GetAutopilotCompassDifferenz(wxString &sentence);
 	  char GetHexValue(char AsChar);
 	  void SetAutopilotparametersChangeable();
 	  raymarine_autopilot_pi *plugin;
@@ -134,8 +142,8 @@ private:
       int               m_leftclick_tool_id;
       bool              m_ShowHelp,m_bCaptureCursor,m_bCaptureShip;
       double			m_ship_lon,m_ship_lat,m_cursor_lon,m_cursor_lat;
-	  bool             m_bautopilotShowIcon;
-	  bool             m_bShowautopilot;
+	  bool              m_bautopilotShowIcon;
+	  bool              m_bShowautopilot;
 	  wxTimer		   *p_Resettimer;
 };
 

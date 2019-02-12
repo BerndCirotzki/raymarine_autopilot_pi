@@ -1,12 +1,11 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Jan 23 2018)
+// C++ code generated with wxFormBuilder (version Oct 26 2018)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
-#ifndef __AUTOPILOTGUI_H__
-#define __AUTOPILOTGUI_H__
+#pragma once
 
 #include <wx/artprov.h>
 #include <wx/xrc/xmlres.h>
@@ -18,6 +17,9 @@
 #include <wx/string.h>
 #include <wx/textctrl.h>
 #include <wx/choice.h>
+#include <wx/bitmap.h>
+#include <wx/image.h>
+#include <wx/icon.h>
 #include <wx/button.h>
 #include <wx/sizer.h>
 #include <wx/dialog.h>
@@ -30,10 +32,10 @@
 ///////////////////////////////////////////////////////////////////////////////
 /// Class m_dialog
 ///////////////////////////////////////////////////////////////////////////////
-class m_dialog : public wxDialog 
+class m_dialog : public wxDialog
 {
 	private:
-	
+
 	protected:
 		wxStaticLine* StaticLine1;
 		wxTextCtrl* TextStatus;
@@ -47,7 +49,7 @@ class m_dialog : public wxDialog
 		wxButton* buttonStandby;
 		wxButton* buttonAutoWind;
 		wxButton* buttonTrack;
-		
+
 		// Virtual event handlers, overide them in your derived class
 		virtual void OnActiveApp( wxActivateEvent& event ) { event.Skip(); }
 		virtual void OnSelectParameter( wxCommandEvent& event ) { event.Skip(); }
@@ -60,50 +62,56 @@ class m_dialog : public wxDialog
 		virtual void OnStandby( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnAutoWind( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnTrack( wxCommandEvent& event ) { event.Skip(); }
-		
-	
+
+
 	public:
 		wxChoice* ParameterChoise;
 		wxChoice* ParameterValue;
 		wxButton* buttonSet;
 		wxStaticLine* StaticLine3;
-		
-		m_dialog( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxT("Autopilot Control"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 181,265 ), long style = wxCAPTION|wxMINIMIZE_BOX, const wxString& name = wxT("Raymarine Autopilot") ); 
+
+		m_dialog( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxT("Autopilot Control"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 181,250 ), long style = wxCAPTION|wxMINIMIZE_BOX, const wxString& name = wxT("Raymarine Autopilot") );
 		~m_dialog();
-	
+
 };
 
 ///////////////////////////////////////////////////////////////////////////////
 /// Class m_Parameterdialog
 ///////////////////////////////////////////////////////////////////////////////
-class m_Parameterdialog : public wxDialog 
+class m_Parameterdialog : public wxDialog
 {
 	private:
-	
+
 	protected:
 		wxStaticText* m_staticText11;
 		wxStaticText* m_staticText21;
 		wxStdDialogButtonSizer* m_sdbSizer1;
 		wxButton* m_sdbSizer1OK;
 		wxButton* m_sdbSizer1Cancel;
-		
+
 		// Virtual event handlers, overide them in your derived class
 		virtual void OnParameterChanged( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnAutoWindNew( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnNewAuto( wxCommandEvent& event ) { event.Skip(); }
-		
-	
+		virtual void OnStandbyCounterReset( wxCommandEvent& event ) { event.Skip(); }
+
+
 	public:
 		wxCheckBox* m_checkParameters;
 		wxCheckBox* m_SendNewAutoWind;
 		wxCheckBox* m_SendNewAutoonStandby;
+		wxCheckBox* m_NewStandbyNoStandbyReceived;
+		wxTextCtrl* m_NoStandbyCounter;
+		wxStaticText* m_NoStandbyCounterValueText;
+		wxButton* m_ResetStandbyCounter;
+		wxChoice* m_SelectCounterStandby;
+		wxStaticText* m_Text;
 		wxCheckBox* m_SendSNBSE;
 		wxTextCtrl* m_STALKreceivename;
 		wxTextCtrl* m_STALKsendname;
-		
-		m_Parameterdialog( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxT("Autopilot"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 645,245 ), long style = wxDEFAULT_DIALOG_STYLE ); 
+
+		m_Parameterdialog( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxT("Autopilot"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 645,313 ), long style = wxDEFAULT_DIALOG_STYLE );
 		~m_Parameterdialog();
-	
+
 };
 
-#endif //__AUTOPILOTGUI_H__

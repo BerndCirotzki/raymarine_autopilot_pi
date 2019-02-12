@@ -44,6 +44,16 @@ class raymarine_autopilot_pi;
 
 class Position;
 
+class ParameterDialog : public m_Parameterdialog
+{
+public:
+	ParameterDialog(raymarine_autopilot_pi* p, wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style);
+	void OnStandbyCounterReset(wxCommandEvent& event);
+	void OnNewAuto(wxCommandEvent& event);
+private:
+	raymarine_autopilot_pi* ptoPlugin;
+};
+	
 class Dlg : public m_dialog
 {
 public:
@@ -69,6 +79,7 @@ public:
 		void SetCompassText(wxString Text);
 		void SetTextStatusColor(wxColour Color);
 		void SetCopmpassTextColor(wxColour Color);
+		void SetBgTextStatusColor(wxColour Color);
 		void OnSetParameterValue(wxCommandEvent& event);
 		void OnSelectParameter(wxCommandEvent& event);
 

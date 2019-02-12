@@ -6,7 +6,7 @@
  *
  ***************************************************************************
  *   Copyright (C) 2017 by Bernd Cirotzki                                  *
- *                                                  *
+ *   eMail : Bernd.Cirotzki@t-online.de                                    *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -97,6 +97,13 @@ int raymarine_autopilot_pi::Init(void)
 	  STALKSendName = "STALK";
 	  STALKReceiveName = "STALK";
 	  p_Resettimer = NULL;
+	  StandbySelfPressed = FALSE;
+	  Autopilot_Status_Before = UNKNOWN;
+	  NoStandbyCounter = 0;
+	  ResponseLevel = 0; // Unbekannter Responselevel.
+	  RudderLevel = 0; // Unbekannt
+	  Standbycommandreceived = TRUE;
+	  CounterStandbySentencesReceived = 0;
       //    And load the configuration items
       LoadConfig();
 
@@ -107,7 +114,7 @@ int raymarine_autopilot_pi::Init(void)
              CALCULATOR_TOOL_POSITION, 0, this);
 
       m_pDialog = NULL;
-	  DisplayShow = 0; 
+	  DisplayShow = 0;
 	  m_pDialog = new Dlg(m_parent_window);
 	  m_pDialog->plugin = this;
 	  m_pDialog->Move(wxPoint(m_route_dialog_x, m_route_dialog_y));
@@ -220,8 +227,6 @@ void raymarine_autopilot_pi::SetColorScheme(PI_ColorScheme cs)
       DimeWindow(m_pDialog);
 }
 
-
-
 void raymarine_autopilot_pi::OnToolbarToolCallback(int id)
 {
       if(NULL == m_pDialog)
@@ -236,6 +241,8 @@ void raymarine_autopilot_pi::OnToolbarToolCallback(int id)
 		  m_pDialog = new Dlg(m_parent_window);
 		  m_pDialog->plugin = this;
 		  m_pDialog->Move(wxPoint(m_route_dialog_x, m_route_dialog_y));
+		  if (NoStandbyCounter != 0)
+			m_pDialog->SetBgTextStatusColor(wxColour(255, 128, 128));
 	  }
 
 	  m_pDialog->Fit();
@@ -245,6 +252,8 @@ void raymarine_autopilot_pi::OnToolbarToolCallback(int id)
       //    Toggle dialog? 
       if(m_bShowautopilot) {
           m_pDialog->Show();
+		  if (NoStandbyCounter != 0)
+			  m_pDialog->SetBgTextStatusColor(wxColour(255, 128, 128));
 		  SetAutopilotparametersChangeable();
 		  // 
 		  if (NULL == p_Resettimer)
@@ -293,6 +302,10 @@ bool raymarine_autopilot_pi::LoadConfig(void)
 			SendSNBSE = (bool)pConf->Read(_T("SendSNBSE"), SendSNBSE);
 			STALKSendName = pConf->Read(_T("STALKSendName"), STALKSendName);
 			STALKReceiveName = pConf->Read(_T("STALKReceiveName"), STALKReceiveName);
+			NewStandbyNoStandbyReceived = (bool) pConf->Read(_T("NewStandbyNoStandbyReceived"), NewStandbyNoStandbyReceived);
+			// will be set to 0 when plugin starts
+			// NoStandbyCounter = pConf->Read(_T("NoStandbyCounter"), NoStandbyCounter);
+			SelectCounterStandby = pConf->Read(_T("SelectCounterStandby"), SelectCounterStandby);
             return true;
       }
       else
@@ -316,7 +329,9 @@ bool raymarine_autopilot_pi::SaveConfig(void)
 			pConf->Write(_T("SendSNBSE"), SendSNBSE);
 			pConf->Write(_T("STALKSendName"), STALKSendName);
 			pConf->Write(_T("STALKReceiveName"), STALKReceiveName);
-
+			pConf->Write(_T("NewStandbyNoStandbyReceived"), NewStandbyNoStandbyReceived);
+			//pConf->Write(_T("NoStandbyCounter"), NoStandbyCounter);
+			pConf->Write(_T("SelectCounterStandby"), SelectCounterStandby);
             return true;
       }
       else
@@ -325,7 +340,7 @@ bool raymarine_autopilot_pi::SaveConfig(void)
 
 void raymarine_autopilot_pi::ShowPreferencesDialog(wxWindow* parent)
 {
-	m_Parameterdialog *dialog = new m_Parameterdialog(parent, wxID_ANY, _("Autopilot Preferences"), wxPoint(m_route_dialog_x, m_route_dialog_y), wxDefaultSize, wxDEFAULT_DIALOG_STYLE);
+	ParameterDialog *dialog = new ParameterDialog(this, parent, wxID_ANY, _("Autopilot Preferences"), wxPoint(m_route_dialog_x, m_route_dialog_y), wxDefaultSize, wxDEFAULT_DIALOG_STYLE);
 	dialog->Fit();
 	wxColour cl;
 	DimeWindow(dialog);
@@ -335,7 +350,21 @@ void raymarine_autopilot_pi::ShowPreferencesDialog(wxWindow* parent)
 	dialog->m_SendSNBSE->SetValue(SendSNBSE);
 	dialog->m_STALKsendname->SetValue(STALKSendName);
 	dialog->m_STALKreceivename->SetValue(STALKReceiveName);
-	
+	// New in Version 0.3
+	if (NewAutoOnStandby == TRUE)
+	{
+		dialog->m_NewStandbyNoStandbyReceived->Enable(false);
+		dialog->m_NoStandbyCounter->Enable(false);
+		dialog->m_NoStandbyCounterValueText->Enable(false);
+		dialog->m_SelectCounterStandby->Enable(false);
+		dialog->m_ResetStandbyCounter->Enable(false);
+		dialog->m_SelectCounterStandby->Enable(false);
+		dialog->m_Text->Enable(false);
+		NewStandbyNoStandbyReceived = FALSE;
+	}
+	dialog->m_NewStandbyNoStandbyReceived->SetValue(NewStandbyNoStandbyReceived);
+	dialog->m_NoStandbyCounter->SetValue(wxString::Format(wxT("%i"), NoStandbyCounter));
+	dialog->m_SelectCounterStandby->SetSelection(SelectCounterStandby);
 	if (dialog->ShowModal() == wxID_OK)
 	{
 		ShowParameters = dialog->m_checkParameters->GetValue();
@@ -344,6 +373,9 @@ void raymarine_autopilot_pi::ShowPreferencesDialog(wxWindow* parent)
 		SendSNBSE = dialog->m_SendSNBSE->GetValue();
 		STALKSendName = dialog->m_STALKsendname->GetValue();
 		STALKReceiveName = dialog->m_STALKreceivename->GetValue();
+		NewStandbyNoStandbyReceived = dialog->m_NewStandbyNoStandbyReceived->GetValue();
+		NoStandbyCounter = atoi(dialog->m_NoStandbyCounter->GetValue());
+		SelectCounterStandby = dialog->m_SelectCounterStandby->GetSelection();
 		if (NULL != m_pDialog)
 		{
 			m_pDialog->Close();
@@ -397,8 +429,42 @@ void raymarine_autopilot_pi::SetNMEASentence(wxString &sentence)
 {
 	if (m_pDialog == NULL)
 		return;
-	wxString Lsentence = "$" + STALKReceiveName + ",84";
+	wxString Lsentence = "$" + STALKReceiveName + ",84",
+		     Lsentence_Command = "$" + STALKReceiveName + ",86",
+	         Lsentence_Response = "$" + STALKReceiveName + ",87",
+		     Lsentence_Rudder = "$" + STALKReceiveName + ",91";
 
+	if (sentence.Left(9) == Lsentence_Response)
+	{
+		// Response Ermittlung.
+		m_pDialog->SetCopmpassTextColor(wxColour(0, 0, 64));
+		m_pDialog->SetTextStatusColor(wxColour(0, 0, 128));
+		m_pDialog->SetStatusText("Response");
+		m_pDialog->SetCompassText(sentence.Mid(13, 2));
+		ResponseLevel = atoi(sentence.Mid(13, 2));
+		m_pDialog->ParameterChoise->SetSelection(1);
+		m_pDialog->ParameterValue->SetSelection(ResponseLevel);
+		return;
+	}
+	if (sentence.Left(9) == Lsentence_Rudder)
+	{
+		// Rudder Ermittlung. 
+		m_pDialog->SetCopmpassTextColor(wxColour(0, 0, 64));
+		m_pDialog->SetTextStatusColor(wxColour(0, 0, 128));
+		m_pDialog->SetStatusText("Rudder");
+		m_pDialog->SetCompassText(sentence.Mid(13, 2));
+		RudderLevel = atoi(sentence.Mid(13, 2));
+		m_pDialog->ParameterChoise->SetSelection(3);
+		m_pDialog->ParameterValue->SetSelection(RudderLevel);
+		return;
+	}
+	if (sentence.Left(9) == Lsentence_Command)
+	{
+		// Commandos von anderem St6002 erkennen
+		if (sentence.Mid(11,7) == "1,02,FD")
+			Standbycommandreceived = TRUE;
+		return;
+	}
 	if (sentence.Left(9) != Lsentence)
 		return;
 	if (NULL != p_Resettimer)
@@ -411,34 +477,65 @@ void raymarine_autopilot_pi::SetNMEASentence(wxString &sentence)
 		DisplayShow--;
 		return;
 	}
-	Autopilot_Status_Before = Autopilot_Status;
+	if (CounterStandbySentencesReceived == 0) // falls noch kein Kommando gekommen ist, bleibt der alte Status.
+		Autopilot_Status_Before = Autopilot_Status;
 	m_pDialog->SetCopmpassTextColor(wxColour(0, 0, 64));
 	m_pDialog->SetTextStatusColor(wxColour(0, 0, 128));
 	Autopilot_Status = GetAutopilotMode(sentence);
 	switch (Autopilot_Status)
 	{
-		case	AUTO:	
+		case	AUTO:
+			if (StandbySelfPressed == TRUE)
+			{
+				// Soll nach Standby gehen ist aber noch in Auto mode.
+				DisplayShow = 2; // 2 Sequenzen abwarten
+				break;
+			}
+			Standbycommandreceived = FALSE;
+			CounterStandbySentencesReceived = 0;
 			if (m_pDialog != NULL)
 			{
 				m_pDialog->SetStatusText("Auto");
-				m_pDialog->SetCompassText(GetAutopilotCompassCourse(sentence));
+				m_pDialog->SetCompassText(GetAutopilotCompassCourse(sentence) + " ( " + GetAutopilotCompassDifferenz(sentence) + " )");
 			}
 			break;
 		case AUTOTRACK :
+			if (StandbySelfPressed == TRUE)
+			{
+				// Soll nach Standby gehen ist aber noch in Auto mode.
+				DisplayShow = 2; // 2 Sequenzen abwarten
+				break;
+			}
+			Standbycommandreceived = FALSE;
+			CounterStandbySentencesReceived = 0;
 			if (m_pDialog != NULL)
 			{
 				m_pDialog->SetStatusText("Auto-Track");
-				m_pDialog->SetCompassText(GetAutopilotCompassCourse(sentence));
+				m_pDialog->SetCompassText(GetAutopilotCompassCourse(sentence) + " ( " + GetAutopilotCompassDifferenz(sentence) + " )");
 			}
 			break;
 		case	AUTOWIND:
+			if (StandbySelfPressed == TRUE)
+			{
+				// Soll nach Standby gehen ist aber noch in Auto mode.
+				DisplayShow = 2; // 2 Sequenzen abwarten
+				break;
+			}
+			Standbycommandreceived = FALSE;
+			CounterStandbySentencesReceived = 0;
 			if (m_pDialog != NULL)
 			{
 				m_pDialog->SetStatusText("Auto-Wind");
-				m_pDialog->SetCompassText(GetAutopilotCompassCourse(sentence));
+				m_pDialog->SetCompassText(GetAutopilotCompassCourse(sentence) + " ( " + GetAutopilotCompassDifferenz(sentence) + " )");
 			}
 			break;
 		case	WINDSHIFT:
+			if (StandbySelfPressed == TRUE)
+			{
+				// Soll nach Standby gehen ist aber noch in Auto mode.
+				DisplayShow = 2; // 2 Sequenzen abwarten
+				break;
+			}
 			if (NewAutoWindCommand)
 			{
 				// Send New Sentence Auto-Wind
@@ -448,22 +545,53 @@ void raymarine_autopilot_pi::SetNMEASentence(wxString &sentence)
 			if (m_pDialog != NULL)
 			{
 				m_pDialog->SetStatusText("Wind-Shift");
-				m_pDialog->SetCompassText(GetAutopilotCompassCourse(sentence));
-				DisplayShow = 2;
+				m_pDialog->SetCompassText(GetAutopilotCompassCourse(sentence) + " ( " + GetAutopilotCompassDifferenz(sentence) + " )");
+				DisplayShow = 10;
 			}
 			break;
 		case	STANDBY :
-			if (Autopilot_Status != Autopilot_Status_Before) // Zustandänderung von Auto -> Standby
+			if (NewStandbyNoStandbyReceived == TRUE && Standbycommandreceived == FALSE && 
+				NoStandbyCounter <= SelectCounterStandby)  // Es soll StandbyCommando ausgewertet werden. Maximale Anzahl.
 			{
+				if (CounterStandbySentencesReceived < 3) // 3 Senteces warten, ob doch noch ein Commando kommt.
+				{
+					if (m_pDialog != NULL)
+					{
+						m_pDialog->SetStatusText("No Standby");
+						m_pDialog->SetCompassText("Err");
+					}
+					CounterStandbySentencesReceived++;
+					break;
+				}
+				else
+				{
+					// Kein Kommando gekommen sende nun Neues Auto Commando.
+					Standbycommandreceived = FALSE;
+					CounterStandbySentencesReceived = 0;
+					Lsentence = "$" + STALKSendName + ",86,21,01,FE";
+					SendNMEASentence(Lsentence);
+					// FehlerCounter hohchzählen.
+					NoStandbyCounter++;
+					if (m_pDialog != NULL)
+						m_pDialog->SetBgTextStatusColor(wxColour(255, 128, 128));
+				}
+				break;
+			}
+			if (Autopilot_Status_Before != STANDBY && (Autopilot_Status_Before == AUTO || Autopilot_Status_Before == AUTOWIND)) // Zustandänderung von Auto -> Standby
+			{
+				CounterStandbySentencesReceived = 0;
 				if (StandbySelfPressed == FALSE && NewAutoOnStandby == TRUE)
 				{
 					// Standby not from here !! goto AUTO
 					// 
+					Standbycommandreceived = FALSE;
+					CounterStandbySentencesReceived = 0;
 					Lsentence = "$" + STALKSendName + ",86,21,01,FE";
 					SendNMEASentence(Lsentence);
 				}
 				StandbySelfPressed = FALSE;
 			}
+
 			if (m_pDialog != NULL)
 			{
 				m_pDialog->SetStatusText("Standby");
@@ -476,9 +604,10 @@ void raymarine_autopilot_pi::SetNMEASentence(wxString &sentence)
 				m_pDialog->SetStatusText("----------");
 				m_pDialog->SetCompassText("---");
 			}
+			Standbycommandreceived = TRUE; // So when the Instruments are switched on again no Error !
+			CounterStandbySentencesReceived = 0;
 			break;
 	}
-
 }
 
 int raymarine_autopilot_pi::GetAutopilotMode(wxString &sentence)
@@ -580,7 +709,7 @@ wxString raymarine_autopilot_pi::GetAutopilotCompassCourse(wxString &sentence)
 			if (-1 == (parameter[2] = GetHexValue((char)HexValue.GetChar(1))))
 				return ("Err - 5");
 			parameter[1] = (parameter[1] << 4) | parameter[2];
-			if (360 < (CompassValue = (int)((parameter[0] & 0x0c) >> 2) * 90 + parameter[1] / 2))
+			if (360 < (CompassValue = (int)((parameter[0] & 0x0c) >> 2) * 90 + parameter[1] / 2)) 
 				return ("Err - 6");
 			return(wxString::Format(wxT("%i"), CompassValue));
 		}
@@ -626,12 +755,92 @@ wxString raymarine_autopilot_pi::GetAutopilotMAGCourse(wxString &sentence)
 			parameter[1] = (parameter[1] << 4) | parameter[2];
 			if (360 < (CompassValue = (int)(((parameter[0] & 0x03) * 90) 
 										  + ((parameter[1] & 0x3F) * 2)
-										  + (((parameter[0] >> 2) & 0x03) / 2))))
+										  + (((parameter[0] >> 2) & 0x03) / 2)))) 
 				return ("Err - 12");
 			return(wxString::Format(wxT("%i"), CompassValue));
 		}
 	}
 	return ("---"); // Nicht def
+}
+
+wxString raymarine_autopilot_pi::GetAutopilotCompassDifferenz(wxString &sentence)
+{
+
+	wxString s = sentence, HexValue;
+
+	s.Trim();
+	unsigned char parameter[3];
+	int sLenght = s.Length();
+	int i = 0, CompassValue = -1, AutoValue = -1;
+
+	while (i < 5)
+	{
+		sLenght = sLenght - s.find(wxT(",")) - 1;
+		if (sLenght <= 0)
+		{
+			return ("-");
+		}
+		s = s.Right(sLenght);
+		HexValue = s.Left(s.find(wxT(",")));
+		i++;
+		if (i == 3) // High Bit
+		{
+			if (HexValue.Length() != 2)
+				return ("a1");
+			if (-1 == (parameter[0] = GetHexValue((char)HexValue.GetChar(0))))
+				return ("a2");
+		}
+		if (i == 4)
+		{
+			if (HexValue.Length() != 2)
+				return ("a3");
+			if (-1 == (parameter[1] = GetHexValue((char)HexValue.GetChar(0))))
+				return ("a4");
+			if (-1 == (parameter[2] = GetHexValue((char)HexValue.GetChar(1))))
+				return ("a5");
+			parameter[1] = (parameter[1] << 4) | parameter[2];
+			if (360 < (CompassValue = (int)((parameter[0] & 0x0c) >> 2) * 90 + parameter[1] / 2))
+				return ("a6");
+		}
+	}
+	s = sentence;
+	s.Trim();
+	sLenght = s.Length();
+	i = 0;
+	while (i < 4)
+	{
+		sLenght = sLenght - s.find(wxT(",")) - 1;
+		if (sLenght <= 0)
+		{
+			return ("-");
+		}
+		s = s.Right(sLenght);
+		HexValue = s.Left(s.find(wxT(",")));
+		i++;
+		if (i == 2) // High Bit
+		{
+			if (HexValue.Length() != 2)
+				return ("x7");
+			if (-1 == (parameter[0] = GetHexValue((char)HexValue.GetChar(0))))
+				return ("x8");
+		}
+		if (i == 3)
+		{
+			if (HexValue.Length() != 2)
+				return ("x9");
+			if (-1 == (parameter[1] = GetHexValue((char)HexValue.GetChar(0))))
+				return ("x10");
+			if (-1 == (parameter[2] = GetHexValue((char)HexValue.GetChar(1))))
+				return ("x11");
+			parameter[1] = (parameter[1] << 4) | parameter[2];
+			if (360 < (AutoValue = (int)(((parameter[0] & 0x03) * 90)
+				+ ((parameter[1] & 0x3F) * 2)
+				+ (((parameter[0] >> 2) & 0x03) / 2))))
+				return ("x12");
+			return(wxString::Format(wxT("%i"), AutoValue - CompassValue));
+		}
+	}
+	return ("-"); // Nicht def
 }
 
 
@@ -669,5 +878,7 @@ void localTimer::Notify()
 		pAutopilot->m_pDialog->SetTextStatusColor(wxColour(0, 0, 128));
 		pAutopilot->m_pDialog->SetStatusText("----------");
 		pAutopilot->m_pDialog->SetCompassText("---");
+		pAutopilot->Standbycommandreceived = TRUE; // So when the Instruments are switched on again no Error !
+		pAutopilot->CounterStandbySentencesReceived = 0;
 	}
 }
