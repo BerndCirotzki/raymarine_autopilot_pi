@@ -15,10 +15,10 @@
         <property name="first_id">1000</property>
         <property name="help_provider">none</property>
         <property name="indent_with_spaces"></property>
-        <property name="internationalize">0</property>
+        <property name="internationalize">1</property>
         <property name="name">raymarineautopilot</property>
         <property name="namespace"></property>
-        <property name="path">C:\Users\Home PC Windows 10\Documents\Raymarine Autopilot Plugin V03 OpenCPN5.0 vc2017 Standby Erkennung</property>
+        <property name="path">./src</property>
         <property name="precompiled_header"></property>
         <property name="relative_path">1</property>
         <property name="skip_lua_events">1</property>
@@ -41,12 +41,12 @@
             <property name="font"></property>
             <property name="hidden">0</property>
             <property name="id">wxID_ANY</property>
-            <property name="maximum_size">181,265</property>
-            <property name="minimum_size">181,230</property>
+            <property name="maximum_size">160,230</property>
+            <property name="minimum_size">160,205</property>
             <property name="name">m_dialog</property>
             <property name="pos"></property>
-            <property name="size">181,250</property>
-            <property name="style">wxCAPTION|wxMINIMIZE_BOX</property>
+            <property name="size">160,230</property>
+            <property name="style">wxCAPTION</property>
             <property name="subclass"></property>
             <property name="title">Autopilot Control</property>
             <property name="tooltip"></property>
@@ -54,15 +54,16 @@
             <property name="window_name">Raymarine Autopilot</property>
             <property name="window_style"></property>
             <event name="OnActivateApp">OnActiveApp</event>
+            <event name="OnClose">OnCloseApp</event>
             <object class="wxBoxSizer" expanded="1">
                 <property name="minimum_size">-1,-1</property>
                 <property name="name">bSizer10</property>
                 <property name="orient">wxVERTICAL</property>
                 <property name="permission">none</property>
                 <object class="sizeritem" expanded="0">
-                    <property name="border">5</property>
+                    <property name="border">3</property>
                     <property name="flag">wxEXPAND | wxALL</property>
-                    <property name="proportion">0</property>
+                    <property name="proportion">1</property>
                     <object class="wxStaticLine" expanded="0">
                         <property name="BottomDockable">1</property>
                         <property name="LeftDockable">1</property>
@@ -93,10 +94,10 @@
                         <property name="id">wxID_ANY</property>
                         <property name="max_size"></property>
                         <property name="maximize_button">0</property>
-                        <property name="maximum_size"></property>
+                        <property name="maximum_size">-1,2</property>
                         <property name="min_size"></property>
                         <property name="minimize_button">0</property>
-                        <property name="minimum_size"></property>
+                        <property name="minimum_size">-1,2</property>
                         <property name="moveable">1</property>
                         <property name="name">StaticLine1</property>
                         <property name="pane_border">1</property>
@@ -107,7 +108,7 @@
                         <property name="pos"></property>
                         <property name="resize">Resizable</property>
                         <property name="show">1</property>
-                        <property name="size">-1,-1</property>
+                        <property name="size">-1,2</property>
                         <property name="style">wxLI_HORIZONTAL</property>
                         <property name="subclass"></property>
                         <property name="toolbar_pane">0</property>
@@ -145,7 +146,7 @@
                         <property name="enabled">1</property>
                         <property name="fg">0,0,128</property>
                         <property name="floatable">1</property>
-                        <property name="font">Arial,93,92,16,74,0</property>
+                        <property name="font">Arial,93,92,13,74,0</property>
                         <property name="gripper">0</property>
                         <property name="hidden">0</property>
                         <property name="id">wxID_ANY</property>
@@ -166,8 +167,8 @@
                         <property name="pos"></property>
                         <property name="resize">Resizable</property>
                         <property name="show">1</property>
-                        <property name="size">135,35</property>
-                        <property name="style">wxTE_READONLY|wxTE_CENTER</property>
+                        <property name="size">120,30</property>
+                        <property name="style">wxTE_CENTER|wxTE_READONLY</property>
                         <property name="subclass"></property>
                         <property name="toolbar_pane">0</property>
                         <property name="tooltip"></property>
@@ -209,7 +210,7 @@
                         <property name="enabled">1</property>
                         <property name="fg">0,0,64</property>
                         <property name="floatable">1</property>
-                        <property name="font">Arial,90,92,12,74,0</property>
+                        <property name="font">Arial,90,92,10,74,0</property>
                         <property name="gripper">0</property>
                         <property name="hidden">0</property>
                         <property name="id">wxID_ANY</property>
@@ -230,7 +231,7 @@
                         <property name="pos"></property>
                         <property name="resize">Resizable</property>
                         <property name="show">1</property>
-                        <property name="size">135,25</property>
+                        <property name="size">120,20</property>
                         <property name="style">wxTE_READONLY|wxTE_CENTER</property>
                         <property name="subclass"></property>
                         <property name="toolbar_pane">0</property>
@@ -246,9 +247,9 @@
                     </object>
                 </object>
                 <object class="sizeritem" expanded="0">
-                    <property name="border">5</property>
+                    <property name="border">4</property>
                     <property name="flag">wxALL|wxEXPAND</property>
-                    <property name="proportion">0</property>
+                    <property name="proportion">1</property>
                     <object class="wxStaticLine" expanded="0">
                         <property name="BottomDockable">1</property>
                         <property name="LeftDockable">1</property>
@@ -279,7 +280,7 @@
                         <property name="id">wxID_ANY</property>
                         <property name="max_size"></property>
                         <property name="maximize_button">0</property>
-                        <property name="maximum_size"></property>
+                        <property name="maximum_size">-1,2</property>
                         <property name="min_size"></property>
                         <property name="minimize_button">0</property>
                         <property name="minimum_size"></property>
@@ -293,7 +294,7 @@
                         <property name="pos"></property>
                         <property name="resize">Resizable</property>
                         <property name="show">1</property>
-                        <property name="size">-1,-1</property>
+                        <property name="size">-1,2</property>
                         <property name="style">wxLI_HORIZONTAL</property>
                         <property name="subclass"></property>
                         <property name="toolbar_pane">0</property>
@@ -304,20 +305,24 @@
                     </object>
                 </object>
                 <object class="sizeritem" expanded="1">
-                    <property name="border">5</property>
-                    <property name="flag">wxRIGHT|wxLEFT|wxALIGN_CENTER_HORIZONTAL</property>
-                    <property name="proportion">1</property>
-                    <object class="wxGridSizer" expanded="1">
-                        <property name="cols">5</property>
+                    <property name="border">1</property>
+                    <property name="flag">wxALIGN_CENTER_HORIZONTAL</property>
+                    <property name="proportion">0</property>
+                    <object class="wxFlexGridSizer" expanded="1">
+                        <property name="cols">3</property>
+                        <property name="flexible_direction">wxBOTH</property>
+                        <property name="growablecols"></property>
+                        <property name="growablerows"></property>
                         <property name="hgap">0</property>
-                        <property name="minimum_size">-1,-1</property>
-                        <property name="name">ValueSizer</property>
+                        <property name="minimum_size"></property>
+                        <property name="name">fgSizer4</property>
+                        <property name="non_flexible_grow_mode">wxFLEX_GROWMODE_SPECIFIED</property>
                         <property name="permission">none</property>
                         <property name="rows">0</property>
                         <property name="vgap">0</property>
                         <object class="sizeritem" expanded="0">
-                            <property name="border">5</property>
-                            <property name="flag">wxALIGN_CENTER_VERTICAL|wxLEFT</property>
+                            <property name="border">0</property>
+                            <property name="flag">wxALIGN_CENTER_VERTICAL|wxALIGN_CENTER_HORIZONTAL</property>
                             <property name="proportion">0</property>
                             <object class="wxChoice" expanded="0">
                                 <property name="BottomDockable">1</property>
@@ -344,7 +349,7 @@
                                 <property name="enabled">1</property>
                                 <property name="fg"></property>
                                 <property name="floatable">1</property>
-                                <property name="font">Arial,90,92,8,74,0</property>
+                                <property name="font">Arial,90,92,6,74,0</property>
                                 <property name="gripper">0</property>
                                 <property name="hidden">0</property>
                                 <property name="id">wxID_ANY</property>
@@ -353,7 +358,7 @@
                                 <property name="maximum_size"></property>
                                 <property name="min_size"></property>
                                 <property name="minimize_button">0</property>
-                                <property name="minimum_size"></property>
+                                <property name="minimum_size">69,18</property>
                                 <property name="moveable">1</property>
                                 <property name="name">ParameterChoise</property>
                                 <property name="pane_border">1</property>
@@ -363,9 +368,9 @@
                                 <property name="pin_button">1</property>
                                 <property name="pos"></property>
                                 <property name="resize">Resizable</property>
-                                <property name="selection">0</property>
+                                <property name="selection">3</property>
                                 <property name="show">1</property>
-                                <property name="size">90,20</property>
+                                <property name="size">69,18</property>
                                 <property name="style"></property>
                                 <property name="subclass"></property>
                                 <property name="toolbar_pane">0</property>
@@ -381,28 +386,8 @@
                             </object>
                         </object>
                         <object class="sizeritem" expanded="0">
-                            <property name="border">5</property>
-                            <property name="flag"></property>
-                            <property name="proportion">0</property>
-                            <object class="spacer" expanded="0">
-                                <property name="height">0</property>
-                                <property name="permission">protected</property>
-                                <property name="width">0</property>
-                            </object>
-                        </object>
-                        <object class="sizeritem" expanded="0">
-                            <property name="border">5</property>
-                            <property name="flag"></property>
-                            <property name="proportion">0</property>
-                            <object class="spacer" expanded="0">
-                                <property name="height">0</property>
-                                <property name="permission">protected</property>
-                                <property name="width">0</property>
-                            </object>
-                        </object>
-                        <object class="sizeritem" expanded="0">
-                            <property name="border">5</property>
-                            <property name="flag">wxALIGN_CENTER_VERTICAL</property>
+                            <property name="border">0</property>
+                            <property name="flag">wxALIGN_CENTER_VERTICAL|wxALIGN_CENTER_HORIZONTAL</property>
                             <property name="proportion">0</property>
                             <object class="wxChoice" expanded="0">
                                 <property name="BottomDockable">1</property>
@@ -429,7 +414,7 @@
                                 <property name="enabled">1</property>
                                 <property name="fg"></property>
                                 <property name="floatable">1</property>
-                                <property name="font">Arial,90,92,8,74,0</property>
+                                <property name="font">Arial,90,92,6,74,0</property>
                                 <property name="gripper">0</property>
                                 <property name="hidden">0</property>
                                 <property name="id">wxID_ANY</property>
@@ -438,7 +423,7 @@
                                 <property name="maximum_size"></property>
                                 <property name="min_size"></property>
                                 <property name="minimize_button">0</property>
-                                <property name="minimum_size"></property>
+                                <property name="minimum_size">28,18</property>
                                 <property name="moveable">1</property>
                                 <property name="name">ParameterValue</property>
                                 <property name="pane_border">1</property>
@@ -448,9 +433,9 @@
                                 <property name="pin_button">1</property>
                                 <property name="pos"></property>
                                 <property name="resize">Resizable</property>
-                                <property name="selection">0</property>
+                                <property name="selection">5</property>
                                 <property name="show">1</property>
-                                <property name="size">33,20</property>
+                                <property name="size">28,18</property>
                                 <property name="style"></property>
                                 <property name="subclass"></property>
                                 <property name="toolbar_pane">0</property>
@@ -465,8 +450,8 @@
                             </object>
                         </object>
                         <object class="sizeritem" expanded="0">
-                            <property name="border">5</property>
-                            <property name="flag">wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxRIGHT</property>
+                            <property name="border">0</property>
+                            <property name="flag">wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</property>
                             <property name="proportion">0</property>
                             <object class="wxButton" expanded="0">
                                 <property name="BottomDockable">1</property>
@@ -497,7 +482,7 @@
                                 <property name="fg">wxSYS_COLOUR_BTNTEXT</property>
                                 <property name="floatable">1</property>
                                 <property name="focus"></property>
-                                <property name="font">Arial,90,92,8,74,0</property>
+                                <property name="font">Arial,90,92,6,74,0</property>
                                 <property name="gripper">0</property>
                                 <property name="hidden">0</property>
                                 <property name="id">wxID_ANY</property>
@@ -509,7 +494,7 @@
                                 <property name="maximum_size"></property>
                                 <property name="min_size"></property>
                                 <property name="minimize_button">0</property>
-                                <property name="minimum_size"></property>
+                                <property name="minimum_size">38,18</property>
                                 <property name="moveable">1</property>
                                 <property name="name">buttonSet</property>
                                 <property name="pane_border">1</property>
@@ -522,7 +507,7 @@
                                 <property name="pressed"></property>
                                 <property name="resize">Resizable</property>
                                 <property name="show">1</property>
-                                <property name="size">30,22</property>
+                                <property name="size">38,18</property>
                                 <property name="style"></property>
                                 <property name="subclass"></property>
                                 <property name="toolbar_pane">0</property>
@@ -540,9 +525,9 @@
                     </object>
                 </object>
                 <object class="sizeritem" expanded="0">
-                    <property name="border">5</property>
-                    <property name="flag">wxALL|wxEXPAND</property>
-                    <property name="proportion">0</property>
+                    <property name="border">4</property>
+                    <property name="flag">wxALIGN_CENTER_HORIZONTAL|wxALL|wxEXPAND</property>
+                    <property name="proportion">1</property>
                     <object class="wxStaticLine" expanded="0">
                         <property name="BottomDockable">1</property>
                         <property name="LeftDockable">1</property>
@@ -573,7 +558,7 @@
                         <property name="id">wxID_ANY</property>
                         <property name="max_size"></property>
                         <property name="maximize_button">0</property>
-                        <property name="maximum_size"></property>
+                        <property name="maximum_size">-1,2</property>
                         <property name="min_size"></property>
                         <property name="minimize_button">0</property>
                         <property name="minimum_size"></property>
@@ -587,7 +572,7 @@
                         <property name="pos"></property>
                         <property name="resize">Resizable</property>
                         <property name="show">1</property>
-                        <property name="size"></property>
+                        <property name="size">-1,2</property>
                         <property name="style">wxLI_HORIZONTAL</property>
                         <property name="subclass"></property>
                         <property name="toolbar_pane">0</property>
@@ -598,20 +583,24 @@
                     </object>
                 </object>
                 <object class="sizeritem" expanded="1">
-                    <property name="border">5</property>
-                    <property name="flag">wxFIXED_MINSIZE|wxLEFT|wxRIGHT|wxSHAPED|wxALIGN_CENTER_HORIZONTAL</property>
+                    <property name="border">1</property>
+                    <property name="flag">wxALIGN_CENTER_HORIZONTAL</property>
                     <property name="proportion">0</property>
-                    <object class="wxGridSizer" expanded="1">
+                    <object class="wxFlexGridSizer" expanded="1">
                         <property name="cols">4</property>
+                        <property name="flexible_direction">wxBOTH</property>
+                        <property name="growablecols"></property>
+                        <property name="growablerows"></property>
                         <property name="hgap">0</property>
-                        <property name="minimum_size">1,-1</property>
-                        <property name="name">gSizer6</property>
+                        <property name="minimum_size"></property>
+                        <property name="name">fgSizer5</property>
+                        <property name="non_flexible_grow_mode">wxFLEX_GROWMODE_SPECIFIED</property>
                         <property name="permission">none</property>
                         <property name="rows">0</property>
                         <property name="vgap">0</property>
                         <object class="sizeritem" expanded="0">
-                            <property name="border">5</property>
-                            <property name="flag">wxALIGN_CENTER_HORIZONTAL|wxLEFT</property>
+                            <property name="border">1</property>
+                            <property name="flag">wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</property>
                             <property name="proportion">0</property>
                             <object class="wxButton" expanded="0">
                                 <property name="BottomDockable">1</property>
@@ -642,7 +631,7 @@
                                 <property name="fg"></property>
                                 <property name="floatable">1</property>
                                 <property name="focus"></property>
-                                <property name="font">Arial,90,92,11,74,0</property>
+                                <property name="font">Arial,90,92,8,74,0</property>
                                 <property name="gripper">0</property>
                                 <property name="hidden">0</property>
                                 <property name="id">wxID_ANY</property>
@@ -667,7 +656,7 @@
                                 <property name="pressed"></property>
                                 <property name="resize">Resizable</property>
                                 <property name="show">1</property>
-                                <property name="size">36,36</property>
+                                <property name="size">34,34</property>
                                 <property name="style"></property>
                                 <property name="subclass"></property>
                                 <property name="toolbar_pane">0</property>
@@ -683,8 +672,8 @@
                             </object>
                         </object>
                         <object class="sizeritem" expanded="0">
-                            <property name="border">3</property>
-                            <property name="flag">wxALIGN_CENTER_VERTICAL|wxALIGN_CENTER_HORIZONTAL|wxLEFT</property>
+                            <property name="border">1</property>
+                            <property name="flag">wxALIGN_CENTER_VERTICAL|wxALIGN_RIGHT</property>
                             <property name="proportion">0</property>
                             <object class="wxButton" expanded="0">
                                 <property name="BottomDockable">1</property>
@@ -715,7 +704,7 @@
                                 <property name="fg"></property>
                                 <property name="floatable">1</property>
                                 <property name="focus"></property>
-                                <property name="font">Arial,90,92,10,74,0</property>
+                                <property name="font">Arial,90,92,8,74,0</property>
                                 <property name="gripper">0</property>
                                 <property name="hidden">0</property>
                                 <property name="id">wxID_ANY</property>
@@ -740,7 +729,7 @@
                                 <property name="pressed"></property>
                                 <property name="resize">Resizable</property>
                                 <property name="show">1</property>
-                                <property name="size">32,32</property>
+                                <property name="size">30,30</property>
                                 <property name="style"></property>
                                 <property name="subclass"></property>
                                 <property name="toolbar_pane">0</property>
@@ -756,8 +745,8 @@
                             </object>
                         </object>
                         <object class="sizeritem" expanded="0">
-                            <property name="border">3</property>
-                            <property name="flag">wxALIGN_CENTER_VERTICAL|wxALIGN_CENTER_HORIZONTAL|wxLEFT</property>
+                            <property name="border">1</property>
+                            <property name="flag">wxALIGN_CENTER_VERTICAL|wxALIGN_RIGHT</property>
                             <property name="proportion">0</property>
                             <object class="wxButton" expanded="0">
                                 <property name="BottomDockable">1</property>
@@ -788,7 +777,7 @@
                                 <property name="fg"></property>
                                 <property name="floatable">1</property>
                                 <property name="focus"></property>
-                                <property name="font">Arial,90,92,10,74,0</property>
+                                <property name="font">Arial,90,92,8,74,0</property>
                                 <property name="gripper">0</property>
                                 <property name="hidden">0</property>
                                 <property name="id">wxID_ANY</property>
@@ -813,7 +802,7 @@
                                 <property name="pressed"></property>
                                 <property name="resize">Resizable</property>
                                 <property name="show">1</property>
-                                <property name="size">32,32</property>
+                                <property name="size">30,30</property>
                                 <property name="style"></property>
                                 <property name="subclass"></property>
                                 <property name="toolbar_pane">0</property>
@@ -829,8 +818,8 @@
                             </object>
                         </object>
                         <object class="sizeritem" expanded="0">
-                            <property name="border">5</property>
-                            <property name="flag">wxALIGN_CENTER_HORIZONTAL</property>
+                            <property name="border">1</property>
+                            <property name="flag">wxALIGN_CENTER_VERTICAL</property>
                             <property name="proportion">0</property>
                             <object class="wxButton" expanded="0">
                                 <property name="BottomDockable">1</property>
@@ -861,7 +850,7 @@
                                 <property name="fg"></property>
                                 <property name="floatable">1</property>
                                 <property name="focus"></property>
-                                <property name="font">Arial,90,92,11,74,0</property>
+                                <property name="font">Arial,90,92,8,74,0</property>
                                 <property name="gripper">0</property>
                                 <property name="hidden">0</property>
                                 <property name="id">wxID_ANY</property>
@@ -886,7 +875,7 @@
                                 <property name="pressed"></property>
                                 <property name="resize">Resizable</property>
                                 <property name="show">1</property>
-                                <property name="size">36,36</property>
+                                <property name="size">34,34</property>
                                 <property name="style"></property>
                                 <property name="subclass"></property>
                                 <property name="toolbar_pane">0</property>
@@ -904,8 +893,8 @@
                     </object>
                 </object>
                 <object class="sizeritem" expanded="1">
-                    <property name="border">4</property>
-                    <property name="flag">wxALIGN_CENTER|wxRIGHT|wxLEFT</property>
+                    <property name="border">1</property>
+                    <property name="flag">wxALIGN_CENTER</property>
                     <property name="proportion">0</property>
                     <object class="wxGridSizer" expanded="1">
                         <property name="cols">2</property>
@@ -916,8 +905,8 @@
                         <property name="rows">0</property>
                         <property name="vgap">0</property>
                         <object class="sizeritem" expanded="0">
-                            <property name="border">5</property>
-                            <property name="flag">wxALIGN_BOTTOM|wxALIGN_CENTER_HORIZONTAL|wxTOP</property>
+                            <property name="border">1</property>
+                            <property name="flag">wxALIGN_CENTER_HORIZONTAL|wxTOP|wxALIGN_CENTER_VERTICAL</property>
                             <property name="proportion">0</property>
                             <object class="wxButton" expanded="0">
                                 <property name="BottomDockable">1</property>
@@ -948,7 +937,7 @@
                                 <property name="fg">wxSYS_COLOUR_BTNTEXT</property>
                                 <property name="floatable">1</property>
                                 <property name="focus"></property>
-                                <property name="font">Arial,90,92,10,74,0</property>
+                                <property name="font">Arial,90,90,8,74,0</property>
                                 <property name="gripper">0</property>
                                 <property name="hidden">0</property>
                                 <property name="id">wxID_ANY</property>
@@ -973,7 +962,7 @@
                                 <property name="pressed"></property>
                                 <property name="resize">Resizable</property>
                                 <property name="show">1</property>
-                                <property name="size">74,28</property>
+                                <property name="size">65,28</property>
                                 <property name="style"></property>
                                 <property name="subclass"></property>
                                 <property name="toolbar_pane">0</property>
@@ -989,8 +978,8 @@
                             </object>
                         </object>
                         <object class="sizeritem" expanded="0">
-                            <property name="border">5</property>
-                            <property name="flag">wxALIGN_CENTER_HORIZONTAL|wxTOP</property>
+                            <property name="border">1</property>
+                            <property name="flag">wxALIGN_CENTER_HORIZONTAL|wxTOP|wxALIGN_CENTER_VERTICAL</property>
                             <property name="proportion">0</property>
                             <object class="wxButton" expanded="0">
                                 <property name="BottomDockable">1</property>
@@ -1021,7 +1010,7 @@
                                 <property name="fg">wxSYS_COLOUR_BTNTEXT</property>
                                 <property name="floatable">1</property>
                                 <property name="focus"></property>
-                                <property name="font">Arial,90,92,10,74,0</property>
+                                <property name="font">Arial,90,90,8,74,0</property>
                                 <property name="gripper">0</property>
                                 <property name="hidden">0</property>
                                 <property name="id">wxID_ANY</property>
@@ -1046,7 +1035,7 @@
                                 <property name="pressed"></property>
                                 <property name="resize">Resizable</property>
                                 <property name="show">1</property>
-                                <property name="size">74,28</property>
+                                <property name="size">65,28</property>
                                 <property name="style"></property>
                                 <property name="subclass"></property>
                                 <property name="toolbar_pane">0</property>
@@ -1062,8 +1051,8 @@
                             </object>
                         </object>
                         <object class="sizeritem" expanded="0">
-                            <property name="border">5</property>
-                            <property name="flag">wxALIGN_CENTER_HORIZONTAL|wxBOTTOM</property>
+                            <property name="border">1</property>
+                            <property name="flag">wxALIGN_CENTER_HORIZONTAL|wxBOTTOM|wxALIGN_CENTER_VERTICAL</property>
                             <property name="proportion">0</property>
                             <object class="wxButton" expanded="0">
                                 <property name="BottomDockable">1</property>
@@ -1094,7 +1083,7 @@
                                 <property name="fg">wxSYS_COLOUR_BTNTEXT</property>
                                 <property name="floatable">1</property>
                                 <property name="focus"></property>
-                                <property name="font">Arial,90,92,10,74,0</property>
+                                <property name="font">Arial,90,90,8,74,0</property>
                                 <property name="gripper">0</property>
                                 <property name="hidden">0</property>
                                 <property name="id">wxID_ANY</property>
@@ -1119,7 +1108,7 @@
                                 <property name="pressed"></property>
                                 <property name="resize">Resizable</property>
                                 <property name="show">1</property>
-                                <property name="size">74,28</property>
+                                <property name="size">65,28</property>
                                 <property name="style"></property>
                                 <property name="subclass"></property>
                                 <property name="toolbar_pane">0</property>
@@ -1135,8 +1124,8 @@
                             </object>
                         </object>
                         <object class="sizeritem" expanded="0">
-                            <property name="border">5</property>
-                            <property name="flag">wxALIGN_CENTER_HORIZONTAL</property>
+                            <property name="border">1</property>
+                            <property name="flag">wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</property>
                             <property name="proportion">0</property>
                             <object class="wxButton" expanded="0">
                                 <property name="BottomDockable">1</property>
@@ -1167,7 +1156,7 @@
                                 <property name="fg">wxSYS_COLOUR_BTNTEXT</property>
                                 <property name="floatable">1</property>
                                 <property name="focus"></property>
-                                <property name="font">Arial,93,92,10,74,0</property>
+                                <property name="font">Arial,93,90,8,74,0</property>
                                 <property name="gripper">0</property>
                                 <property name="hidden">0</property>
                                 <property name="id">wxID_ANY</property>
@@ -1192,7 +1181,7 @@
                                 <property name="pressed"></property>
                                 <property name="resize">Resizable</property>
                                 <property name="show">1</property>
-                                <property name="size">74,28</property>
+                                <property name="size">65,28</property>
                                 <property name="style"></property>
                                 <property name="subclass"></property>
                                 <property name="toolbar_pane">0</property>
@@ -1229,7 +1218,7 @@
             <property name="minimum_size"></property>
             <property name="name">m_Parameterdialog</property>
             <property name="pos"></property>
-            <property name="size">645,313</property>
+            <property name="size">684,313</property>
             <property name="style">wxDEFAULT_DIALOG_STYLE</property>
             <property name="subclass"></property>
             <property name="title">Autopilot</property>
@@ -1260,7 +1249,7 @@
                         <property name="caption"></property>
                         <property name="caption_visible">1</property>
                         <property name="center_pane">0</property>
-                        <property name="checked">0</property>
+                        <property name="checked">1</property>
                         <property name="close_button">1</property>
                         <property name="context_help"></property>
                         <property name="context_menu">1</property>
@@ -1374,7 +1363,7 @@
                 </object>
                 <object class="sizeritem" expanded="0">
                     <property name="border">5</property>
-                    <property name="flag">wxALL</property>
+                    <property name="flag">wxALL|wxEXPAND</property>
                     <property name="proportion">0</property>
                     <object class="wxCheckBox" expanded="0">
                         <property name="BottomDockable">1</property>
@@ -1390,7 +1379,7 @@
                         <property name="caption"></property>
                         <property name="caption_visible">1</property>
                         <property name="center_pane">0</property>
-                        <property name="checked">1</property>
+                        <property name="checked">0</property>
                         <property name="close_button">1</property>
                         <property name="context_help"></property>
                         <property name="context_menu">1</property>
@@ -1408,7 +1397,7 @@
                         <property name="label">Send new &quot;Auto&quot; or &quot;Auto-Wind&quot; Command, when &quot;Standby&quot; is not send from here, but the &quot;Auto&quot; was from here</property>
                         <property name="max_size"></property>
                         <property name="maximize_button">0</property>
-                        <property name="maximum_size">640,-1</property>
+                        <property name="maximum_size">680,-1</property>
                         <property name="min_size"></property>
                         <property name="minimize_button">0</property>
                         <property name="minimum_size"></property>
@@ -1504,7 +1493,7 @@
                 <object class="sizeritem" expanded="1">
                     <property name="border">5</property>
                     <property name="flag">wxEXPAND</property>
-                    <property name="proportion">1</property>
+                    <property name="proportion">0</property>
                     <object class="wxFlexGridSizer" expanded="1">
                         <property name="cols">4</property>
                         <property name="flexible_direction">wxBOTH</property>
@@ -1641,7 +1630,7 @@
                                 <property name="pos"></property>
                                 <property name="resize">Resizable</property>
                                 <property name="show">1</property>
-                                <property name="size">500,-1</property>
+                                <property name="size">-1,-1</property>
                                 <property name="style"></property>
                                 <property name="subclass"></property>
                                 <property name="toolbar_pane">0</property>
@@ -1697,7 +1686,7 @@
                                 <property name="maximum_size"></property>
                                 <property name="min_size"></property>
                                 <property name="minimize_button">0</property>
-                                <property name="minimum_size">50,20</property>
+                                <property name="minimum_size">-1,20</property>
                                 <property name="moveable">1</property>
                                 <property name="name">m_ResetStandbyCounter</property>
                                 <property name="pane_border">1</property>

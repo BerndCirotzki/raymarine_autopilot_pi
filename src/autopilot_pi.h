@@ -92,7 +92,7 @@ public:
      
 
 //    Optional plugin overrides
-      void SetColorScheme(PI_ColorScheme cs);
+      //void SetColorScheme(PI_ColorScheme cs);
 
 
 //    The override PlugIn Methods

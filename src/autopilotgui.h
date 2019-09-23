@@ -9,6 +9,7 @@
 
 #include <wx/artprov.h>
 #include <wx/xrc/xmlres.h>
+#include <wx/intl.h>
 #include <wx/statline.h>
 #include <wx/gdicmn.h>
 #include <wx/font.h>
@@ -52,6 +53,7 @@ class m_dialog : public wxDialog
 
 		// Virtual event handlers, overide them in your derived class
 		virtual void OnActiveApp( wxActivateEvent& event ) { event.Skip(); }
+		virtual void OnCloseApp( wxCloseEvent& event ) { event.Skip(); }
 		virtual void OnSelectParameter( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnSetParameterValue( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnDecrementOne( wxCommandEvent& event ) { event.Skip(); }
@@ -70,7 +72,7 @@ class m_dialog : public wxDialog
 		wxButton* buttonSet;
 		wxStaticLine* StaticLine3;
 
-		m_dialog( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxT("Autopilot Control"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 181,250 ), long style = wxCAPTION|wxMINIMIZE_BOX, const wxString& name = wxT("Raymarine Autopilot") );
+		m_dialog( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Autopilot Control"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 160,230 ), long style = wxCAPTION, const wxString& name = wxT("Raymarine Autopilot") );
 		~m_dialog();
 
 };
@@ -110,7 +112,7 @@ class m_Parameterdialog : public wxDialog
 		wxTextCtrl* m_STALKreceivename;
 		wxTextCtrl* m_STALKsendname;
 
-		m_Parameterdialog( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxT("Autopilot"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 645,313 ), long style = wxDEFAULT_DIALOG_STYLE );
+		m_Parameterdialog( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Autopilot"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 684,313 ), long style = wxDEFAULT_DIALOG_STYLE );
 		~m_Parameterdialog();
 
 };

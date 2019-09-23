@@ -118,10 +118,35 @@ int raymarine_autopilot_pi::Init(void)
 	  m_pDialog = new Dlg(m_parent_window);
 	  m_pDialog->plugin = this;
 	  m_pDialog->Move(wxPoint(m_route_dialog_x, m_route_dialog_y));
-	  // Senden von Seatalkdaten ausschalten.
-	  if (SendSNBSE)
-		SendNMEASentence("$SNBSE,0,0");
-	  
+	  if (m_bShowautopilot) {
+		  m_pDialog->Show();
+		  if (NoStandbyCounter != 0)
+			  m_pDialog->SetBgTextStatusColor(wxColour(255, 128, 128));
+		  SetAutopilotparametersChangeable();
+		  // 
+		  if (NULL == p_Resettimer)
+		  {
+			  p_Resettimer = new localTimer(this);
+			  p_Resettimer->StartOnce(12000);
+		  }
+		  // Seatalk Daten senden von Bridge einschalten
+		  if (SendSNBSE)
+			  SendNMEASentence("$SNBSE,0,1");
+	  }
+	  else
+	  {
+		  m_pDialog->Hide();
+		  if (NULL != p_Resettimer)
+		  {
+			  p_Resettimer->Stop();
+			  delete p_Resettimer;
+			  p_Resettimer = NULL;
+		  }
+		  if (SendSNBSE)
+			  SendNMEASentence("$SNBSE,0,0");
+	  }
+	  //SetColorScheme(cs);
+
 	  return (WANTS_PREFERENCES |
 		      WANTS_TOOLBAR_CALLBACK |
 		      WANTS_NMEA_EVENTS |
@@ -155,7 +180,7 @@ bool raymarine_autopilot_pi::DeInit(void)
 			// Senden von Seatalkdaten ausschalten.
 			if (SendSNBSE)
 				SendNMEASentence("$SNBSE,0,0");
-			m_bShowautopilot = false;
+			// m_bShowautopilot = false;
 			SetToolbarItemState( m_leftclick_tool_id, m_bShowautopilot );
       }	
 	  if (NULL != p_Resettimer)
@@ -218,14 +243,15 @@ int raymarine_autopilot_pi::GetToolbarToolCount(void)
 {
       return 1;
 }
-
+/*
 void raymarine_autopilot_pi::SetColorScheme(PI_ColorScheme cs)
 {
       if (NULL == m_pDialog)
             return;
 
       DimeWindow(m_pDialog);
-}
+	  m_pDialog->Refresh(false);
+}*/
 
 void raymarine_autopilot_pi::OnToolbarToolCallback(int id)
 {
@@ -237,18 +263,20 @@ void raymarine_autopilot_pi::OnToolbarToolCallback(int id)
       }
 	  else
 	  {
-		  delete m_pDialog;
-		  m_pDialog = new Dlg(m_parent_window);
-		  m_pDialog->plugin = this;
-		  m_pDialog->Move(wxPoint(m_route_dialog_x, m_route_dialog_y));
+		  //Capture dialog position
+		  //wxPoint p = m_pDialog->GetPosition();
+		  //SetCalculatorDialogX(p.x);
+		  //SetCalculatorDialogY(p.y);
+		  //delete m_pDialog;
+		  //m_pDialog = new Dlg(m_parent_window);
+		  //m_pDialog->plugin = this;
+		  //m_pDialog->Move(wxPoint(m_route_dialog_x, m_route_dialog_y));
 		  if (NoStandbyCounter != 0)
-			m_pDialog->SetBgTextStatusColor(wxColour(255, 128, 128));
+		  	m_pDialog->SetBgTextStatusColor(wxColour(255, 128, 128));
 	  }
-
 	  m_pDialog->Fit();
 	  //Toggle 
-	  m_bShowautopilot = !m_bShowautopilot;	  
-	  
+	  m_bShowautopilot = !m_pDialog->IsShown();
       //    Toggle dialog? 
       if(m_bShowautopilot) {
           m_pDialog->Show();
@@ -291,8 +319,8 @@ bool raymarine_autopilot_pi::LoadConfig(void)
       if(pConf)
       {
             pConf->SetPath ( _T( "/Settings/raymarine_autopilot_pi" ) );
-			 pConf->Read ( _T( "ShowautopilotIcon" ), &m_bautopilotShowIcon, 1 );
-           
+			pConf->Read ( _T( "ShowautopilotIcon" ), &m_bautopilotShowIcon, 1 );
+			pConf->Read(_T("Showautopilot"), &m_bShowautopilot, 1 );
             m_route_dialog_x =  pConf->Read ( _T ( "DialogPosX" ), 20L );
             m_route_dialog_y =  pConf->Read ( _T ( "DialogPosY" ), 20L );
          
@@ -320,7 +348,7 @@ bool raymarine_autopilot_pi::SaveConfig(void)
       {
             pConf->SetPath ( _T ( "/Settings/raymarine_autopilot_pi" ) );
 			pConf->Write ( _T ( "ShowautopilotIcon" ), m_bautopilotShowIcon );
-          
+			pConf->Write(_T("Showautopilot"), m_bShowautopilot);
             pConf->Write ( _T ( "DialogPosX" ),   m_route_dialog_x );
             pConf->Write ( _T ( "DialogPosY" ),   m_route_dialog_y );
 			pConf->Write(_T("ShowParameters"), ShowParameters);
@@ -378,6 +406,10 @@ void raymarine_autopilot_pi::ShowPreferencesDialog(wxWindow* parent)
 		SelectCounterStandby = dialog->m_SelectCounterStandby->GetSelection();
 		if (NULL != m_pDialog)
 		{
+			//Capture dialog position
+			wxPoint p = m_pDialog->GetPosition();
+			SetCalculatorDialogX(p.x);
+			SetCalculatorDialogY(p.y);
 			m_pDialog->Close();
 			m_pDialog = new Dlg(m_parent_window);
 			m_pDialog->plugin = this;
@@ -385,7 +417,6 @@ void raymarine_autopilot_pi::ShowPreferencesDialog(wxWindow* parent)
 			if (m_bShowautopilot)
 				m_pDialog->Show();
 			SetAutopilotparametersChangeable();
-
 		}
 		SaveConfig();
 	}
@@ -403,7 +434,9 @@ void raymarine_autopilot_pi::SetAutopilotparametersChangeable()
 		m_pDialog->ParameterValue->Show();
 		m_pDialog->buttonSet->Show();
 		m_pDialog->StaticLine3->Show();
-		m_pDialog->SetSize(wxSize(181, 265));
+		m_pDialog->SetMaxSize(wxSize(160, 230));
+		m_pDialog->SetSize(wxSize(160, 230));
+		m_pDialog->SetMinSize(wxSize(160, 230));
 	}
 	else
 	{
@@ -411,18 +444,19 @@ void raymarine_autopilot_pi::SetAutopilotparametersChangeable()
 		m_pDialog->ParameterValue->Show(FALSE);
 		m_pDialog->buttonSet->Show(FALSE);
 		m_pDialog->StaticLine3->Show(FALSE);
-		m_pDialog->SetSize(wxSize(181, 230));
+		m_pDialog->SetSize(wxSize(160, 205));
+		m_pDialog->SetMinSize(wxSize(160, 205));
+		m_pDialog->SetMaxSize(wxSize(160, 205));
 	}
 }
 
 void raymarine_autopilot_pi::OnautopilotDialogClose()
 {
-    m_bShowautopilot = false;
+    //m_bShowautopilot = false;
     SetToolbarItemState( m_leftclick_tool_id, m_bShowautopilot );
     m_pDialog->Hide();
-    SaveConfig();
-
-    RequestRefresh(m_parent_window); // refresh main window
+	SaveConfig();
+	RequestRefresh(m_parent_window); // refresh main window
 }
 
 void raymarine_autopilot_pi::SetNMEASentence(wxString &sentence)
@@ -461,7 +495,8 @@ void raymarine_autopilot_pi::SetNMEASentence(wxString &sentence)
 	if (sentence.Left(9) == Lsentence_Command)
 	{
 		// Commandos von anderem St6002 erkennen
-		if (sentence.Mid(11,7) == "1,02,FD")
+		if (sentence.Mid(11,7) == "1,02,FD" ||   // Standby pressed
+			sentence.Mid(11,7) == "1,42,BD")    // Standby pressed longer ab Version 0.4
 			Standbycommandreceived = TRUE;
 		return;
 	}

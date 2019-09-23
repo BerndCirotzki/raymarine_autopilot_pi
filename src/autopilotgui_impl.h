@@ -82,7 +82,7 @@ public:
 		void SetBgTextStatusColor(wxColour Color);
 		void OnSetParameterValue(wxCommandEvent& event);
 		void OnSelectParameter(wxCommandEvent& event);
-
+		void OnCloseApp(wxCloseEvent& event);
 		raymarine_autopilot_pi *plugin; 
 
 		wxString rte_start;

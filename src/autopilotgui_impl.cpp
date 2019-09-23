@@ -112,6 +112,11 @@ void Dlg::OnClose(wxCloseEvent& event)
 	plugin->OnautopilotDialogClose();
 }
 
+void Dlg::OnCloseApp(wxCloseEvent& event)
+{
+	plugin->OnautopilotDialogClose();
+}
+
 void Dlg::OnAuto(wxCommandEvent& event)
 {
 	wxString sentence = "$" + plugin->STALKSendName + ",86,21,01,FE";
@@ -244,7 +249,7 @@ void Dlg::OnSelectParameter(wxCommandEvent& event)
 	case	1:	// Response
 		// old : this->ParameterValue->SetSelection(plugin->ResponseLevel);
 		// Anzeige auf ST6002 Display für 5 Sekunden
-		Sentence = "$" + plugin->STALKSendName + ",86,21,2E,D1";
+		Sentence = "$" + plugin->STALKSendName + ",86,21,2E,D1"; // (Response Display)
 		plugin->SendNMEASentence(Sentence);
 		break;
 	case	2:	// WindTrim
@@ -253,7 +258,7 @@ void Dlg::OnSelectParameter(wxCommandEvent& event)
 	case	3:  // Ruddergain
 		// old : this->ParameterValue->SetSelection(2);
 		// Anzeige auf ST6002 Display für 5 Sekunden
-		Sentence = "$" + plugin->STALKSendName + ",86,21,6E,91";
+		Sentence = "$" + plugin->STALKSendName + ",86,21,6E,91"; // (Rudder Gain Display)
 		plugin->SendNMEASentence(Sentence);
 		break;
 	}
