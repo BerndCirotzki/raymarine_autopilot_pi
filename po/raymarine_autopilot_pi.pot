@@ -6,9 +6,9 @@
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: raymarine_autopilot_pi 0.3\n"
+"Project-Id-Version: raymarine_autopilot_pi 0.7\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-06-29 15:21+0200\n"
+"POT-Creation-Date: 2020-07-14 10:05+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,19 +17,19 @@ msgstr ""
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: src/autopilot_pi.cpp:111
+#: src/autopilot_pi.cpp:117
 msgid "Raymarine Autopilot"
 msgstr ""
 
-#: src/autopilot_pi.cpp:197
+#: src/autopilot_pi.cpp:231
 msgid "Raymarine autopilot"
 msgstr ""
 
-#: src/autopilot_pi.cpp:203
+#: src/autopilot_pi.cpp:237
 msgid "Raymarine autopilot Control for Raymarine Smartpilot"
 msgstr ""
 
-#: src/autopilot_pi.cpp:208
+#: src/autopilot_pi.cpp:242
 msgid ""
 "Autopilot Control for Raymarine Smartpilot\r\n"
 "Simulates a Remote Control (Commandos from ST6002), by sending Seatalk(1) "
@@ -40,64 +40,195 @@ msgid ""
 "Preferences."
 msgstr ""
 
-#: src/autopilot_pi.cpp:343
+#: src/autopilot_pi.cpp:388
 msgid "Autopilot Preferences"
 msgstr ""
 
-#: src/autopilotgui.cpp:185
+#: src/autopilotgui.cpp:27
+msgid "----------"
+msgstr ""
+
+#: src/autopilotgui.cpp:34
+msgid "---"
+msgstr ""
+
+#: src/autopilotgui.cpp:51
+msgid "------------"
+msgstr ""
+
+#: src/autopilotgui.cpp:51
+msgid "Response"
+msgstr ""
+
+#: src/autopilotgui.cpp:51
+msgid "WindTrim"
+msgstr ""
+
+#: src/autopilotgui.cpp:51
+msgid "RudderGain"
+msgstr ""
+
+#: src/autopilotgui.cpp:61
+msgid "-"
+msgstr ""
+
+#: src/autopilotgui.cpp:61 src/autopilotgui.cpp:251
+msgid "1"
+msgstr ""
+
+#: src/autopilotgui.cpp:61 src/autopilotgui.cpp:251
+msgid "2"
+msgstr ""
+
+#: src/autopilotgui.cpp:61 src/autopilotgui.cpp:251
+msgid "3"
+msgstr ""
+
+#: src/autopilotgui.cpp:61 src/autopilotgui.cpp:251
+msgid "4"
+msgstr ""
+
+#: src/autopilotgui.cpp:61 src/autopilotgui.cpp:251
+msgid "5"
+msgstr ""
+
+#: src/autopilotgui.cpp:61 src/autopilotgui.cpp:251
+msgid "6"
+msgstr ""
+
+#: src/autopilotgui.cpp:61 src/autopilotgui.cpp:251
+msgid "7"
+msgstr ""
+
+#: src/autopilotgui.cpp:61 src/autopilotgui.cpp:251
+msgid "8"
+msgstr ""
+
+#: src/autopilotgui.cpp:61 src/autopilotgui.cpp:251
+msgid "9"
+msgstr ""
+
+#: src/autopilotgui.cpp:71
+msgid "Set"
+msgstr ""
+
+#: src/autopilotgui.cpp:92
+msgid "-1"
+msgstr ""
+
+#: src/autopilotgui.cpp:98
+msgid "-10"
+msgstr ""
+
+#: src/autopilotgui.cpp:104
+msgid "+10"
+msgstr ""
+
+#: src/autopilotgui.cpp:110
+msgid "+1"
+msgstr ""
+
+#: src/autopilotgui.cpp:122
+msgid "Auto"
+msgstr ""
+
+#: src/autopilotgui.cpp:129
+msgid "Standby"
+msgstr ""
+
+#: src/autopilotgui.cpp:136
+msgid "Auto-Wind"
+msgstr ""
+
+#: src/autopilotgui.cpp:143
+msgid "Track"
+msgstr ""
+
+#: src/autopilotgui.cpp:203
 msgid "Autopilot Parameters changeable"
 msgstr ""
 
-#: src/autopilotgui.cpp:188
+#: src/autopilotgui.cpp:207
 msgid "Send new \"Auto-Wind\" Command when \"Wind Shift\""
 msgstr ""
 
-#: src/autopilotgui.cpp:191
+#: src/autopilotgui.cpp:210
 msgid ""
 "Send new \"Auto\" or \"Auto-Wind\" Command, when \"Standby\" is not send from "
 "here, but the \"Auto\" was from here"
 msgstr ""
 
-#: src/autopilotgui.cpp:196
+#: src/autopilotgui.cpp:215
 msgid ""
 "Send new \"Auto\" Command, when No Standby-Information is received from other "
 "Instrument or from here"
 msgstr ""
 
-#: src/autopilotgui.cpp:218
+#: src/autopilotgui.cpp:227
+msgid "0"
+msgstr ""
+
+#: src/autopilotgui.cpp:238
 msgid ""
 "Counter for Autopilot is in Standby Mode, but without \"Standby\" Command "
 "received"
 msgstr ""
 
-#: src/autopilotgui.cpp:237
+#: src/autopilotgui.cpp:242
+msgid "Reset"
+msgstr ""
+
+#: src/autopilotgui.cpp:251
+msgid "10"
+msgstr ""
+
+#: src/autopilotgui.cpp:257
 msgid ""
 "Value, for maximum  \"Not recived Standby Commands\" not sending \"Auto\" "
 "Command again"
 msgstr ""
 
-#: src/autopilotgui.cpp:244
+#: src/autopilotgui.cpp:271
+msgid ""
+"Change course value back to the last Compass course value, the Course "
+"Computer\n"
+"had, before the Auto Signal lost"
+msgstr ""
+
+#: src/autopilotgui.cpp:278
 msgid ""
 "Send \"$SNBSE\" message to switch sending \"$STALK\" messages from "
 "SeatalkLink off, when Autopilot in not visible"
 msgstr ""
 
-#: src/autopilotgui.cpp:263
+#: src/autopilotgui.cpp:286 src/autopilotgui.cpp:301
+msgid "STALK"
+msgstr ""
+
+#: src/autopilotgui.cpp:297
 msgid "NMEA Sentencename from  Seatalk bus converted by SeatalkLink"
 msgstr ""
 
-#: src/autopilotgui.cpp:278
+#: src/autopilotgui.cpp:312
 msgid "NMEA Sentencename to Seatalk bus converted by SeatalkLink"
 msgstr ""
 
-#: src/autopilotgui_impl.cpp:196
+#: src/autopilotgui.cpp:319
+msgid "Write Message Info to OPENCPN Logfile"
+msgstr ""
+
+#: src/autopilotgui.cpp:322
+msgid "Debug all \"$STALK\" Messages into OPENCPN Logfile"
+msgstr ""
+
+#: src/autopilotgui_impl.cpp:248
 msgid "No Value selected"
 msgstr ""
 
-#: src/autopilotgui_impl.cpp:201
+#: src/autopilotgui_impl.cpp:253
 msgid "No Parameter selected"
 msgstr ""
 
-#: src/autopilotgui_impl.cpp:204
+#: src/autopilotgui_impl.cpp:256
 msgid "is set to  "
 msgstr ""
