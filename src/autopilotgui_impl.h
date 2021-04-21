@@ -66,6 +66,7 @@ public:
 		vector<Position> my_points;
 
 		//void OnGenerate(autopilot_pi& a);
+		void OnKlickInDisplay(wxMouseEvent& event);
 		void OnAuto(wxCommandEvent& event);
 		void OnAutoWind(wxCommandEvent& event);
 		void OnTrack(wxCommandEvent& event);
@@ -80,6 +81,7 @@ public:
 		void SetTextStatusColor(wxColour Color);
 		void SetCopmpassTextColor(wxColour Color);
 		void SetBgTextStatusColor(wxColour Color);
+		void SetBgTextCompassColor(wxColour Color);
 		void OnSetParameterValue(wxCommandEvent& event);
 		void OnSelectParameter(wxCommandEvent& event);
 		void OnCloseApp(wxCloseEvent& event);
@@ -93,7 +95,8 @@ private:
         double lat1, lon1, lat2, lon2;
         bool error_found;
         bool dbg;
-		wxString     m_gpx_path;		
+		wxString     m_gpx_path;
+		short int SetToggel;
 };
 
 

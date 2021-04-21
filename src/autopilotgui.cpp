@@ -34,7 +34,7 @@ m_dialog::m_dialog( wxWindow* parent, wxWindowID id, const wxString& title, cons
 	TextCompass = new wxTextCtrl( this, wxID_ANY, _("---"), wxDefaultPosition, wxSize( 120,20 ), wxTE_READONLY|wxTE_CENTER );
 	TextCompass->SetFont( wxFont( 10, wxFONTFAMILY_SWISS, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD, false, wxT("Arial") ) );
 	TextCompass->SetForegroundColour( wxColour( 0, 0, 64 ) );
-	TextCompass->SetBackgroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_INFOBK ) );
+	TextCompass->SetBackgroundColour( wxColour( 255, 255, 225 ) );
 
 	bSizer10->Add( TextCompass, 0, wxALIGN_CENTER_HORIZONTAL, 5 );
 
@@ -159,6 +159,8 @@ m_dialog::m_dialog( wxWindow* parent, wxWindowID id, const wxString& title, cons
 	// Connect Events
 	this->Connect( wxEVT_ACTIVATE_APP, wxActivateEventHandler( m_dialog::OnActiveApp ) );
 	this->Connect( wxEVT_CLOSE_WINDOW, wxCloseEventHandler( m_dialog::OnCloseApp ) );
+	TextStatus->Connect( wxEVT_LEFT_DOWN, wxMouseEventHandler( m_dialog::OnKlickInDisplay ), NULL, this );
+	TextCompass->Connect( wxEVT_LEFT_DOWN, wxMouseEventHandler( m_dialog::OnKlickInDisplay ), NULL, this );
 	ParameterChoise->Connect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( m_dialog::OnSelectParameter ), NULL, this );
 	buttonSet->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( m_dialog::OnSetParameterValue ), NULL, this );
 	buttonDecOne->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( m_dialog::OnDecrementOne ), NULL, this );
@@ -176,6 +178,8 @@ m_dialog::~m_dialog()
 	// Disconnect Events
 	this->Disconnect( wxEVT_ACTIVATE_APP, wxActivateEventHandler( m_dialog::OnActiveApp ) );
 	this->Disconnect( wxEVT_CLOSE_WINDOW, wxCloseEventHandler( m_dialog::OnCloseApp ) );
+	TextStatus->Disconnect( wxEVT_LEFT_DOWN, wxMouseEventHandler( m_dialog::OnKlickInDisplay ), NULL, this );
+	TextCompass->Disconnect( wxEVT_LEFT_DOWN, wxMouseEventHandler( m_dialog::OnKlickInDisplay ), NULL, this );
 	ParameterChoise->Disconnect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( m_dialog::OnSelectParameter ), NULL, this );
 	buttonSet->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( m_dialog::OnSetParameterValue ), NULL, this );
 	buttonDecOne->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( m_dialog::OnDecrementOne ), NULL, this );
@@ -218,7 +222,7 @@ m_Parameterdialog::m_Parameterdialog( wxWindow* parent, wxWindowID id, const wxS
 	fgSizer2->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 
 
-	fgSizer2->Add( 15, 0, 1, wxEXPAND, 5 );
+	fgSizer2->Add( 20, 0, 1, wxEXPAND, 3 );
 
 	m_NoStandbyCounter = new wxTextCtrl( this, wxID_ANY, _("0"), wxDefaultPosition, wxSize( 40,20 ), wxTE_CENTER );
 	#ifdef __WXGTK__
@@ -229,30 +233,44 @@ m_Parameterdialog::m_Parameterdialog( wxWindow* parent, wxWindowID id, const wxS
 	#else
 	m_NoStandbyCounter->SetMaxLength( 2 );
 	#endif
-	fgSizer2->Add( m_NoStandbyCounter, 0, wxALL, 5 );
+	fgSizer2->Add( m_NoStandbyCounter, 0, wxALL|wxALIGN_CENTER_VERTICAL, 3 );
 
 	m_NoStandbyCounterValueText = new wxStaticText( this, wxID_ANY, _("Counter for Autopilot is in Standby Mode, but without \"Standby\" Command received"), wxDefaultPosition, wxSize( -1,-1 ), 0 );
 	m_NoStandbyCounterValueText->Wrap( -1 );
-	fgSizer2->Add( m_NoStandbyCounterValueText, 0, wxALL, 5 );
+	fgSizer2->Add( m_NoStandbyCounterValueText, 0, wxALL|wxALIGN_CENTER_VERTICAL, 3 );
 
 	m_ResetStandbyCounter = new wxButton( this, wxID_ANY, _("Reset"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_ResetStandbyCounter->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), wxFONTFAMILY_DEFAULT, wxFONTSTYLE_ITALIC, wxFONTWEIGHT_NORMAL, false, wxEmptyString ) );
 	m_ResetStandbyCounter->SetMinSize( wxSize( -1,20 ) );
 
-	fgSizer2->Add( m_ResetStandbyCounter, 0, wxALL, 5 );
+	fgSizer2->Add( m_ResetStandbyCounter, 0, wxALL|wxALIGN_CENTER_VERTICAL, 3 );
 
 
-	fgSizer2->Add( 0, 0, 1, wxEXPAND, 5 );
+	fgSizer2->Add( 0, 0, 1, wxEXPAND, 3 );
 
 	wxString m_SelectCounterStandbyChoices[] = { _("1"), _("2"), _("3"), _("4"), _("5"), _("6"), _("7"), _("8"), _("9"), _("10") };
 	int m_SelectCounterStandbyNChoices = sizeof( m_SelectCounterStandbyChoices ) / sizeof( wxString );
 	m_SelectCounterStandby = new wxChoice( this, wxID_ANY, wxDefaultPosition, wxSize( 40,20 ), m_SelectCounterStandbyNChoices, m_SelectCounterStandbyChoices, 0 );
 	m_SelectCounterStandby->SetSelection( 0 );
-	fgSizer2->Add( m_SelectCounterStandby, 0, wxALL, 5 );
+	fgSizer2->Add( m_SelectCounterStandby, 0, wxALL|wxALIGN_CENTER_VERTICAL|wxALIGN_CENTER_HORIZONTAL, 3 );
 
 	m_Text = new wxStaticText( this, wxID_ANY, _("Value, for maximum  \"Not recived Standby Commands\" not sending \"Auto\" Command again"), wxDefaultPosition, wxSize( 500,-1 ), 0 );
 	m_Text->Wrap( -1 );
-	fgSizer2->Add( m_Text, 0, wxALL, 5 );
+	fgSizer2->Add( m_Text, 0, wxALL|wxALIGN_CENTER_VERTICAL, 3 );
+
+
+	fgSizer2->Add( 0, 0, 1, wxEXPAND, 3 );
+
+
+	fgSizer2->Add( 0, 0, 1, wxEXPAND, 3 );
+
+	m_ChangeValueToLast = new wxCheckBox( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	m_ChangeValueToLast->SetValue(true);
+	fgSizer2->Add( m_ChangeValueToLast, 0, wxALL|wxALIGN_CENTER_VERTICAL, 3 );
+
+	m_Text1 = new wxStaticText( this, wxID_ANY, _("Change course value back to the last Compass course value, the Course Computer\nhad, before the Auto Signal lost"), wxDefaultPosition, wxSize( 500,-1 ), 0 );
+	m_Text1->Wrap( -1 );
+	fgSizer2->Add( m_Text1, 0, wxALL|wxALIGN_CENTER_VERTICAL, 3 );
 
 
 	bSizer2->Add( fgSizer2, 0, wxEXPAND, 5 );
@@ -297,6 +315,12 @@ m_Parameterdialog::m_Parameterdialog( wxWindow* parent, wxWindowID id, const wxS
 
 
 	bSizer2->Add( fgSizer1, 1, wxEXPAND, 5 );
+
+	m_WriteMessages = new wxCheckBox( this, wxID_ANY, _("Write Message Info to OPENCPN Logfile"), wxDefaultPosition, wxDefaultSize, 0 );
+	bSizer2->Add( m_WriteMessages, 0, wxALL, 5 );
+
+	m_WriteDebug = new wxCheckBox( this, wxID_ANY, _("Debug all \"$STALK\" Messages into OPENCPN Logfile"), wxDefaultPosition, wxDefaultSize, 0 );
+	bSizer2->Add( m_WriteDebug, 0, wxALL, 5 );
 
 	m_sdbSizer1 = new wxStdDialogButtonSizer();
 	m_sdbSizer1OK = new wxButton( this, wxID_OK );

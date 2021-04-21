@@ -50,6 +50,7 @@
 #define TRACK		4
 #define	WINDSHIFT	5
 #define AUTOTRACK	6
+#define OFFCOURSE	7
 #define UNKNOWN		0
 
 
@@ -83,7 +84,7 @@ public:
       wxString GetCommonName();
       wxString GetShortDescription();
       wxString GetLongDescription();
-	  void SetNMEASentence(wxString &sentence);
+	  void SetNMEASentence(wxString &sentence_incomming);
 
 //    The required override PlugIn Methods
       int GetToolbarToolCount(void);
@@ -109,15 +110,20 @@ public:
 	  bool			   ShowParameters;
 	  bool			   NewAutoWindCommand;
 	  bool			   NewAutoOnStandby;
+	  bool			   ChangeValueToLast;
 	  bool			   SendSNBSE;
+	  bool			   WriteMessages;
+	  bool			   WriteDebug;
 	  bool             NewStandbyNoStandbyReceived;
 	  wxString	       STALKSendName;
 	  wxString		   STALKReceiveName;
 	  bool			   StandbySelfPressed;
 	  bool             Standbycommandreceived;
+	  bool			   NeedCompassCorrection;
 	  int			   CounterStandbySentencesReceived;
 	  int			   NoStandbyCounter;
 	  int			   SelectCounterStandby;
+	  int			   IS_standby;
 	  int			   ResponseLevel;
 	  int              RudderLevel;
 	  Dlg			   *m_pDialog;
@@ -133,6 +139,7 @@ private:
 	  void SetAutopilotparametersChangeable();
 	  raymarine_autopilot_pi *plugin;
   
+	  wxLog				*pLogger;
 	  wxFileConfig      *m_pconfig;
       wxWindow          *m_parent_window;
       bool              LoadConfig(void);
@@ -145,6 +152,7 @@ private:
 	  bool              m_bautopilotShowIcon;
 	  bool              m_bShowautopilot;
 	  wxTimer		   *p_Resettimer;
+	  int				LastCompassCourse;
 };
 
 class localTimer :public wxTimer

@@ -54,6 +54,7 @@ class m_dialog : public wxDialog
 		// Virtual event handlers, overide them in your derived class
 		virtual void OnActiveApp( wxActivateEvent& event ) { event.Skip(); }
 		virtual void OnCloseApp( wxCloseEvent& event ) { event.Skip(); }
+		virtual void OnKlickInDisplay( wxMouseEvent& event ) { event.Skip(); }
 		virtual void OnSelectParameter( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnSetParameterValue( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnDecrementOne( wxCommandEvent& event ) { event.Skip(); }
@@ -108,11 +109,15 @@ class m_Parameterdialog : public wxDialog
 		wxButton* m_ResetStandbyCounter;
 		wxChoice* m_SelectCounterStandby;
 		wxStaticText* m_Text;
+		wxCheckBox* m_ChangeValueToLast;
+		wxStaticText* m_Text1;
 		wxCheckBox* m_SendSNBSE;
 		wxTextCtrl* m_STALKreceivename;
 		wxTextCtrl* m_STALKsendname;
+		wxCheckBox* m_WriteMessages;
+		wxCheckBox* m_WriteDebug;
 
-		m_Parameterdialog( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Autopilot"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 684,313 ), long style = wxDEFAULT_DIALOG_STYLE );
+		m_Parameterdialog( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Autopilot"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 694,382 ), long style = wxDEFAULT_DIALOG_STYLE );
 		~m_Parameterdialog();
 
 };
