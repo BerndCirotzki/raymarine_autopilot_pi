@@ -1,0 +1,4 @@
+name: autopilot-rm
+title: autopilot_raymarine
+version: '0.1'
+start_page: ROOT:autopilot-rm.adoc 

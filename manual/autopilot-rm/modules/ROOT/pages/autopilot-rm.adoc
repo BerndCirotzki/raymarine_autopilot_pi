@@ -1,0 +1,55 @@
+:imagesdir: ../images/
+== Autopilot Raymarine
+
+image:autopilot-rm-icon.png[]
+
+=== Links
+
+* Source: https://github.com/BerndCirotzki/Autopilot-Plugin[Github
+Source]
+* Forum:
+http://www.cruisersforum.com/forums/f134/autopilot-route-plugin-197566.html[Autopilot_RM
+Plugin for Raymarine]
+* Forum:
+http://www.cruisersforum.com/forums/f134/route-info-to-raymarine-via-seatalk-199948.html[Route
+info to Raymarine via Seatalk]
+* https://opencpn.org/wiki/dokuwiki/doku.php?id=opencpn:developer_manual:plugins:beta_plugins:autopilot_rm_pi[Windows
+Release Download]
+
+=== AIM
+
+Provide an OpenCPN Autopilot Control for Raymarine Autopilots. Autopilot
+can control a Raymarine autopilot by sending and receiving special NMEA
+messages to the course-computer.
+
+Autopilot-RM Menu
+
+image:autopilot-rm-menu.png[]
+
+Autopilot-RM Preferences
+
+image:autopilot-rm-preferences.png[]
+
+=== Documentation
+
+* https://github.com/BerndCirotzki/Autopilot-Plugin/blob/master/Autopilot%20description.odt[ODT
+Documentation]
+* https://github.com/BerndCirotzki/Autopilot-Plugin/blob/master/Autopilot%20description.pdf[PDF
+Documentation]
+
+* link:assets/autopilot_plugin_for_opencpn.docx[Docx Documentation]
+
+=== Beta Version
+
+by Bernd Cirotzki
+
+“Autopilot can control a Raymarine autopilot by sending and receiving
+special NMEA messages to the course-computer.”
+
+“For this functioning it is necessary to convert a messages from “NMEA”
+to “SEATALK”. For this conversion a special hardware is required.
+(Seatalk – NMEA converter, Seatalk-link) The hardware can be ordered
+here : http://www.gadgetPool.de
+
+“It is tested with a Raymarine Smartpilot S1G an a ST6002+ Panel. But I
+think it would work with others too.”
