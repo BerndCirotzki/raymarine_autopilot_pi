@@ -37,7 +37,7 @@ Documentation]
 * https://github.com/BerndCirotzki/Autopilot-Plugin/blob/master/Autopilot%20description.pdf[PDF
 Documentation]
 
-* link:assets/autopilot_plugin_for_opencpn.docx[Docx Documentation]
+* link:{attachmentsdir}/autopilot_plugin_for_opencpn.docx[Docx Documentation]
 
 === Beta Version
 
