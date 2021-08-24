@@ -1,12 +1,12 @@
 site:
-  title: Two Can Plugin Manual
+  title: AutoPilot Plugin Manual
   url:  https://nowhere.net
   start_page: autopilot-rm:ROOT:autopilot-rm.adoc
 
 content:
   sources:
-    - url: ../..
-      start_path: manual/autopilot-rm
+    - url: ..
+      start_path: manual
       branches: HEAD
       edit_url: https://github.com/opencpn-manuals/Autopilot-Plugin/edit/master/{path}
 
