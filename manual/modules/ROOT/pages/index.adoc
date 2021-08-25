@@ -13,8 +13,7 @@ Plugin for Raymarine]
 * Forum:
 http://www.cruisersforum.com/forums/f134/route-info-to-raymarine-via-seatalk-199948.html[Route
 info to Raymarine via Seatalk]
-* https://opencpn.org/wiki/dokuwiki/doku.php?id=opencpn:developer_manual:plugins:beta_plugins:autopilot_rm_pi[Windows
-Release Download]
+* xref:autopilot-rm::index.adoc[AutoPilot Plugin Manual]
 
 === AIM
 
