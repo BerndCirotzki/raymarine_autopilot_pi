@@ -1,9 +1,9 @@
 :imagesdir: ../images/
-== Autopilot Raymarine
+= Autopilot Raymarine
 
 image:autopilot-rm-icon.png[]
 
-=== Links
+== Links
 
 * Source: https://github.com/BerndCirotzki/Autopilot-Plugin[Github
 Source]
@@ -15,7 +15,7 @@ http://www.cruisersforum.com/forums/f134/route-info-to-raymarine-via-seatalk-199
 info to Raymarine via Seatalk]
 * xref:autopilot-rm::index.adoc[AutoPilot Plugin Manual]
 
-=== AIM
+== AIM
 
 Provide an OpenCPN Autopilot Control for Raymarine Autopilots. Autopilot
 can control a Raymarine autopilot by sending and receiving special NMEA
@@ -29,7 +29,7 @@ Autopilot-RM Preferences
 
 image:autopilot-rm-preferences.png[]
 
-=== Documentation
+== Documentation
 
 * https://github.com/BerndCirotzki/Autopilot-Plugin/blob/master/Autopilot%20description.odt[ODT
 Documentation]
@@ -38,7 +38,7 @@ Documentation]
 
 * link:{attachmentsdir}/autopilot_plugin_for_opencpn.docx[Docx Documentation]
 
-=== Beta Version
+== Beta Version
 
 by Bernd Cirotzki
 
