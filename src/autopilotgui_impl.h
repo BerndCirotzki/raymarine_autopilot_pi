@@ -44,6 +44,16 @@ class raymarine_autopilot_pi;
 
 class Position;
 
+class ParameterDialog : public m_Parameterdialog
+{
+public:
+	ParameterDialog(raymarine_autopilot_pi* p, wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style);
+	void OnStandbyCounterReset(wxCommandEvent& event);
+	void OnNewAuto(wxCommandEvent& event);
+private:
+	raymarine_autopilot_pi* ptoPlugin;
+};
+	
 class Dlg : public m_dialog
 {
 public:
@@ -56,6 +66,7 @@ public:
 		vector<Position> my_points;
 
 		//void OnGenerate(autopilot_pi& a);
+		void OnKlickInDisplay(wxMouseEvent& event);
 		void OnAuto(wxCommandEvent& event);
 		void OnAutoWind(wxCommandEvent& event);
 		void OnTrack(wxCommandEvent& event);
@@ -69,9 +80,11 @@ public:
 		void SetCompassText(wxString Text);
 		void SetTextStatusColor(wxColour Color);
 		void SetCopmpassTextColor(wxColour Color);
+		void SetBgTextStatusColor(wxColour Color);
+		void SetBgTextCompassColor(wxColour Color);
 		void OnSetParameterValue(wxCommandEvent& event);
 		void OnSelectParameter(wxCommandEvent& event);
-
+		void OnCloseApp(wxCloseEvent& event);
 		raymarine_autopilot_pi *plugin; 
 
 		wxString rte_start;
@@ -82,7 +95,8 @@ private:
         double lat1, lon1, lat2, lon2;
         bool error_found;
         bool dbg;
-		wxString     m_gpx_path;		
+		wxString     m_gpx_path;
+		short int SetToggel;
 };
 
 
