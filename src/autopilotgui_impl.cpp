@@ -166,6 +166,13 @@ void Dlg::OnAutoWind(wxCommandEvent& event)
 
 void Dlg::OnTrack(wxCommandEvent& event)
 {
+	if (plugin->Autopilot_Status == STANDBY)
+	{
+		plugin->DisplayShow = 1;
+		this->TextStatus->SetForegroundColour(wxColour(255, 0, 0));
+		this->TextStatus->SetValue("Not in Auto");
+		return;
+	}
 	wxString sentence = "$" + plugin->STALKSendName + ",86,21,03,FC";
 	plugin->SendNMEASentence(sentence);
 	if (plugin->WriteMessages) wxLogMessage((" Pushed Track %s"), sentence);

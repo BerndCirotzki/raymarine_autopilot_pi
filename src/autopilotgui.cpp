@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Oct 26 2018)
+// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b3)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -120,28 +120,28 @@ m_dialog::m_dialog( wxWindow* parent, wxWindowID id, const wxString& title, cons
 	gSizer7 = new wxGridSizer( 0, 2, 0, 0 );
 
 	buttonAuto = new wxButton( this, wxID_ANY, _("Auto"), wxDefaultPosition, wxSize( 65,28 ), 0|wxBORDER_DEFAULT );
-	buttonAuto->SetFont( wxFont( 8, wxFONTFAMILY_SWISS, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, wxT("Arial") ) );
+	buttonAuto->SetFont( wxFont( 8, wxFONTFAMILY_SWISS, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD, false, wxT("Arial") ) );
 	buttonAuto->SetForegroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_BTNTEXT ) );
 	buttonAuto->SetBackgroundColour( wxColour( 255, 0, 0 ) );
 
 	gSizer7->Add( buttonAuto, 0, wxALIGN_CENTER_HORIZONTAL|wxTOP|wxALIGN_CENTER_VERTICAL, 1 );
 
 	buttonStandby = new wxButton( this, wxID_ANY, _("Standby"), wxDefaultPosition, wxSize( 65,28 ), 0 );
-	buttonStandby->SetFont( wxFont( 8, wxFONTFAMILY_SWISS, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, wxT("Arial") ) );
+	buttonStandby->SetFont( wxFont( 8, wxFONTFAMILY_SWISS, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD, false, wxT("Arial") ) );
 	buttonStandby->SetForegroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_BTNTEXT ) );
 	buttonStandby->SetBackgroundColour( wxColour( 0, 255, 0 ) );
 
 	gSizer7->Add( buttonStandby, 0, wxALIGN_CENTER_HORIZONTAL|wxTOP|wxALIGN_CENTER_VERTICAL, 1 );
 
 	buttonAutoWind = new wxButton( this, wxID_ANY, _("Auto-Wind"), wxDefaultPosition, wxSize( 65,28 ), 0 );
-	buttonAutoWind->SetFont( wxFont( 8, wxFONTFAMILY_SWISS, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, wxT("Arial") ) );
+	buttonAutoWind->SetFont( wxFont( 8, wxFONTFAMILY_SWISS, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD, false, wxT("Arial") ) );
 	buttonAutoWind->SetForegroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_BTNTEXT ) );
 	buttonAutoWind->SetBackgroundColour( wxColour( 255, 128, 128 ) );
 
 	gSizer7->Add( buttonAutoWind, 0, wxALIGN_CENTER_HORIZONTAL|wxBOTTOM|wxALIGN_CENTER_VERTICAL, 1 );
 
 	buttonTrack = new wxButton( this, wxID_ANY, _("Track"), wxDefaultPosition, wxSize( 65,28 ), 0 );
-	buttonTrack->SetFont( wxFont( 8, wxFONTFAMILY_SWISS, wxFONTSTYLE_ITALIC, wxFONTWEIGHT_NORMAL, false, wxT("Arial") ) );
+	buttonTrack->SetFont( wxFont( 8, wxFONTFAMILY_SWISS, wxFONTSTYLE_ITALIC, wxFONTWEIGHT_BOLD, false, wxT("Arial") ) );
 	buttonTrack->SetForegroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_BTNTEXT ) );
 	buttonTrack->SetBackgroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_ACTIVEBORDER ) );
 
@@ -275,8 +275,34 @@ m_Parameterdialog::m_Parameterdialog( wxWindow* parent, wxWindowID id, const wxS
 
 	bSizer2->Add( fgSizer2, 0, wxEXPAND, 5 );
 
-	m_SendSNBSE = new wxCheckBox( this, wxID_ANY, _("Send \"$SNBSE\" message to switch sending \"$STALK\" messages from SeatalkLink off, when Autopilot in not visible"), wxDefaultPosition, wxDefaultSize, 0 );
-	bSizer2->Add( m_SendSNBSE, 0, wxALL, 5 );
+	m_SendTrack = new wxCheckBox( this, wxID_ANY, _("Send \"Track\" automatic when Autopilot has new Waypoint. Be careful with this normaly you have to accept yourself."), wxDefaultPosition, wxDefaultSize, 0 );
+	bSizer2->Add( m_SendTrack, 0, wxALL, 5 );
+
+	wxFlexGridSizer* fgSizer5;
+	fgSizer5 = new wxFlexGridSizer( 0, 3, 0, 0 );
+	fgSizer5->SetFlexibleDirection( wxBOTH );
+	fgSizer5->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
+
+
+	fgSizer5->Add( 20, 0, 1, wxEXPAND, 5 );
+
+	m_TimeToSendNewWaypiont = new wxTextCtrl( this, wxID_ANY, _("10"), wxDefaultPosition, wxSize( 40,20 ), wxTE_CENTER );
+	#ifdef __WXGTK__
+	if ( !m_TimeToSendNewWaypiont->HasFlag( wxTE_MULTILINE ) )
+	{
+	m_TimeToSendNewWaypiont->SetMaxLength( 2 );
+	}
+	#else
+	m_TimeToSendNewWaypiont->SetMaxLength( 2 );
+	#endif
+	fgSizer5->Add( m_TimeToSendNewWaypiont, 0, wxALL, 5 );
+
+	m_NoStandbyCounterValueText1 = new wxStaticText( this, wxID_ANY, _("Time in seconds to wait before sending \"Track\" sentence."), wxDefaultPosition, wxSize( -1,-1 ), 0 );
+	m_NoStandbyCounterValueText1->Wrap( -1 );
+	fgSizer5->Add( m_NoStandbyCounterValueText1, 0, wxALIGN_CENTER_VERTICAL|wxALL, 3 );
+
+
+	bSizer2->Add( fgSizer5, 0, wxEXPAND, 5 );
 
 	wxFlexGridSizer* fgSizer1;
 	fgSizer1 = new wxFlexGridSizer( 0, 2, 0, 0 );
@@ -321,6 +347,9 @@ m_Parameterdialog::m_Parameterdialog( wxWindow* parent, wxWindowID id, const wxS
 
 	m_WriteDebug = new wxCheckBox( this, wxID_ANY, _("Debug all \"$STALK\" Messages into OPENCPN Logfile"), wxDefaultPosition, wxDefaultSize, 0 );
 	bSizer2->Add( m_WriteDebug, 0, wxALL, 5 );
+
+	m_ModyfyRMC = new wxCheckBox( this, wxID_ANY, _("Modify RMC Sentence as \"$ECRMC\" and replace or fill with Variationfield with the value from WMM Plugin"), wxDefaultPosition, wxDefaultSize, 0 );
+	bSizer2->Add( m_ModyfyRMC, 0, wxALL, 5 );
 
 	m_sdbSizer1 = new wxStdDialogButtonSizer();
 	m_sdbSizer1OK = new wxButton( this, wxID_OK );
