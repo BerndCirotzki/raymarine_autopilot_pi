@@ -59,7 +59,7 @@ extern "C" DECL_EXP void destroy_pi(opencpn_plugin* p)
 //
 //---------------------------------------------------------------------------------------------------------
 
-raymarine_autopilot_pi::raymarine_autopilot_pi(void *ppimgr) :opencpn_plugin_17 (ppimgr)
+raymarine_autopilot_pi::raymarine_autopilot_pi(void *ppimgr) :opencpn_plugin_116(ppimgr)
 {
       // Create the PlugIn icons
       initialize_images();
@@ -208,12 +208,12 @@ bool raymarine_autopilot_pi::DeInit(void)
 
 int raymarine_autopilot_pi::GetAPIVersionMajor()
 {
-      return MY_API_VERSION_MAJOR;
+      return OCPN_API_VERSION_MAJOR;
 }
 
 int raymarine_autopilot_pi::GetAPIVersionMinor()
 {
-      return MY_API_VERSION_MINOR;
+      return OCPN_API_VERSION_MINOR;
 }
 
 int raymarine_autopilot_pi::GetPlugInVersionMajor()

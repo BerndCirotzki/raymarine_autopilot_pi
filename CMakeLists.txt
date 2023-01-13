@@ -21,7 +21,7 @@ if(COMMAND cmake_policy)
         cmake_policy(SET CMP0043 NEW)
     endif(POLICY CMP0043)
     cmake_policy(SET CMP0048 NEW)
-    # Need cmake 3.13 to implement this, but raspbian builds are at 3.7.2 and bionic at 3.10 and xenial builds at 3.5.1
+# Need cmake 3.13 to implement this, but raspbian builds are at 3.7.2 and bionic at 3.10 and xenial builds at 3.5.1
     cmake_policy(SET CMP0076 NEW)
     if(POLICY CMP0077)
         cmake_policy(SET CMP0077 NEW)
@@ -30,12 +30,12 @@ endif(COMMAND cmake_policy)
 
 # define plugin name, owner and versions
 set(VERBOSE_NAME "raymarine_autopilot")
-set(COMMON_NAME "raymarine_autopilot")
+set(COMMON_NAME "Raymarine autopilot")
 set(TITLE_NAME "raymarine_autopilot")
 set(PACKAGE_CONTACT "Bernd Cirotzki")
 set(PACKAGE "raymarine_autopilot")
-set(SHORT_DESCRIPTION "Plugin to test examples of the ODAPI and JSON interface for ODRAW")
-set(LONG_DESCRIPTION "testplugin Plugin is used to test out the ODraw API and demonstrate how to use it successfully from another plugin")
+set(SHORT_DESCRIPTION "Plugin to contol a Raymarine Seatalk 1 Autopilot")
+set(LONG_DESCRIPTION "testplugin Plugin is used to contol a Raymarine Seatalk 1 Autopilot")
 
 set(VERSION_MAJOR "1")
 set(VERSION_MINOR "0")
@@ -59,12 +59,12 @@ set(ALPHA "alpha")  # Standard Repos
 
 # set this if your cloudsmith repository name does not match your git repository name
 #set(CLOUDSMITH_BASE_REPOSITORY "testplugin_pi")
-set(CLOUDSMITH_BASE_REPOSITORY "Raymarine Autopilot_pi")
+set(CLOUDSMITH_BASE_REPOSITORY "raymarine_autopilot_pi")
 # Set the following to use OpenCPN cloudsmith repositories instead of own repositories
 set(CLOUDSMITH_USER "opencpn")
 #set(CLOUDSMITH_USER "jon-gough")
 
-set(XML_INFO_URL "https://opencpn.org/wiki/dokuwiki/doku.php?id=opencpn:opencpn_user_manual:plugins:safety:odraw1.6_pi")
+set(XML_INFO_URL "https://opencpn-manuals.github.io/main/autopilot-rm/0.1/index.html")
 set(XML_SUMMARY ${SHORT_DESCRIPTION})
 set(XML_DESCRIPTION ${LONG_DESCRIPTION})
 

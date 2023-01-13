@@ -44,9 +44,6 @@
 
 #include "version.h"
 
-#define     MY_API_VERSION_MAJOR    1
-#define     MY_API_VERSION_MINOR    7
-
 #define AUTO		1
 #define STANDBY		2
 #define AUTOWIND	3
@@ -66,7 +63,7 @@ class localTimer;
 
 #define CALCULATOR_TOOL_POSITION    -1          // Request default positioning of toolbar tool
 
-class raymarine_autopilot_pi : public opencpn_plugin_17
+class raymarine_autopilot_pi : public opencpn_plugin_116
 {
 	
 public:
