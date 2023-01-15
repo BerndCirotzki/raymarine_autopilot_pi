@@ -1,10 +1,6 @@
 # ---------------------------------------------------------------------------
 # Author:      Bernd Cirotzk   Copyright: License:     wxWidgets License
 # ---------------------------------------------------------------------------
-## ----- When changing this file do NOT change the order in which sections occur        ----- ##
-## ----- Changes should only be made between the section blocks that identify where     ----- ##
-## ----- these changes should be. The whole configuration process relies on this        ----- ##
-## ----- sequence to be successful                                                      ----- ##
 ## ---------------------------------------------------------------------------
 ## Frontend Author: Jon Gough  Frontend2 Version: 1.0.222.1  25/12/2022  DD/MM/YYYY       
 ##  buildCI:yes useODAPI:no validateJSON:no  
@@ -45,9 +41,9 @@ set(LONG_DESCRIPTION "testplugin Plugin is used to contol a Raymarine Seatalk 1 
 
 set(VERSION_MAJOR "1")
 set(VERSION_MINOR "0")
-set(VERSION_PATCH "1")
+set(VERSION_PATCH "2")
 set(VERSION_TWEAK "0")
-set(VERSION_DATE "13/01/2023") # DD/MM/YYYY format
+set(VERSION_DATE "15/01/2023") # DD/MM/YYYY format
 set(OCPN_MIN_VERSION "ov50")
 set(OCPN_API_VERSION_MAJOR "1")
 set(OCPN_API_VERSION_MINOR "16")
