@@ -11,7 +11,7 @@
 
 m_dialog::m_dialog( wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style, const wxString& name ) : wxDialog( parent, id, title, pos, size, style, name )
 {
-	this->SetSizeHints( wxSize( 160,230 ), wxSize( 160,230 ) );
+	this->SetSizeHints( wxSize( 160,205 ), wxSize( -1,-1 ) );
 	this->SetForegroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_WINDOW ) );
 	this->SetBackgroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_MENU ) );
 

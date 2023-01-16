@@ -466,7 +466,6 @@ void raymarine_autopilot_pi::SetAutopilotparametersChangeable()
 		m_pDialog->ParameterValue->Show();
 		m_pDialog->buttonSet->Show();
 		m_pDialog->StaticLine3->Show();
-		m_pDialog->SetMaxSize(wxSize(160, 230));
 		m_pDialog->SetSize(wxSize(160, 230));
 		m_pDialog->SetMinSize(wxSize(160, 230));
 	}
@@ -478,7 +477,6 @@ void raymarine_autopilot_pi::SetAutopilotparametersChangeable()
 		m_pDialog->StaticLine3->Show(FALSE);
 		m_pDialog->SetSize(wxSize(160, 205));
 		m_pDialog->SetMinSize(wxSize(160, 205));
-		m_pDialog->SetMaxSize(wxSize(160, 205));
 	}
 }
 
