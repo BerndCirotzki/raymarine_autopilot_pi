@@ -76,7 +76,7 @@ void ParameterDialog::OnNewAuto(wxCommandEvent& event)
 	}
 }
 
-Dlg::Dlg( wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style ) : m_dialog( parent, id, title, pos, size, style )
+Dlg::Dlg( wxWindow* parent, double Skalefaktor, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style ) : m_dialog( parent, Skalefaktor, id, title, pos, size, style )
 {	
     this->Fit();
 	SetToggel = 0;

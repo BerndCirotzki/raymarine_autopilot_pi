@@ -1,4 +1,4 @@
-Ôªø/******************************************************************************
+/******************************************************************************
  *
  * Project:  OpenCPN
  * Purpose:  autopilot Plugin
@@ -66,7 +66,7 @@ raymarine_autopilot_pi::raymarine_autopilot_pi(void *ppimgr) :opencpn_plugin_116
 	  m_bShowautopilot = false;
 	  Autopilot_Status = UNKNOWN;
 	  StandbySelfPressed = FALSE;
-	  LastCompassCourse = -1; // Nicht g√ºltig
+	  LastCompassCourse = -1; // Nicht g¸ltig
 	  NeedCompassCorrection = false;
 	  wxLogMessage(("    Creating Raymarine Autopilot Plugin"));
 }
@@ -115,13 +115,15 @@ int raymarine_autopilot_pi::Init(void)
 	  RudderLevel = 0; // Unbekannt
 	  Standbycommandreceived = TRUE;
 	  CounterStandbySentencesReceived = 0;
+      Skalefaktor = 1;
 	  IS_standby = 0;
 	  BoatVariation = 0x01FF;  // Not Avalibal
       WMM_receive_count = 60; // set to No Information from WMM
 	  WayPointBearing = "unknown";
       //    And load the configuration items
       LoadConfig();
-
+      if (Skalefaktor < 1 || Skalefaktor > 2.1)
+          Skalefaktor = 1;
 	  //    This PlugIn needs a toolbar icon, so request its insertion
 	  if(m_bautopilotShowIcon)
 		m_leftclick_tool_id  = InsertPlugInTool(_T(""), _img_autopilot, _img_autopilot, wxITEM_CHECK,
@@ -130,7 +132,7 @@ int raymarine_autopilot_pi::Init(void)
 
       m_pDialog = NULL;
 	  DisplayShow = 0;
-	  m_pDialog = new Dlg(m_parent_window);
+	  m_pDialog = new Dlg(m_parent_window, Skalefaktor);
 	  m_pDialog->plugin = this;
 	  m_pDialog->Move(wxPoint(m_route_dialog_x, m_route_dialog_y));
 	  if (m_bShowautopilot) {
@@ -269,20 +271,12 @@ void raymarine_autopilot_pi::OnToolbarToolCallback(int id)
 {
       if(NULL == m_pDialog)
       {
-            m_pDialog = new Dlg(m_parent_window);
+            m_pDialog = new Dlg(m_parent_window, Skalefaktor);
             m_pDialog->plugin = this;
 			m_pDialog->Move(wxPoint(m_route_dialog_x, m_route_dialog_y));
       }
 	  else
-	  {
-		  //Capture dialog position
-		  //wxPoint p = m_pDialog->GetPosition();
-		  //SetCalculatorDialogX(p.x);
-		  //SetCalculatorDialogY(p.y);
-		  //delete m_pDialog;
-		  //m_pDialog = new Dlg(m_parent_window);
-		  //m_pDialog->plugin = this;
-		  //m_pDialog->Move(wxPoint(m_route_dialog_x, m_route_dialog_y));
+	  {		  
 		  if (NoStandbyCounter != 0)
 		  {
 			  m_pDialog->SetBgTextStatusColor(wxColour(255, 128, 128));
@@ -349,6 +343,7 @@ bool raymarine_autopilot_pi::LoadConfig(void)
 			// will be set to 0 when plugin starts
 			// NoStandbyCounter = pConf->Read(_T("NoStandbyCounter"), NoStandbyCounter);
 			SelectCounterStandby = pConf->Read(_T("SelectCounterStandby"), SelectCounterStandby);
+            Skalefaktor = ((double)pConf->Read(_T("Skalefaktor"), Skalefaktor)) / 10;
 			WriteMessages = (bool)pConf->Read(_T("WriteMessages"), WriteMessages);
 			WriteDebug = (bool)pConf->Read(_T("WriteDebug"), WriteDebug);
 			ModyfyRMC = (bool)pConf->Read(_T("ModyfyRMC"), ModyfyRMC);
@@ -381,6 +376,7 @@ bool raymarine_autopilot_pi::SaveConfig(void)
 			// will be set to 0 when plugin starts
 			//pConf->Write(_T("NoStandbyCounter"), NoStandbyCounter);
 			pConf->Write(_T("SelectCounterStandby"), SelectCounterStandby);
+            pConf->Write(_T("Skalefaktor"), (int)(Skalefaktor * 10));
 			pConf->Write(_T("WriteMessages"), WriteMessages);
 			pConf->Write(_T("WriteDebug"), WriteDebug);
 			pConf->Write(_T("ModyfyRMC"), ModyfyRMC);
@@ -407,6 +403,7 @@ void raymarine_autopilot_pi::ShowPreferencesDialog(wxWindow* parent)
 	dialog->m_ModyfyRMC->SetValue(ModyfyRMC);
 	dialog->m_STALKsendname->SetValue(STALKSendName);
 	dialog->m_STALKreceivename->SetValue(STALKReceiveName);
+    dialog->m_Skalefaktor->SetValue(round((Skalefaktor - 1) * 10));
 	if (NewAutoOnStandby == TRUE)
 	{
 		dialog->m_NewStandbyNoStandbyReceived->Enable(false);
@@ -437,6 +434,7 @@ void raymarine_autopilot_pi::ShowPreferencesDialog(wxWindow* parent)
 		NewStandbyNoStandbyReceived = dialog->m_NewStandbyNoStandbyReceived->GetValue();
 		NoStandbyCounter = atoi(dialog->m_NoStandbyCounter->GetValue());
 		SelectCounterStandby = dialog->m_SelectCounterStandby->GetSelection();
+        Skalefaktor = 1 + (double)((double)dialog->m_Skalefaktor->GetValue() / 10);
 		if (NULL != m_pDialog)
 		{
 			wxPoint p = m_pDialog->GetPosition();
@@ -444,7 +442,7 @@ void raymarine_autopilot_pi::ShowPreferencesDialog(wxWindow* parent)
 			SetCalculatorDialogY(p.y);
 			m_pDialog->Close();
             delete m_pDialog;
-			m_pDialog = new Dlg(m_parent_window);
+			m_pDialog = new Dlg(m_parent_window,Skalefaktor);
 			m_pDialog->plugin = this;
 			m_pDialog->Move(wxPoint(m_route_dialog_x, m_route_dialog_y));
 			if (m_bShowautopilot)
@@ -453,6 +451,7 @@ void raymarine_autopilot_pi::ShowPreferencesDialog(wxWindow* parent)
 		}
 		SaveConfig();
 	}
+
 	delete dialog;
 }
 
@@ -466,8 +465,9 @@ void raymarine_autopilot_pi::SetAutopilotparametersChangeable()
 		m_pDialog->ParameterValue->Show();
 		m_pDialog->buttonSet->Show();
 		m_pDialog->StaticLine3->Show();
-		m_pDialog->SetSize(wxSize(160, 230));
-		m_pDialog->SetMinSize(wxSize(160, 230));
+		m_pDialog->SetMaxSize(Skalefaktor * wxSize(160, 220));
+		m_pDialog->SetSize(Skalefaktor * wxSize(160, 220));
+		m_pDialog->SetMinSize(Skalefaktor * wxSize(160, 220));
 	}
 	else
 	{
@@ -475,8 +475,9 @@ void raymarine_autopilot_pi::SetAutopilotparametersChangeable()
 		m_pDialog->ParameterValue->Show(FALSE);
 		m_pDialog->buttonSet->Show(FALSE);
 		m_pDialog->StaticLine3->Show(FALSE);
-		m_pDialog->SetSize(wxSize(160, 205));
-		m_pDialog->SetMinSize(wxSize(160, 205));
+		m_pDialog->SetSize(Skalefaktor * wxSize(160, 195));
+		m_pDialog->SetMinSize(Skalefaktor * wxSize(160, 195));
+		m_pDialog->SetMaxSize(Skalefaktor * wxSize(160, 195));
 	}
 }
 
@@ -507,7 +508,7 @@ void raymarine_autopilot_pi::SetPluginMessage(wxString &message_id, wxString &me
 
 void raymarine_autopilot_pi::SetNMEASentence(wxString &sentence_incomming)
 {
-	// SS & 0x80 : Displays ‚ÄúAuto Rel‚Äù on 600R  this is Next Waypoint ist Bearing !!!
+	// SS & 0x80 : Displays "Auto Rel" on 600R  this is Next Waypoint ist Bearing !!!
 	// 
 	wxString sentence = sentence_incomming;
 	int tmp;
@@ -605,7 +606,7 @@ void raymarine_autopilot_pi::SetNMEASentence(wxString &sentence_incomming)
 			if (WriteDebug) wxLogInfo(("Received Auto %s"), sentence);
 			if (Autopilot_Status_Before != Autopilot_Status)
 			{
-				// Nur f√ºr Logging
+				// Nur f¸r Logging
 				if (WriteMessages) wxLogMessage("Auto-Status changed to AUTO");
 			}
 			if (StandbySelfPressed == TRUE)
@@ -623,7 +624,7 @@ void raymarine_autopilot_pi::SetNMEASentence(wxString &sentence_incomming)
 			if (Standbycommandreceived == TRUE && Autopilot_Status_Before != UNKNOWN)
 			{
 				// Warten ob Der Autopilot noch in Standbymode geht, falls Dieses "Auto" Signal kurz hinter dem
-				// Dr√ºcken der Standbytaste noch kam, und dadurch den "Standbycommandreceived Status wieder nach
+				// Dr¸cken der Standbytaste noch kam, und dadurch den "Standbycommandreceived Status wieder nach
 				// FALSE setzt.
 				// Zwei Sequenzen abwarten.
 				if (WriteMessages) wxLogMessage(("Standby from St6001 detected in Auto Mode %s"), sentence);
@@ -653,7 +654,7 @@ void raymarine_autopilot_pi::SetNMEASentence(wxString &sentence_incomming)
 				}
 				else
 				{
-					// Korrectur durchf√ºhren
+					// Korrectur durchf¸hren
 					// -------------------------------
 					tmp = atoi(GetAutopilotCompassCourse(sentence));
 					if (tmp < 0 || tmp > 360)
@@ -665,7 +666,7 @@ void raymarine_autopilot_pi::SetNMEASentence(wxString &sentence_incomming)
 					}
 					if (180 > abs(tmp - LastCompassCourse) &&  30 < abs(tmp - LastCompassCourse))
 					{
-						// Nicht mehr als 30 Grad √Ñnderung !!
+						// Nicht mehr als 30 Grad ƒnderung !!
 						if (WriteMessages) wxLogMessage("No Correction more than 30 degree");
 						NeedCompassCorrection = false;
 						break;
@@ -673,20 +674,20 @@ void raymarine_autopilot_pi::SetNMEASentence(wxString &sentence_incomming)
 					if (WriteMessages) wxLogMessage(("Correct Compass course from %i to %i"),tmp, LastCompassCourse);
 					if (180 < abs(tmp - LastCompassCourse))
 					{
-						// √úber Nodern √§ndern
+						// ‹ber Nodern ‰ndern
 						if (tmp > LastCompassCourse)
 						{
-							// Compasskurs muss √ºber Norden mit PLus ver√§ndert werden. (bis 0 Grad.)
+							// Compasskurs muss ¸ber Norden mit PLus ver‰ndert werden. (bis 0 Grad.)
 							if ((tmp - LastCompassCourse) >= 10)
 							{
-								// Mehr als 10 Grad differenz !! also +10 Grad √§ndern.
+								// Mehr als 10 Grad differenz !! also +10 Grad ‰ndern.
 								if (WriteMessages) wxLogMessage("Over North + 10");
 								Lsentence = "$" + STALKSendName + ",86,21,08,F7";
 								SendNMEASentence(Lsentence);
 							}
 							else
 							{
-								// Weniger als 10 Grad √§ndern.
+								// Weniger als 10 Grad ‰ndern.
 								if (WriteMessages) wxLogMessage("Over North + 1");
 								Lsentence = "$" + STALKSendName + ",86,21,07,F8";
 								SendNMEASentence(Lsentence);
@@ -694,17 +695,17 @@ void raymarine_autopilot_pi::SetNMEASentence(wxString &sentence_incomming)
 						}
 						else
 						{
-							// Compasskurs von z.B. 5 nach 340 ... √§ndern mit Minus
+							// Compasskurs von z.B. 5 nach 340 ... ‰ndern mit Minus
 							if ((LastCompassCourse - tmp) >= 10)
 							{
-								// Mehr als 10 Grad differenz !! also +10 Grad √§ndern.
+								// Mehr als 10 Grad differenz !! also +10 Grad ‰ndern.
 								if (WriteMessages) wxLogMessage("Over North - 10");
 								Lsentence = "$" + STALKSendName + ",86,21,06,F9";
 								SendNMEASentence(Lsentence);
 							}
 							else
 							{
-								// Weniger als 10 Grad √§ndern.
+								// Weniger als 10 Grad ‰ndern.
 								if (WriteMessages) wxLogMessage("Over North - 1");
 								Lsentence = "$" + STALKSendName + ",86,21,05,FA";
 								SendNMEASentence(Lsentence);
@@ -713,20 +714,20 @@ void raymarine_autopilot_pi::SetNMEASentence(wxString &sentence_incomming)
 					}
 					else
 					{
-						// Normale √Ñnderung nicht √ºber Norden.
+						// Normale ƒnderung nicht ¸ber Norden.
 						if (tmp > LastCompassCourse)
 						{
-							// Der Neue Compasskurs ist gr√∂sser als der alte also Verkleineren.
+							// Der Neue Compasskurs ist grˆsser als der alte also Verkleineren.
 							if ((tmp - LastCompassCourse) >= 10)
 							{
-								// Mehr als 10 Grad differenz !! also +10 Grad √§ndern.
+								// Mehr als 10 Grad differenz !! also +10 Grad ‰ndern.
 								if (WriteMessages) wxLogMessage("Korrectur - 10");
 								Lsentence = "$" + STALKSendName + ",86,21,06,F9";
 								SendNMEASentence(Lsentence);
 							}
 							else
 							{
-								// Weniger als 10 Grad √§ndern.
+								// Weniger als 10 Grad ‰ndern.
 								if (WriteMessages) wxLogMessage("Korrectur - 1");
 								Lsentence = "$" + STALKSendName + ",86,21,05,FA";
 								SendNMEASentence(Lsentence);
@@ -734,17 +735,17 @@ void raymarine_autopilot_pi::SetNMEASentence(wxString &sentence_incomming)
 						}
 						else
 						{
-							// Der neue Compass kurs ist kleiner als der alte. also Vergr√∂ssern.
+							// Der neue Compass kurs ist kleiner als der alte. also Vergrˆssern.
 							if ((LastCompassCourse - tmp) >= 10)
 							{
-								// Mehr als 10 Grad differenz !! also +10 Grad √§ndern.
+								// Mehr als 10 Grad differenz !! also +10 Grad ‰ndern.
 								if (WriteMessages) wxLogMessage("Korrectur + 10");
 								Lsentence = "$" + STALKSendName + ",86,21,08,F7";
 								SendNMEASentence(Lsentence);
 							}
 							else
 							{
-								// Weniger als 10 Grad √§ndern.
+								// Weniger als 10 Grad ‰ndern.
 								if (WriteMessages) wxLogMessage("Korrectur + 1");
 								Lsentence = "$" + STALKSendName + ",86,21,07,F8";
 								SendNMEASentence(Lsentence);
@@ -781,7 +782,7 @@ void raymarine_autopilot_pi::SetNMEASentence(wxString &sentence_incomming)
 			if (WriteDebug) wxLogInfo(("Received Auto-Track %s"), sentence);
 			if (Autopilot_Status_Before != Autopilot_Status)
 			{
-				// Nur f√ºr Logging
+				// Nur f¸r Logging
 				if (WriteMessages) wxLogMessage("Auto-Status changed to AUTO-TRACK");
 			}
 			if (StandbySelfPressed == TRUE)
@@ -798,7 +799,7 @@ void raymarine_autopilot_pi::SetNMEASentence(wxString &sentence_incomming)
 			if (Standbycommandreceived == TRUE && Autopilot_Status_Before != UNKNOWN)
 			{
 				// Warten ob Der Autopilot noch in Standbymode geht, falls Dieses "Auto" Signal kurz hinter dem
-				// Dr√ºcken der Standbytaste noch kam, und dadurch den "Standbycommandreceived Status wieder nach
+				// Dr¸cken der Standbytaste noch kam, und dadurch den "Standbycommandreceived Status wieder nach
 				// FALSE setzt.
 				// Zwei Sequenzen abwarten.
 				if (WriteMessages) wxLogMessage(("Standby from St6001 detected in Auto-Track Mode %s"), sentence);
@@ -827,7 +828,7 @@ void raymarine_autopilot_pi::SetNMEASentence(wxString &sentence_incomming)
 			if (WriteDebug) wxLogInfo(("Received Auto-Wind %s"), sentence);
 			if (Autopilot_Status_Before != Autopilot_Status)
 			{
-				// Nur f√ºr Logging
+				// Nur f¸r Logging
 				if (WriteMessages) wxLogMessage("Auto-Status changed to AUTO-WIND");
 			}
 			if (StandbySelfPressed == TRUE)
@@ -844,7 +845,7 @@ void raymarine_autopilot_pi::SetNMEASentence(wxString &sentence_incomming)
 			if (Standbycommandreceived == TRUE && Autopilot_Status_Before != UNKNOWN)
 			{
 				// Warten ob Der Autopilot noch in Standbymode geht, falls Dieses "Auto" Signal kurz hinter dem
-				// Dr√ºcken der Standbytaste noch kam, und dadurch den "Standbycommandreceived Status wieder nach
+				// Dr¸cken der Standbytaste noch kam, und dadurch den "Standbycommandreceived Status wieder nach
 				// FALSE setzt.
 				// Zwei Sequenzen abwarten.
 				if (WriteMessages) wxLogMessage(("Standby from St6001 detected in Auto-Wind Mode %s"), sentence);
@@ -870,7 +871,7 @@ void raymarine_autopilot_pi::SetNMEASentence(wxString &sentence_incomming)
 			if (WriteDebug) wxLogInfo(("Received Windshift %s"), sentence);
 			if (Autopilot_Status_Before != Autopilot_Status)
 			{
-				// Nur f√ºr Logging
+				// Nur f¸r Logging
 				if (WriteMessages) wxLogMessage("Auto-Status .... Windshift received");
 			}
 			if (StandbySelfPressed == TRUE)
@@ -902,7 +903,7 @@ void raymarine_autopilot_pi::SetNMEASentence(wxString &sentence_incomming)
 			if (WriteDebug) wxLogInfo(("Received Off-Course %s"), sentence);
 			if (Autopilot_Status_Before != Autopilot_Status)
 			{
-				// Nur f√ºr Logging
+				// Nur f¸r Logging
 				if (WriteMessages) wxLogMessage("Auto-Status .... Off-Course received");
 			}
 			if (StandbySelfPressed == TRUE)
@@ -927,11 +928,11 @@ void raymarine_autopilot_pi::SetNMEASentence(wxString &sentence_incomming)
 			if (WriteDebug) wxLogInfo(("Received Standby %s"), sentence);
 			if (Autopilot_Status_Before != Autopilot_Status)
 			{
-				// Nur f√ºr Logging
+				// Nur f¸r Logging
 				if (WriteMessages) wxLogMessage("Auto-Status changed to STANDBY");
 			}
 			if (Autopilot_Status_Before != STANDBY &&
-				NewStandbyNoStandbyReceived == TRUE &&  // Sool √úberhaupt ein Neues Standby gesendent werden ?
+				NewStandbyNoStandbyReceived == TRUE &&  // Sool ‹berhaupt ein Neues Standby gesendent werden ?
 				Standbycommandreceived == FALSE &&
 				NoStandbyCounter <= SelectCounterStandby &&  // Es soll StandbyCommando ausgewertet werden. Maximale Anzahl.
 				ConfirmNextWaypoint(sentence) == false) // Kein Fehler aufgetreten, sonst geht der Autopilot selber in Standby
@@ -954,14 +955,14 @@ void raymarine_autopilot_pi::SetNMEASentence(wxString &sentence_incomming)
 					IS_standby = 0;
 					if (WriteMessages) wxLogMessage(("StandbyCommandreceived = False %s"), sentence);
 					CounterStandbySentencesReceived = 0;
-					Autopilot_Status = Autopilot_Status_Before; // Dadurch werden mehrere Seqnenzen gesendet, wenn n√∂tig.
+					Autopilot_Status = Autopilot_Status_Before; // Dadurch werden mehrere Seqnenzen gesendet, wenn nˆtig.
 					if (Autopilot_Status_Before == AUTO)
 					{
 						if (WriteMessages) wxLogMessage("---------------Send New Auto------------");
 						Lsentence = "$" + STALKSendName + ",86,21,01,FE";
 						if (ChangeValueToLast == true)
 						{
-							// Kurskorrectur durchf√ºhren
+							// Kurskorrectur durchf¸hren
 							if (WriteMessages) wxLogMessage("Course correction is enabled");
 							NeedCompassCorrection = true;
 						}
@@ -981,7 +982,7 @@ void raymarine_autopilot_pi::SetNMEASentence(wxString &sentence_incomming)
 						Lsentence = "$" + STALKSendName + ",86,21,03,FC";
 					}
 					SendNMEASentence(Lsentence);
-					// FehlerCounter hohchz√§hlen.
+					// FehlerCounter hohchz‰hlen.
 					NoStandbyCounter++;
 					if (NoStandbyCounter > SelectCounterStandby)
 					{
@@ -1003,7 +1004,7 @@ void raymarine_autopilot_pi::SetNMEASentence(wxString &sentence_incomming)
 				CounterStandbySentencesReceived = 0;
 				NeedCompassCorrection = false;
 			}
-			if (Autopilot_Status_Before == AUTO || Autopilot_Status_Before == AUTOWIND) // Zustand√§nderung von Auto -> Standby
+			if (Autopilot_Status_Before == AUTO || Autopilot_Status_Before == AUTOWIND) // Zustand‰nderung von Auto -> Standby
 			{
 				CounterStandbySentencesReceived = 0;
 				if (StandbySelfPressed == FALSE &&
@@ -1021,7 +1022,7 @@ void raymarine_autopilot_pi::SetNMEASentence(wxString &sentence_incomming)
 					SendNMEASentence(Lsentence);
 					if (ChangeValueToLast == true)
 					{
-						// Kurskorrectur durchf√ºhren
+						// Kurskorrectur durchf¸hren
 						if (WriteMessages) wxLogMessage("Course correction(2) is enabled");
 						NeedCompassCorrection = true;
 					}
@@ -1154,7 +1155,7 @@ void raymarine_autopilot_pi::GetWaypointBearing(const wxString &sentence)
 			WayPointBearing = s.Left(s.find(wxT(",")));
 			if (WayPointBearing.find(wxT(".")) != -1)
 				WayPointBearing = WayPointBearing.Left(WayPointBearing.find(wxT(".")));
-			WayPointBearing += " ¬∞";
+			WayPointBearing += " ∞";
 			return;
 		}
 	}

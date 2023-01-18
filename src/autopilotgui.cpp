@@ -2,175 +2,177 @@
 // C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b3)
 // http://www.wxformbuilder.org/
 //
-// PLEASE DO *NOT* EDIT THIS FILE!
+// Code manuell updated ... do not overwrite with wxFormbuilder
+// Skalefaktor added to m_dialog.
+// Bernd Cirotzki 18.01.2023
 ///////////////////////////////////////////////////////////////////////////
 
 #include "autopilotgui.h"
 
 ///////////////////////////////////////////////////////////////////////////
 
-m_dialog::m_dialog( wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style, const wxString& name ) : wxDialog( parent, id, title, pos, size, style, name )
+m_dialog::m_dialog(wxWindow* parent, double Skalefaktor, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style, const wxString& name) : wxDialog(parent, id, title, pos, size, style, name)
 {
-	this->SetSizeHints( wxSize( 160,205 ), wxSize( -1,-1 ) );
-	this->SetForegroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_WINDOW ) );
-	this->SetBackgroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_MENU ) );
+    this->SetSizeHints(Skalefaktor * wxSize(160, 195), Skalefaktor * wxSize(160, 220));
+    this->SetForegroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOW));
+    this->SetBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_MENU));
 
-	wxBoxSizer* bSizer10;
-	bSizer10 = new wxBoxSizer( wxVERTICAL );
+    wxBoxSizer* bSizer10;
+    bSizer10 = new wxBoxSizer(wxVERTICAL);
 
-	StaticLine1 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxSize( -1,2 ), wxLI_HORIZONTAL );
-	StaticLine1->SetMinSize( wxSize( -1,2 ) );
-	StaticLine1->SetMaxSize( wxSize( -1,2 ) );
+    StaticLine1 = new wxStaticLine(this, wxID_ANY, wxDefaultPosition, Skalefaktor * wxSize(-1, 2), wxLI_HORIZONTAL);
+    StaticLine1->SetMinSize(wxSize(-1, 2));
+    StaticLine1->SetMaxSize(wxSize(-1, 2));
 
-	bSizer10->Add( StaticLine1, 1, wxEXPAND | wxALL, 3 );
+    bSizer10->Add(StaticLine1, 1, wxEXPAND | wxALL, 3);
 
-	TextStatus = new wxTextCtrl( this, wxID_ANY, _("----------"), wxDefaultPosition, wxSize( 120,30 ), wxTE_CENTER|wxTE_READONLY );
-	TextStatus->SetFont( wxFont( 13, wxFONTFAMILY_SWISS, wxFONTSTYLE_ITALIC, wxFONTWEIGHT_BOLD, false, wxT("Arial") ) );
-	TextStatus->SetForegroundColour( wxColour( 0, 0, 128 ) );
-	TextStatus->SetBackgroundColour( wxColour( 255, 255, 225 ) );
+    TextStatus = new wxTextCtrl(this, wxID_ANY, _("----------"), wxDefaultPosition, Skalefaktor * wxSize(120, 30), wxTE_CENTER | wxTE_READONLY);
+    TextStatus->SetFont(wxFont(Skalefaktor * 13, wxFONTFAMILY_SWISS, wxFONTSTYLE_ITALIC, wxFONTWEIGHT_BOLD, false, wxT("Arial")));
+    TextStatus->SetForegroundColour(wxColour(0, 0, 128));
+    TextStatus->SetBackgroundColour(wxColour(255, 255, 225));
 
-	bSizer10->Add( TextStatus, 0, wxALIGN_CENTER_HORIZONTAL, 5 );
+    bSizer10->Add(TextStatus, 0, wxALIGN_CENTER_HORIZONTAL, 5);
 
-	TextCompass = new wxTextCtrl( this, wxID_ANY, _("---"), wxDefaultPosition, wxSize( 120,20 ), wxTE_READONLY|wxTE_CENTER );
-	TextCompass->SetFont( wxFont( 10, wxFONTFAMILY_SWISS, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD, false, wxT("Arial") ) );
-	TextCompass->SetForegroundColour( wxColour( 0, 0, 64 ) );
-	TextCompass->SetBackgroundColour( wxColour( 255, 255, 225 ) );
+    TextCompass = new wxTextCtrl(this, wxID_ANY, _("---"), wxDefaultPosition, Skalefaktor * wxSize(120, 20), wxTE_READONLY | wxTE_CENTER);
+    TextCompass->SetFont(wxFont(Skalefaktor * 10, wxFONTFAMILY_SWISS, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD, false, wxT("Arial")));
+    TextCompass->SetForegroundColour(wxColour(0, 0, 64));
+    TextCompass->SetBackgroundColour(wxColour(255, 255, 225));
 
-	bSizer10->Add( TextCompass, 0, wxALIGN_CENTER_HORIZONTAL, 5 );
+    bSizer10->Add(TextCompass, 0, wxALIGN_CENTER_HORIZONTAL, 5);
 
-	StaticLine2 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxSize( -1,2 ), wxLI_HORIZONTAL );
-	StaticLine2->SetMaxSize( wxSize( -1,2 ) );
+    StaticLine2 = new wxStaticLine(this, wxID_ANY, wxDefaultPosition, Skalefaktor * wxSize(-1, 2), wxLI_HORIZONTAL);
+    StaticLine2->SetMaxSize(wxSize(-1, 2));
 
-	bSizer10->Add( StaticLine2, 1, wxALL|wxEXPAND, 4 );
+    bSizer10->Add(StaticLine2, 1, wxALL | wxEXPAND, 4);
 
-	wxFlexGridSizer* fgSizer4;
-	fgSizer4 = new wxFlexGridSizer( 0, 3, 0, 0 );
-	fgSizer4->SetFlexibleDirection( wxBOTH );
-	fgSizer4->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
+    wxFlexGridSizer* fgSizer4;
+    fgSizer4 = new wxFlexGridSizer(0, 3, 0, 0);
+    fgSizer4->SetFlexibleDirection(wxBOTH);
+    fgSizer4->SetNonFlexibleGrowMode(wxFLEX_GROWMODE_SPECIFIED);
 
-	wxString ParameterChoiseChoices[] = { _("------------"), _("Response"), _("WindTrim"), _("RudderGain") };
-	int ParameterChoiseNChoices = sizeof( ParameterChoiseChoices ) / sizeof( wxString );
-	ParameterChoise = new wxChoice( this, wxID_ANY, wxDefaultPosition, wxSize( 69,18 ), ParameterChoiseNChoices, ParameterChoiseChoices, 0 );
-	ParameterChoise->SetSelection( 3 );
-	ParameterChoise->SetFont( wxFont( 6, wxFONTFAMILY_SWISS, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD, false, wxT("Arial") ) );
-	ParameterChoise->SetBackgroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_MENU ) );
-	ParameterChoise->SetMinSize( wxSize( 69,18 ) );
+    wxString ParameterChoiseChoices[] = { _("------------"), _("Response"), _("WindTrim"), _("RudderGain") };
+    int ParameterChoiseNChoices = sizeof(ParameterChoiseChoices) / sizeof(wxString);
+    ParameterChoise = new wxChoice(this, wxID_ANY, wxDefaultPosition, Skalefaktor * wxSize(69, 18), ParameterChoiseNChoices, ParameterChoiseChoices, 0);
+    ParameterChoise->SetSelection(3);
+    ParameterChoise->SetFont(wxFont(Skalefaktor * 6, wxFONTFAMILY_SWISS, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD, false, wxT("Arial")));
+    ParameterChoise->SetBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_MENU));
+    ParameterChoise->SetMinSize(Skalefaktor * wxSize(69, 18));
 
-	fgSizer4->Add( ParameterChoise, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_CENTER_HORIZONTAL, 0 );
+    fgSizer4->Add(ParameterChoise, 0, wxALIGN_CENTER_VERTICAL | wxALIGN_CENTER_HORIZONTAL, 0);
 
-	wxString ParameterValueChoices[] = { _("-"), _("1"), _("2"), _("3"), _("4"), _("5"), _("6"), _("7"), _("8"), _("9") };
-	int ParameterValueNChoices = sizeof( ParameterValueChoices ) / sizeof( wxString );
-	ParameterValue = new wxChoice( this, wxID_ANY, wxDefaultPosition, wxSize( 28,18 ), ParameterValueNChoices, ParameterValueChoices, 0 );
-	ParameterValue->SetSelection( 5 );
-	ParameterValue->SetFont( wxFont( 6, wxFONTFAMILY_SWISS, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD, false, wxT("Arial") ) );
-	ParameterValue->SetBackgroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_MENU ) );
-	ParameterValue->SetMinSize( wxSize( 28,18 ) );
+    wxString ParameterValueChoices[] = { _("-"), _("1"), _("2"), _("3"), _("4"), _("5"), _("6"), _("7"), _("8"), _("9") };
+    int ParameterValueNChoices = sizeof(ParameterValueChoices) / sizeof(wxString);
+    ParameterValue = new wxChoice(this, wxID_ANY, wxDefaultPosition, Skalefaktor * wxSize(28, 18), ParameterValueNChoices, ParameterValueChoices, 0);
+    ParameterValue->SetSelection(5);
+    ParameterValue->SetFont(wxFont(Skalefaktor * 6, wxFONTFAMILY_SWISS, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD, false, wxT("Arial")));
+    ParameterValue->SetBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_MENU));
+    ParameterValue->SetMinSize(Skalefaktor * wxSize(28, 18));
 
-	fgSizer4->Add( ParameterValue, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_CENTER_HORIZONTAL, 0 );
+    fgSizer4->Add(ParameterValue, 0, wxALIGN_CENTER_VERTICAL | wxALIGN_CENTER_HORIZONTAL, 0);
 
-	buttonSet = new wxButton( this, wxID_ANY, _("Set"), wxDefaultPosition, wxSize( 38,18 ), 0 );
-	buttonSet->SetFont( wxFont( 6, wxFONTFAMILY_SWISS, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD, false, wxT("Arial") ) );
-	buttonSet->SetForegroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_BTNTEXT ) );
-	buttonSet->SetBackgroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_ACTIVEBORDER ) );
-	buttonSet->SetMinSize( wxSize( 38,18 ) );
+    buttonSet = new wxButton(this, wxID_ANY, _("Set"), wxDefaultPosition, Skalefaktor * wxSize(38, 18), 0);
+    buttonSet->SetFont(wxFont(Skalefaktor * 6, wxFONTFAMILY_SWISS, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD, false, wxT("Arial")));
+    buttonSet->SetForegroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_BTNTEXT));
+    buttonSet->SetBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_ACTIVEBORDER));
+    buttonSet->SetMinSize(Skalefaktor * wxSize(38, 18));
 
-	fgSizer4->Add( buttonSet, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 0 );
-
-
-	bSizer10->Add( fgSizer4, 0, wxALIGN_CENTER_HORIZONTAL, 1 );
-
-	StaticLine3 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxSize( -1,2 ), wxLI_HORIZONTAL );
-	StaticLine3->SetMaxSize( wxSize( -1,2 ) );
-
-	bSizer10->Add( StaticLine3, 1, wxALIGN_CENTER_HORIZONTAL|wxALL|wxEXPAND, 4 );
-
-	wxFlexGridSizer* fgSizer5;
-	fgSizer5 = new wxFlexGridSizer( 0, 4, 0, 0 );
-	fgSizer5->SetFlexibleDirection( wxBOTH );
-	fgSizer5->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
-
-	buttonDecOne = new wxButton( this, wxID_ANY, _("-1"), wxDefaultPosition, wxSize( 34,34 ), 0 );
-	buttonDecOne->SetFont( wxFont( 8, wxFONTFAMILY_SWISS, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD, false, wxT("Arial") ) );
-	buttonDecOne->SetBackgroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_ACTIVEBORDER ) );
-
-	fgSizer5->Add( buttonDecOne, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 1 );
-
-	buttonDecTen = new wxButton( this, wxID_ANY, _("-10"), wxDefaultPosition, wxSize( 30,30 ), 0 );
-	buttonDecTen->SetFont( wxFont( 8, wxFONTFAMILY_SWISS, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD, false, wxT("Arial") ) );
-	buttonDecTen->SetBackgroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_ACTIVEBORDER ) );
-
-	fgSizer5->Add( buttonDecTen, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_RIGHT, 1 );
-
-	buttonIncTen = new wxButton( this, wxID_ANY, _("+10"), wxDefaultPosition, wxSize( 30,30 ), 0 );
-	buttonIncTen->SetFont( wxFont( 8, wxFONTFAMILY_SWISS, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD, false, wxT("Arial") ) );
-	buttonIncTen->SetBackgroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_ACTIVEBORDER ) );
-
-	fgSizer5->Add( buttonIncTen, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_RIGHT, 1 );
-
-	buttonIncOne = new wxButton( this, wxID_ANY, _("+1"), wxDefaultPosition, wxSize( 34,34 ), 0 );
-	buttonIncOne->SetFont( wxFont( 8, wxFONTFAMILY_SWISS, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD, false, wxT("Arial") ) );
-	buttonIncOne->SetBackgroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_ACTIVEBORDER ) );
-
-	fgSizer5->Add( buttonIncOne, 0, wxALIGN_CENTER_VERTICAL, 1 );
+    fgSizer4->Add(buttonSet, 0, wxALIGN_CENTER_HORIZONTAL | wxALIGN_CENTER_VERTICAL, 0);
 
 
-	bSizer10->Add( fgSizer5, 0, wxALIGN_CENTER_HORIZONTAL, 1 );
+    bSizer10->Add(fgSizer4, 0, wxALIGN_CENTER_HORIZONTAL, 1);
 
-	wxGridSizer* gSizer7;
-	gSizer7 = new wxGridSizer( 0, 2, 0, 0 );
+    StaticLine3 = new wxStaticLine(this, wxID_ANY, wxDefaultPosition, Skalefaktor * wxSize(-1, 2), wxLI_HORIZONTAL);
+    StaticLine3->SetMaxSize(Skalefaktor * wxSize(-1, 2));
 
-	buttonAuto = new wxButton( this, wxID_ANY, _("Auto"), wxDefaultPosition, wxSize( 65,28 ), 0|wxBORDER_DEFAULT );
-	buttonAuto->SetFont( wxFont( 8, wxFONTFAMILY_SWISS, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD, false, wxT("Arial") ) );
-	buttonAuto->SetForegroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_BTNTEXT ) );
-	buttonAuto->SetBackgroundColour( wxColour( 255, 0, 0 ) );
+    bSizer10->Add(StaticLine3, 1, wxALIGN_CENTER_HORIZONTAL | wxALL | wxEXPAND, 4);
 
-	gSizer7->Add( buttonAuto, 0, wxALIGN_CENTER_HORIZONTAL|wxTOP|wxALIGN_CENTER_VERTICAL, 1 );
+    wxFlexGridSizer* fgSizer5;
+    fgSizer5 = new wxFlexGridSizer(0, 4, 0, 0);
+    fgSizer5->SetFlexibleDirection(wxBOTH);
+    fgSizer5->SetNonFlexibleGrowMode(wxFLEX_GROWMODE_SPECIFIED);
 
-	buttonStandby = new wxButton( this, wxID_ANY, _("Standby"), wxDefaultPosition, wxSize( 65,28 ), 0 );
-	buttonStandby->SetFont( wxFont( 8, wxFONTFAMILY_SWISS, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD, false, wxT("Arial") ) );
-	buttonStandby->SetForegroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_BTNTEXT ) );
-	buttonStandby->SetBackgroundColour( wxColour( 0, 255, 0 ) );
+    buttonDecOne = new wxButton(this, wxID_ANY, _("-1"), wxDefaultPosition, Skalefaktor * wxSize(34, 34), 0);
+    buttonDecOne->SetFont(wxFont(Skalefaktor * 8, wxFONTFAMILY_SWISS, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD, false, wxT("Arial")));
+    buttonDecOne->SetBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_ACTIVEBORDER));
 
-	gSizer7->Add( buttonStandby, 0, wxALIGN_CENTER_HORIZONTAL|wxTOP|wxALIGN_CENTER_VERTICAL, 1 );
+    fgSizer5->Add(buttonDecOne, 0, wxALIGN_CENTER_HORIZONTAL | wxALIGN_CENTER_VERTICAL, 1);
 
-	buttonAutoWind = new wxButton( this, wxID_ANY, _("Auto-Wind"), wxDefaultPosition, wxSize( 65,28 ), 0 );
-	buttonAutoWind->SetFont( wxFont( 8, wxFONTFAMILY_SWISS, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD, false, wxT("Arial") ) );
-	buttonAutoWind->SetForegroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_BTNTEXT ) );
-	buttonAutoWind->SetBackgroundColour( wxColour( 255, 128, 128 ) );
+    buttonDecTen = new wxButton(this, wxID_ANY, _("-10"), wxDefaultPosition, Skalefaktor * wxSize(30, 30), 0);
+    buttonDecTen->SetFont(wxFont(Skalefaktor * 8, wxFONTFAMILY_SWISS, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD, false, wxT("Arial")));
+    buttonDecTen->SetBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_ACTIVEBORDER));
 
-	gSizer7->Add( buttonAutoWind, 0, wxALIGN_CENTER_HORIZONTAL|wxBOTTOM|wxALIGN_CENTER_VERTICAL, 1 );
+    fgSizer5->Add(buttonDecTen, 0, wxALIGN_CENTER_VERTICAL | wxALIGN_RIGHT, 1);
 
-	buttonTrack = new wxButton( this, wxID_ANY, _("Track"), wxDefaultPosition, wxSize( 65,28 ), 0 );
-	buttonTrack->SetFont( wxFont( 8, wxFONTFAMILY_SWISS, wxFONTSTYLE_ITALIC, wxFONTWEIGHT_BOLD, false, wxT("Arial") ) );
-	buttonTrack->SetForegroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_BTNTEXT ) );
-	buttonTrack->SetBackgroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_ACTIVEBORDER ) );
+    buttonIncTen = new wxButton(this, wxID_ANY, _("+10"), wxDefaultPosition, Skalefaktor * wxSize(30, 30), 0);
+    buttonIncTen->SetFont(wxFont(Skalefaktor * 8, wxFONTFAMILY_SWISS, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD, false, wxT("Arial")));
+    buttonIncTen->SetBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_ACTIVEBORDER));
 
-	gSizer7->Add( buttonTrack, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 1 );
+    fgSizer5->Add(buttonIncTen, 0, wxALIGN_CENTER_VERTICAL | wxALIGN_RIGHT, 1);
+
+    buttonIncOne = new wxButton(this, wxID_ANY, _("+1"), wxDefaultPosition, Skalefaktor * wxSize(34, 34), 0);
+    buttonIncOne->SetFont(wxFont(Skalefaktor * 8, wxFONTFAMILY_SWISS, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD, false, wxT("Arial")));
+    buttonIncOne->SetBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_ACTIVEBORDER));
+
+    fgSizer5->Add(buttonIncOne, 0, wxALIGN_CENTER_VERTICAL, 1);
 
 
-	bSizer10->Add( gSizer7, 0, wxALIGN_CENTER, 1 );
+    bSizer10->Add(fgSizer5, 0, wxALIGN_CENTER_HORIZONTAL, 1);
+
+    wxGridSizer* gSizer7;
+    gSizer7 = new wxGridSizer(0, 2, 0, 0);
+
+    buttonAuto = new wxButton(this, wxID_ANY, _("Auto"), wxDefaultPosition, Skalefaktor * wxSize(65, 28), 0 | wxBORDER_DEFAULT);
+    buttonAuto->SetFont(wxFont(Skalefaktor * 8, wxFONTFAMILY_SWISS, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD, false, wxT("Arial")));
+    buttonAuto->SetForegroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_BTNTEXT));
+    buttonAuto->SetBackgroundColour(wxColour(255, 0, 0));
+
+    gSizer7->Add(buttonAuto, 0, wxALIGN_CENTER_HORIZONTAL | wxTOP | wxALIGN_CENTER_VERTICAL, 1);
+
+    buttonStandby = new wxButton(this, wxID_ANY, _("Standby"), wxDefaultPosition, Skalefaktor * wxSize(65, 28), 0);
+    buttonStandby->SetFont(wxFont(Skalefaktor * 8, wxFONTFAMILY_SWISS, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD, false, wxT("Arial")));
+    buttonStandby->SetForegroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_BTNTEXT));
+    buttonStandby->SetBackgroundColour(wxColour(0, 255, 0));
+
+    gSizer7->Add(buttonStandby, 0, wxALIGN_CENTER_HORIZONTAL | wxTOP | wxALIGN_CENTER_VERTICAL, 1);
+
+    buttonAutoWind = new wxButton(this, wxID_ANY, _("Auto-Wind"), wxDefaultPosition, Skalefaktor * wxSize(65, 28), 0);
+    buttonAutoWind->SetFont(wxFont(Skalefaktor * 8, wxFONTFAMILY_SWISS, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD, false, wxT("Arial")));
+    buttonAutoWind->SetForegroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_BTNTEXT));
+    buttonAutoWind->SetBackgroundColour(wxColour(255, 128, 128));
+
+    gSizer7->Add(buttonAutoWind, 0, wxALIGN_CENTER_HORIZONTAL | wxBOTTOM | wxALIGN_CENTER_VERTICAL, 1);
+
+    buttonTrack = new wxButton(this, wxID_ANY, _("Track"), wxDefaultPosition, Skalefaktor * wxSize(65, 28), 0);
+    buttonTrack->SetFont(wxFont(Skalefaktor * 8, wxFONTFAMILY_SWISS, wxFONTSTYLE_ITALIC, wxFONTWEIGHT_BOLD, false, wxT("Arial")));
+    buttonTrack->SetForegroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_BTNTEXT));
+    buttonTrack->SetBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_ACTIVEBORDER));
+
+    gSizer7->Add(buttonTrack, 0, wxALIGN_CENTER_HORIZONTAL | wxALIGN_CENTER_VERTICAL, 1);
 
 
-	this->SetSizer( bSizer10 );
-	this->Layout();
+    bSizer10->Add(gSizer7, 0, wxALIGN_CENTER, 1);
 
-	this->Centre( wxBOTH );
 
-	// Connect Events
-	this->Connect( wxEVT_ACTIVATE_APP, wxActivateEventHandler( m_dialog::OnActiveApp ) );
-	this->Connect( wxEVT_CLOSE_WINDOW, wxCloseEventHandler( m_dialog::OnCloseApp ) );
-	TextStatus->Connect( wxEVT_LEFT_DOWN, wxMouseEventHandler( m_dialog::OnKlickInDisplay ), NULL, this );
-	TextCompass->Connect( wxEVT_LEFT_DOWN, wxMouseEventHandler( m_dialog::OnKlickInDisplay ), NULL, this );
-	ParameterChoise->Connect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( m_dialog::OnSelectParameter ), NULL, this );
-	buttonSet->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( m_dialog::OnSetParameterValue ), NULL, this );
-	buttonDecOne->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( m_dialog::OnDecrementOne ), NULL, this );
-	buttonDecTen->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( m_dialog::OnDecrementTen ), NULL, this );
-	buttonIncTen->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( m_dialog::OnIncrementTen ), NULL, this );
-	buttonIncOne->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( m_dialog::OnIncrementOne ), NULL, this );
-	buttonAuto->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( m_dialog::OnAuto ), NULL, this );
-	buttonStandby->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( m_dialog::OnStandby ), NULL, this );
-	buttonAutoWind->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( m_dialog::OnAutoWind ), NULL, this );
-	buttonTrack->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( m_dialog::OnTrack ), NULL, this );
+    this->SetSizer(bSizer10);
+    this->Layout();
+
+    this->Centre(wxBOTH);
+
+    // Connect Events
+    this->Connect(wxEVT_ACTIVATE_APP, wxActivateEventHandler(m_dialog::OnActiveApp));
+    this->Connect(wxEVT_CLOSE_WINDOW, wxCloseEventHandler(m_dialog::OnCloseApp));
+    TextStatus->Connect(wxEVT_LEFT_DOWN, wxMouseEventHandler(m_dialog::OnKlickInDisplay), NULL, this);
+    TextCompass->Connect(wxEVT_LEFT_DOWN, wxMouseEventHandler(m_dialog::OnKlickInDisplay), NULL, this);
+    ParameterChoise->Connect(wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler(m_dialog::OnSelectParameter), NULL, this);
+    buttonSet->Connect(wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler(m_dialog::OnSetParameterValue), NULL, this);
+    buttonDecOne->Connect(wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler(m_dialog::OnDecrementOne), NULL, this);
+    buttonDecTen->Connect(wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler(m_dialog::OnDecrementTen), NULL, this);
+    buttonIncTen->Connect(wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler(m_dialog::OnIncrementTen), NULL, this);
+    buttonIncOne->Connect(wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler(m_dialog::OnIncrementOne), NULL, this);
+    buttonAuto->Connect(wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler(m_dialog::OnAuto), NULL, this);
+    buttonStandby->Connect(wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler(m_dialog::OnStandby), NULL, this);
+    buttonAutoWind->Connect(wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler(m_dialog::OnAutoWind), NULL, this);
+    buttonTrack->Connect(wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler(m_dialog::OnTrack), NULL, this);
 }
 
 m_dialog::~m_dialog()
@@ -203,6 +205,26 @@ m_Parameterdialog::m_Parameterdialog( wxWindow* parent, wxWindowID id, const wxS
 	m_checkParameters = new wxCheckBox( this, wxID_ANY, _("Autopilot Parameters changeable"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_checkParameters->SetValue(true);
 	bSizer2->Add( m_checkParameters, 0, wxALL, 5 );
+
+	wxFlexGridSizer* fgSizer51;
+	fgSizer51 = new wxFlexGridSizer( 0, 3, 0, 0 );
+	fgSizer51->SetFlexibleDirection( wxBOTH );
+	fgSizer51->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
+
+
+	fgSizer51->Add( 20, 0, 1, wxEXPAND, 5 );
+
+	m_NoStandbyCounterValueText11 = new wxStaticText( this, wxID_ANY, _("Autopilot Control display zoom factor          "), wxDefaultPosition, wxSize( -1,-1 ), 0 );
+	m_NoStandbyCounterValueText11->Wrap( -1 );
+	fgSizer51->Add( m_NoStandbyCounterValueText11, 0, wxALIGN_CENTER_VERTICAL|wxALL, 3 );
+
+	m_Skalefaktor = new wxSlider( this, wxID_ANY, 0, 0, 10, wxDefaultPosition, wxSize( 220,-1 ), wxSL_BOTH|wxSL_BOTTOM|wxSL_HORIZONTAL|wxSL_LABELS );
+	m_Skalefaktor->SetFont( wxFont( 7, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_ITALIC, wxFONTWEIGHT_NORMAL, false, wxEmptyString ) );
+
+	fgSizer51->Add( m_Skalefaktor, 0, wxALIGN_CENTER_HORIZONTAL|wxALL, 0 );
+
+
+	bSizer2->Add( fgSizer51, 0, 0, 0 );
 
 	m_SendNewAutoWind = new wxCheckBox( this, wxID_ANY, _("Send new \"Auto-Wind\" Command when \"Wind Shift\""), wxDefaultPosition, wxDefaultSize, 0 );
 	bSizer2->Add( m_SendNewAutoWind, 0, wxALL, 5 );

@@ -2,7 +2,10 @@
 // C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b3)
 // http://www.wxformbuilder.org/
 //
-// PLEASE DO *NOT* EDIT THIS FILE!
+// Code manuell updated ... do not overwrite with wxFormbuilder
+// Skalefaktor added to m_dialog.
+// Bernd Cirotzki 18.01.2023
+
 ///////////////////////////////////////////////////////////////////////////
 
 #pragma once
@@ -26,6 +29,7 @@
 #include <wx/dialog.h>
 #include <wx/checkbox.h>
 #include <wx/stattext.h>
+#include <wx/slider.h>
 
 ///////////////////////////////////////////////////////////////////////////
 
@@ -73,7 +77,7 @@ class m_dialog : public wxDialog
 		wxButton* buttonSet;
 		wxStaticLine* StaticLine3;
 
-		m_dialog( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Autopilot Control"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 160,230 ), long style = wxCAPTION, const wxString& name = wxT("Raymarine Autopilot") );
+		m_dialog( wxWindow* parent, double Skalefaktor = 1, wxWindowID id = wxID_ANY, const wxString& title = _("Autopilot Control"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 160,220 ), long style = wxCAPTION, const wxString& name = wxT("Raymarine Autopilot") );
 
 		~m_dialog();
 
@@ -102,6 +106,8 @@ class m_Parameterdialog : public wxDialog
 
 	public:
 		wxCheckBox* m_checkParameters;
+		wxStaticText* m_NoStandbyCounterValueText11;
+		wxSlider* m_Skalefaktor;
 		wxCheckBox* m_SendNewAutoWind;
 		wxCheckBox* m_SendNewAutoonStandby;
 		wxCheckBox* m_NewStandbyNoStandbyReceived;
@@ -121,7 +127,7 @@ class m_Parameterdialog : public wxDialog
 		wxCheckBox* m_WriteDebug;
 		wxCheckBox* m_ModyfyRMC;
 
-		m_Parameterdialog( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Autopilot"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 694,464 ), long style = wxDEFAULT_DIALOG_STYLE );
+		m_Parameterdialog( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Autopilot"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 694,501 ), long style = wxDEFAULT_DIALOG_STYLE );
 
 		~m_Parameterdialog();
 

@@ -91,7 +91,7 @@ public:
       int GetToolbarToolCount(void);
 	  void ShowPreferencesDialog(wxWindow* parent);
       void OnToolbarToolCallback(int id);
-     
+      void SetPluginSize(double Scalefaktor);
 
 //    Optional plugin overrides
       //void SetColorScheme(PI_ColorScheme cs);
@@ -132,6 +132,7 @@ public:
 	  int			   ResponseLevel;
 	  int              RudderLevel;
 	  double           BoatVariation;
+      double           Skalefaktor;
 	  Dlg			   *m_pDialog;
 	  wxString			WayPointBearing;
 
