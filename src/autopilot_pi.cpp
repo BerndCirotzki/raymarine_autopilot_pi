@@ -122,6 +122,8 @@ int raymarine_autopilot_pi::Init(void)
 	  WayPointBearing = "unknown";
       //    And load the configuration items
       LoadConfig();
+	  if (Skalefaktor < 1 || Skalefaktor > 2.1)
+		  Skalefaktor = 1;
 	  //    This PlugIn needs a toolbar icon, so request its insertion
 	  if(m_bautopilotShowIcon)
 		m_leftclick_tool_id  = InsertPlugInTool(_T(""), _img_autopilot, _img_autopilot, wxITEM_CHECK,
