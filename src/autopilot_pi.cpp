@@ -122,8 +122,6 @@ int raymarine_autopilot_pi::Init(void)
 	  WayPointBearing = "unknown";
       //    And load the configuration items
       LoadConfig();
-      if (Skalefaktor < 1 || Skalefaktor > 2.1)
-          Skalefaktor = 1;
 	  //    This PlugIn needs a toolbar icon, so request its insertion
 	  if(m_bautopilotShowIcon)
 		m_leftclick_tool_id  = InsertPlugInTool(_T(""), _img_autopilot, _img_autopilot, wxITEM_CHECK,
@@ -475,9 +473,9 @@ void raymarine_autopilot_pi::SetAutopilotparametersChangeable()
 		m_pDialog->ParameterValue->Show(FALSE);
 		m_pDialog->buttonSet->Show(FALSE);
 		m_pDialog->StaticLine3->Show(FALSE);
-		m_pDialog->SetSize(Skalefaktor * wxSize(160, 195));
-		m_pDialog->SetMinSize(Skalefaktor * wxSize(160, 195));
-		m_pDialog->SetMaxSize(Skalefaktor * wxSize(160, 195));
+		m_pDialog->SetSize(Skalefaktor * wxSize(160, 194));
+		m_pDialog->SetMinSize(Skalefaktor * wxSize(160, 194));
+		m_pDialog->SetMaxSize(Skalefaktor * wxSize(160, 194));
 	}
 }
 

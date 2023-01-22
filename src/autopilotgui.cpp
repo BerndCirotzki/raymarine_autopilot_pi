@@ -13,18 +13,17 @@
 
 m_dialog::m_dialog(wxWindow* parent, double Skalefaktor, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style, const wxString& name) : wxDialog(parent, id, title, pos, size, style, name)
 {
-    this->SetSizeHints(Skalefaktor * wxSize(160, 195), Skalefaktor * wxSize(160, 220));
+    this->SetSizeHints(Skalefaktor * wxSize(160, 194), Skalefaktor * wxSize(160, 220));
     this->SetForegroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOW));
     this->SetBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_MENU));
 
     wxBoxSizer* bSizer10;
     bSizer10 = new wxBoxSizer(wxVERTICAL);
-
     StaticLine1 = new wxStaticLine(this, wxID_ANY, wxDefaultPosition, Skalefaktor * wxSize(-1, 2), wxLI_HORIZONTAL);
-    StaticLine1->SetMinSize(wxSize(-1, 2));
-    StaticLine1->SetMaxSize(wxSize(-1, 2));
+    StaticLine1->SetMinSize(wxSize(-1, Skalefaktor * 2));
+    StaticLine1->SetMaxSize(wxSize(-1, Skalefaktor * 2));
 
-    bSizer10->Add(StaticLine1, 1, wxEXPAND | wxALL, 3);
+    bSizer10->Add(StaticLine1, 0, wxEXPAND | wxALL, 3);
 
     TextStatus = new wxTextCtrl(this, wxID_ANY, _("----------"), wxDefaultPosition, Skalefaktor * wxSize(120, 30), wxTE_CENTER | wxTE_READONLY);
     TextStatus->SetFont(wxFont(Skalefaktor * 13, wxFONTFAMILY_SWISS, wxFONTSTYLE_ITALIC, wxFONTWEIGHT_BOLD, false, wxT("Arial")));
@@ -41,9 +40,9 @@ m_dialog::m_dialog(wxWindow* parent, double Skalefaktor, wxWindowID id, const wx
     bSizer10->Add(TextCompass, 0, wxALIGN_CENTER_HORIZONTAL, 5);
 
     StaticLine2 = new wxStaticLine(this, wxID_ANY, wxDefaultPosition, Skalefaktor * wxSize(-1, 2), wxLI_HORIZONTAL);
-    StaticLine2->SetMaxSize(wxSize(-1, 2));
+    StaticLine2->SetMaxSize(wxSize(-1, Skalefaktor * 2));
 
-    bSizer10->Add(StaticLine2, 1, wxALL | wxEXPAND, 4);
+    bSizer10->Add(StaticLine2, 0, wxALL | wxEXPAND, 4);
 
     wxFlexGridSizer* fgSizer4;
     fgSizer4 = new wxFlexGridSizer(0, 3, 0, 0);
@@ -56,7 +55,7 @@ m_dialog::m_dialog(wxWindow* parent, double Skalefaktor, wxWindowID id, const wx
     ParameterChoise->SetSelection(3);
     ParameterChoise->SetFont(wxFont(Skalefaktor * 6, wxFONTFAMILY_SWISS, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD, false, wxT("Arial")));
     ParameterChoise->SetBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_MENU));
-    ParameterChoise->SetMinSize(Skalefaktor * wxSize(69, 18));
+    ParameterChoise->SetMinSize(wxSize(Skalefaktor * 69, -1));
 
     fgSizer4->Add(ParameterChoise, 0, wxALIGN_CENTER_VERTICAL | wxALIGN_CENTER_HORIZONTAL, 0);
 
@@ -66,7 +65,7 @@ m_dialog::m_dialog(wxWindow* parent, double Skalefaktor, wxWindowID id, const wx
     ParameterValue->SetSelection(5);
     ParameterValue->SetFont(wxFont(Skalefaktor * 6, wxFONTFAMILY_SWISS, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD, false, wxT("Arial")));
     ParameterValue->SetBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_MENU));
-    ParameterValue->SetMinSize(Skalefaktor * wxSize(28, 18));
+    ParameterValue->SetMinSize(wxSize(Skalefaktor *  28, -1));
 
     fgSizer4->Add(ParameterValue, 0, wxALIGN_CENTER_VERTICAL | wxALIGN_CENTER_HORIZONTAL, 0);
 
@@ -78,13 +77,12 @@ m_dialog::m_dialog(wxWindow* parent, double Skalefaktor, wxWindowID id, const wx
 
     fgSizer4->Add(buttonSet, 0, wxALIGN_CENTER_HORIZONTAL | wxALIGN_CENTER_VERTICAL, 0);
 
-
-    bSizer10->Add(fgSizer4, 0, wxALIGN_CENTER_HORIZONTAL, 1);
+    bSizer10->Add(fgSizer4, 0, wxALIGN_CENTER_HORIZONTAL | wxALL, 0);
 
     StaticLine3 = new wxStaticLine(this, wxID_ANY, wxDefaultPosition, Skalefaktor * wxSize(-1, 2), wxLI_HORIZONTAL);
-    StaticLine3->SetMaxSize(Skalefaktor * wxSize(-1, 2));
+    StaticLine3->SetMaxSize(wxSize(-1, Skalefaktor * 2));
 
-    bSizer10->Add(StaticLine3, 1, wxALIGN_CENTER_HORIZONTAL | wxALL | wxEXPAND, 4);
+    bSizer10->Add(StaticLine3, 0, wxALIGN_CENTER_HORIZONTAL | wxALL | wxEXPAND, 3);
 
     wxFlexGridSizer* fgSizer5;
     fgSizer5 = new wxFlexGridSizer(0, 4, 0, 0);
@@ -115,8 +113,7 @@ m_dialog::m_dialog(wxWindow* parent, double Skalefaktor, wxWindowID id, const wx
 
     fgSizer5->Add(buttonIncOne, 0, wxALIGN_CENTER_VERTICAL, 1);
 
-
-    bSizer10->Add(fgSizer5, 0, wxALIGN_CENTER_HORIZONTAL, 1);
+    bSizer10->Add(fgSizer5, 0, wxALIGN_CENTER_HORIZONTAL | wxALL, 0);
 
     wxGridSizer* gSizer7;
     gSizer7 = new wxGridSizer(0, 2, 0, 0);
@@ -149,9 +146,7 @@ m_dialog::m_dialog(wxWindow* parent, double Skalefaktor, wxWindowID id, const wx
 
     gSizer7->Add(buttonTrack, 0, wxALIGN_CENTER_HORIZONTAL | wxALIGN_CENTER_VERTICAL, 1);
 
-
-    bSizer10->Add(gSizer7, 0, wxALIGN_CENTER, 1);
-
+    bSizer10->Add(gSizer7, 0, wxALIGN_CENTER | wxALL, 0);
 
     this->SetSizer(bSizer10);
     this->Layout();

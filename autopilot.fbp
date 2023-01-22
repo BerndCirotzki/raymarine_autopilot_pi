@@ -44,10 +44,10 @@
             <property name="hidden">0</property>
             <property name="id">wxID_ANY</property>
             <property name="maximum_size">160,220</property>
-            <property name="minimum_size">160,195</property>
+            <property name="minimum_size">160,194</property>
             <property name="name">m_dialog</property>
             <property name="pos"></property>
-            <property name="size">160,220</property>
+            <property name="size">220,216</property>
             <property name="style">wxCAPTION</property>
             <property name="subclass"></property>
             <property name="title">Autopilot Control</property>
@@ -66,7 +66,7 @@
                 <object class="sizeritem" expanded="0">
                     <property name="border">3</property>
                     <property name="flag">wxEXPAND | wxALL</property>
-                    <property name="proportion">1</property>
+                    <property name="proportion">0</property>
                     <object class="wxStaticLine" expanded="0">
                         <property name="BottomDockable">1</property>
                         <property name="LeftDockable">1</property>
@@ -254,7 +254,7 @@
                 <object class="sizeritem" expanded="0">
                     <property name="border">4</property>
                     <property name="flag">wxALL|wxEXPAND</property>
-                    <property name="proportion">1</property>
+                    <property name="proportion">0</property>
                     <object class="wxStaticLine" expanded="0">
                         <property name="BottomDockable">1</property>
                         <property name="LeftDockable">1</property>
@@ -310,8 +310,8 @@
                     </object>
                 </object>
                 <object class="sizeritem" expanded="1">
-                    <property name="border">1</property>
-                    <property name="flag">wxALIGN_CENTER_HORIZONTAL</property>
+                    <property name="border">0</property>
+                    <property name="flag">wxALIGN_CENTER_HORIZONTAL|wxALL</property>
                     <property name="proportion">0</property>
                     <object class="wxFlexGridSizer" expanded="1">
                         <property name="cols">3</property>
@@ -363,7 +363,7 @@
                                 <property name="maximum_size"></property>
                                 <property name="min_size"></property>
                                 <property name="minimize_button">0</property>
-                                <property name="minimum_size">69,18</property>
+                                <property name="minimum_size">69,-1</property>
                                 <property name="moveable">1</property>
                                 <property name="name">ParameterChoise</property>
                                 <property name="pane_border">1</property>
@@ -428,7 +428,7 @@
                                 <property name="maximum_size"></property>
                                 <property name="min_size"></property>
                                 <property name="minimize_button">0</property>
-                                <property name="minimum_size">28,18</property>
+                                <property name="minimum_size">28,-1</property>
                                 <property name="moveable">1</property>
                                 <property name="name">ParameterValue</property>
                                 <property name="pane_border">1</property>
@@ -531,9 +531,9 @@
                     </object>
                 </object>
                 <object class="sizeritem" expanded="0">
-                    <property name="border">4</property>
-                    <property name="flag">wxALIGN_CENTER_HORIZONTAL|wxALL|wxEXPAND</property>
-                    <property name="proportion">1</property>
+                    <property name="border">3</property>
+                    <property name="flag">wxALL|wxEXPAND</property>
+                    <property name="proportion">0</property>
                     <object class="wxStaticLine" expanded="0">
                         <property name="BottomDockable">1</property>
                         <property name="LeftDockable">1</property>
@@ -589,8 +589,8 @@
                     </object>
                 </object>
                 <object class="sizeritem" expanded="1">
-                    <property name="border">1</property>
-                    <property name="flag">wxALIGN_CENTER_HORIZONTAL</property>
+                    <property name="border">0</property>
+                    <property name="flag">wxALIGN_CENTER_HORIZONTAL|wxALL</property>
                     <property name="proportion">0</property>
                     <object class="wxFlexGridSizer" expanded="1">
                         <property name="cols">4</property>
@@ -903,8 +903,8 @@
                     </object>
                 </object>
                 <object class="sizeritem" expanded="1">
-                    <property name="border">1</property>
-                    <property name="flag">wxALIGN_CENTER</property>
+                    <property name="border">0</property>
+                    <property name="flag">wxALIGN_CENTER|wxALL</property>
                     <property name="proportion">0</property>
                     <object class="wxGridSizer" expanded="1">
                         <property name="cols">2</property>
