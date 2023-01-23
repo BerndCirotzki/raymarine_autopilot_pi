@@ -76,7 +76,7 @@ void ParameterDialog::OnNewAuto(wxCommandEvent& event)
 	}
 }
 
-Dlg::Dlg( wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style ) : m_dialog( parent, id, title, pos, size, style )
+Dlg::Dlg( wxWindow* parent, double Skalefaktor, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style ) : m_dialog( parent, Skalefaktor, id, title, pos, size, style )
 {	
     this->Fit();
 	SetToggel = 0;
@@ -166,6 +166,13 @@ void Dlg::OnAutoWind(wxCommandEvent& event)
 
 void Dlg::OnTrack(wxCommandEvent& event)
 {
+	if (plugin->Autopilot_Status == STANDBY)
+	{
+		plugin->DisplayShow = 1;
+		this->TextStatus->SetForegroundColour(wxColour(255, 0, 0));
+		this->TextStatus->SetValue("Not in Auto");
+		return;
+	}
 	wxString sentence = "$" + plugin->STALKSendName + ",86,21,03,FC";
 	plugin->SendNMEASentence(sentence);
 	if (plugin->WriteMessages) wxLogMessage((" Pushed Track %s"), sentence);

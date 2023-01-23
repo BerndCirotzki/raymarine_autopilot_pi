@@ -6,9 +6,9 @@
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: raymarine_autopilot_pi 0.7\n"
+"Project-Id-Version: raymarine_autopilot_pi 1.0.000.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-07-14 10:05+0200\n"
+"POT-Creation-Date: 2023-01-10 14:39+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,30 +17,38 @@ msgstr ""
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: src/autopilot_pi.cpp:117
+#: include/autopilotgui.h:76 include/autopilotgui_impl.h:60
+msgid "Autopilot Control"
+msgstr ""
+
+#: include/autopilotgui.h:124
+msgid "Autopilot"
+msgstr ""
+
+#: src/autopilot_pi.cpp:128
 msgid "Raymarine Autopilot"
 msgstr ""
 
-#: src/autopilot_pi.cpp:231
+#: src/autopilot_pi.cpp:236
 msgid "Raymarine autopilot"
 msgstr ""
 
-#: src/autopilot_pi.cpp:237
+#: src/autopilot_pi.cpp:242
 msgid "Raymarine autopilot Control for Raymarine Smartpilot"
 msgstr ""
 
-#: src/autopilot_pi.cpp:242
+#: src/autopilot_pi.cpp:247
 msgid ""
 "Autopilot Control for Raymarine Smartpilot\r\n"
-"Simulates a Remote Control (Commandos from ST6002), by sending Seatalk(1) "
+"Simulates a Remote Control (Commandos from ST600x), by sending Seatalk(1) "
 "Data.\r\n"
-"Requires Seatalk <-> NMEA Converter (SeataLkLink) http://www.gadgetPool.de\r\n"
-"Allow \".TALK\" to NMEA Input Sequenz from Autopilot COMx and\r\n"
-"\".TALK\" and \"SNBSE\" to the NMEA Output Sequenz. Name them in the "
-"Preferences."
+"Requires Seatalk <-> NMEA Converter. The Sentences must be in the format\r\n"
+"$SENTENCENAME,Seatalkbytes in Hex. ( $STALK,84,36,9D,88,40,00,"
+"FF,02,06*02 )\r\n"
+"send to the NMEA Output Port. $SENTENCENAME named in the Preferences."
 msgstr ""
 
-#: src/autopilot_pi.cpp:388
+#: src/autopilot_pi.cpp:395
 msgid "Autopilot Preferences"
 msgstr ""
 
@@ -61,11 +69,11 @@ msgid "Response"
 msgstr ""
 
 #: src/autopilotgui.cpp:51
-msgid "WindTrim"
+msgid "RudderGain"
 msgstr ""
 
 #: src/autopilotgui.cpp:51
-msgid "RudderGain"
+msgid "WindTrim"
 msgstr ""
 
 #: src/autopilotgui.cpp:61
@@ -178,7 +186,7 @@ msgstr ""
 msgid "Reset"
 msgstr ""
 
-#: src/autopilotgui.cpp:251
+#: src/autopilotgui.cpp:251 src/autopilotgui.cpp:289
 msgid "10"
 msgstr ""
 
@@ -197,38 +205,48 @@ msgstr ""
 
 #: src/autopilotgui.cpp:278
 msgid ""
-"Send \"$SNBSE\" message to switch sending \"$STALK\" messages from "
-"SeatalkLink off, when Autopilot in not visible"
+"Send \"Track\" automatic when Autopilot has new Waypoint. Be careful with "
+"this normaly you have to accept yourself."
 msgstr ""
 
-#: src/autopilotgui.cpp:286 src/autopilotgui.cpp:301
+#: src/autopilotgui.cpp:300
+msgid "Time in seconds to wait before sending \"Track\" sentence."
+msgstr ""
+
+#: src/autopilotgui.cpp:312 src/autopilotgui.cpp:327
 msgid "STALK"
 msgstr ""
 
-#: src/autopilotgui.cpp:297
+#: src/autopilotgui.cpp:323
 msgid "NMEA Sentencename from  Seatalk bus converted by SeatalkLink"
 msgstr ""
 
-#: src/autopilotgui.cpp:312
+#: src/autopilotgui.cpp:338
 msgid "NMEA Sentencename to Seatalk bus converted by SeatalkLink"
 msgstr ""
 
-#: src/autopilotgui.cpp:319
+#: src/autopilotgui.cpp:345
 msgid "Write Message Info to OPENCPN Logfile"
 msgstr ""
 
-#: src/autopilotgui.cpp:322
+#: src/autopilotgui.cpp:348
 msgid "Debug all \"$STALK\" Messages into OPENCPN Logfile"
 msgstr ""
 
-#: src/autopilotgui_impl.cpp:248
+#: src/autopilotgui.cpp:351
+msgid ""
+"Modify RMC Sentence as \"$ECRMC\" and replace or fill with Variationfield "
+"with the value from WMM Plugin"
+msgstr ""
+
+#: src/autopilotgui_impl.cpp:264
 msgid "No Value selected"
 msgstr ""
 
-#: src/autopilotgui_impl.cpp:253
+#: src/autopilotgui_impl.cpp:269
 msgid "No Parameter selected"
 msgstr ""
 
-#: src/autopilotgui_impl.cpp:256
+#: src/autopilotgui_impl.cpp:272
 msgid "is set to  "
 msgstr ""
