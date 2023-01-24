@@ -2,10 +2,7 @@
 // C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b3)
 // http://www.wxformbuilder.org/
 //
-// Code manuell updated ... do not overwrite with wxFormbuilder
-// Skalefaktor added to m_dialog.
-// Bernd Cirotzki 18.01.2023
-
+// PLEASE DO *NOT* EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
 #pragma once
@@ -77,7 +74,7 @@ class m_dialog : public wxDialog
 		wxButton* buttonSet;
 		wxStaticLine* StaticLine3;
 
-		m_dialog( wxWindow* parent, double Skalefaktor = 1, wxWindowID id = wxID_ANY, const wxString& title = _("Autopilot Control"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 160,220 ), long style = wxCAPTION, const wxString& name = wxT("Raymarine Autopilot") );
+		m_dialog( wxWindow* parent, double Skalefaktor = 1, wxWindowID id = wxID_ANY, const wxString& title = _("Autopilot Control"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 220,216 ), long style = wxCAPTION, const wxString& name = wxT("Raymarine Autopilot") );
 
 		~m_dialog();
 

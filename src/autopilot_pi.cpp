@@ -465,9 +465,9 @@ void raymarine_autopilot_pi::SetAutopilotparametersChangeable()
 		m_pDialog->ParameterValue->Show();
 		m_pDialog->buttonSet->Show();
 		m_pDialog->StaticLine3->Show();
-		m_pDialog->SetMaxSize(Skalefaktor * wxSize(160, 220));
-		m_pDialog->SetSize(Skalefaktor * wxSize(160, 220));
-		m_pDialog->SetMinSize(Skalefaktor * wxSize(160, 220));
+		m_pDialog->SetMaxSize(Skalefaktor * m_pDialog->FromDIP(wxSize(160, 220)));
+		m_pDialog->SetSize(Skalefaktor * m_pDialog->FromDIP(wxSize(160, 220)));
+		m_pDialog->SetMinSize(Skalefaktor * m_pDialog->FromDIP(wxSize(160, 220)));
 	}
 	else
 	{
@@ -475,9 +475,9 @@ void raymarine_autopilot_pi::SetAutopilotparametersChangeable()
 		m_pDialog->ParameterValue->Show(FALSE);
 		m_pDialog->buttonSet->Show(FALSE);
 		m_pDialog->StaticLine3->Show(FALSE);
-		m_pDialog->SetSize(Skalefaktor * wxSize(160, 194));
-		m_pDialog->SetMinSize(Skalefaktor * wxSize(160, 194));
-		m_pDialog->SetMaxSize(Skalefaktor * wxSize(160, 194));
+		m_pDialog->SetSize(Skalefaktor * m_pDialog->FromDIP(wxSize(160, 194)));
+		m_pDialog->SetMinSize(Skalefaktor * m_pDialog->FromDIP(wxSize(160, 194)));
+		m_pDialog->SetMaxSize(Skalefaktor * m_pDialog->FromDIP(wxSize(160, 194)));
 	}
 }
 
