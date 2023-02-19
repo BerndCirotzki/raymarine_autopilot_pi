@@ -2,7 +2,7 @@
 # Author:      Bernd Cirotzk   Copyright: License:     wxWidgets License
 # ---------------------------------------------------------------------------
 ## ---------------------------------------------------------------------------
-## Frontend Author: Jon Gough  Frontend2 Version: 1.0.223.1  23/01/2022  DD/MM/YYYY       
+## Frontend Author: Jon Gough  Frontend2 Version: 1.0.226.0  17/02/2023  DD/MM/YYYY       
 ##  buildCI:yes useODAPI:no validateJSON:no  
 ## ---------------------------------------------------------------------------
 ## 
@@ -41,9 +41,9 @@ set(LONG_DESCRIPTION "testplugin Plugin is used to contol a Raymarine Seatalk 1 
 
 set(VERSION_MAJOR "1")
 set(VERSION_MINOR "0")
-set(VERSION_PATCH "2")
-set(VERSION_TWEAK "1")
-set(VERSION_DATE "23/01/2023") # DD/MM/YYYY format
+set(VERSION_PATCH "3")
+set(VERSION_TWEAK "0")
+set(VERSION_DATE "19/02/2023") # DD/MM/YYYY format
 set(OCPN_MIN_VERSION "ov50")
 set(OCPN_API_VERSION_MAJOR "1")
 set(OCPN_API_VERSION_MINOR "16")
