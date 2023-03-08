@@ -7,86 +7,114 @@ msgid ""
 msgstr ""
 "Project-Id-Version: raymarine_autopilot_pi 0.3\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-01-12 11:59+0100\n"
-"PO-Revision-Date: 2023-01-08 12:14+0100\n"
+"POT-Creation-Date: 2023-02-25 16:28+0100\n"
+"PO-Revision-Date: 2023-02-26 14:05+0100\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: de_DE\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 2.3\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 3.2.2\n"
+
 #
 msgid "+1"
 msgstr ""
+
 #
 msgid "+10"
 msgstr ""
+
 #
 msgid "-"
 msgstr ""
+
 #
 msgid "---"
 msgstr ""
+
 #
 msgid "----------"
 msgstr ""
+
 #
 msgid "------------"
 msgstr ""
+
 #
 msgid "-1"
 msgstr ""
+
 #
 msgid "-10"
 msgstr ""
+
 #
 msgid "0"
 msgstr ""
+
 #
 msgid "1"
 msgstr ""
+
 #
 msgid "10"
 msgstr ""
+
 #
 msgid "2"
 msgstr ""
+
 #
 msgid "3"
 msgstr ""
+
 #
 msgid "4"
 msgstr ""
+
 #
 msgid "5"
 msgstr ""
+
 #
 msgid "6"
 msgstr ""
+
 #
 msgid "7"
 msgstr ""
+
 #
 msgid "8"
 msgstr ""
+
 #
 msgid "9"
 msgstr ""
+
 #
 msgid "Auto"
 msgstr ""
+
 #
 msgid "Auto-Wind"
 msgstr ""
+
 #
 #, fuzzy
 msgid "Autopilot"
 msgstr "Raymarine Autopilot"
+
 #
 msgid "Autopilot Control"
 msgstr ""
+
+#
+msgid "Autopilot Control display zoom factor          "
+msgstr "Autopilot Control Fenster Zoom Faktor          "
+
 #
 msgid ""
 "Autopilot Control for Raymarine Smartpilot\r\n"
@@ -104,12 +132,15 @@ msgstr ""
 "$SENTENCENAME,Seatalkbytes in Hex. ( $STALK,84,36,9D,88,40,00,FF,02,06*02 ).\n"
 "Sendet Daten zum NMEA Output Port. $SENTENCENAME wird in den Einstellungen "
 "definiert."
+
 #
 msgid "Autopilot Parameters changeable"
 msgstr "Autopilot Parameter änderbar (Leiste einblenden)"
+
 #
 msgid "Autopilot Preferences"
 msgstr "Autopilot Eigenschaften"
+
 #
 msgid ""
 "Change course value back to the last Compass course value, the Course "
@@ -118,6 +149,7 @@ msgid ""
 msgstr ""
 "Ändere Kurs Wert zurück auf den alten Kompasskurswert, den der Kurscomputer\n"
 "hatte, bevor das Auto Signal verloren ging"
+
 #
 msgid ""
 "Counter for Autopilot is in Standby Mode, but without \"Standby\" Command "
@@ -125,9 +157,11 @@ msgid ""
 msgstr ""
 "Zähler für Autopilot ist im Standbymodus, aber es wurde kein \"Standby\" "
 "empfangen"
+
 #
 msgid "Debug all \"$STALK\" Messages into OPENCPN Logfile"
 msgstr "Schreibe alle \"$STALK\" Nachrichten in OPENCPN Logfile"
+
 #
 msgid ""
 "Modify RMC Sentence as \"$ECRMC\" and replace or fill with Variationfield "
@@ -135,39 +169,53 @@ msgid ""
 msgstr ""
 "Ändere \"$..RMC\" Message in \"$ECRMC\" und Ersetze oder Fülle die "
 "magnetische Missweisung durch den Wert vom WMM Plugin"
+
 #
 msgid "NMEA Sentencename from  Seatalk bus converted by SeatalkLink"
-msgstr "NMEA Sequenzname vom Seatalk Bus, gesendet von  SeatalkLink"
+msgstr "NMEA Sequenzname vom Seatalk Bus, gesendet von Seatalk/NMEA Übersetzer"
+
 #
 msgid "NMEA Sentencename to Seatalk bus converted by SeatalkLink"
-msgstr "NMEA Sequenzname zum Seatalk Bus, der von  SeatalkLink umgewandelt wird"
+msgstr ""
+"NMEA Sequenzname zum Seatalk Bus, der von Seatalk/NMEA Übersetzer akzeptiert "
+"wird"
+
 #
 msgid "No Parameter selected"
 msgstr "Kein Autopilotparameter ausgewählt"
+
 #
 msgid "No Value selected"
 msgstr "Kein Wert ausgewählt"
+
 #
 msgid "Raymarine Autopilot"
 msgstr "Raymarine Autopilot"
+
 #
 msgid "Raymarine autopilot"
 msgstr "Raymarine Autopilot"
+
 #
 msgid "Raymarine autopilot Control for Raymarine Smartpilot"
 msgstr "Raymarine Autopilot Bedienterminal für Raymarine Smartpilot"
+
 #
 msgid "Reset"
 msgstr ""
+
 #
 msgid "Response"
 msgstr ""
+
 #
 msgid "RudderGain"
 msgstr ""
+
 #
 msgid "STALK"
 msgstr ""
+
 #
 msgid ""
 "Send \"Track\" automatic when Autopilot has new Waypoint. Be careful with "
@@ -175,6 +223,7 @@ msgid ""
 msgstr ""
 "Sende \"Track\" automatisch, wenn ein neuer Wegepunkt angesteuert werden "
 "soll. Normalerweise manuelle Bestätigung."
+
 #
 msgid ""
 "Send new \"Auto\" Command, when No Standby-Information is received from other "
@@ -182,6 +231,7 @@ msgid ""
 msgstr ""
 "Sende neues \"Auto\" Kommando, wenn kein Standby von einen anderen Instrument "
 "oder von hier gesendet"
+
 #
 msgid ""
 "Send new \"Auto\" or \"Auto-Wind\" Command, when \"Standby\" is not send from "
@@ -189,23 +239,29 @@ msgid ""
 msgstr ""
 "Sende neuen \"Auto\" oder \"Auto Wind\" Befehl, wenn Standby nicht von hier "
 "gesendet wird, aber das \"Auto\" Kommando"
+
 #
 msgid "Send new \"Auto-Wind\" Command when \"Wind Shift\""
 msgstr ""
 "Bei Empfang eines \"Wind-Shift\" vom Kurscomputer neues Auto-Wind senden."
+
 #
 msgid "Set"
 msgstr ""
+
 #
 msgid "Standby"
 msgstr ""
+
 #
 msgid "Time in seconds to wait before sending \"Track\" sentence."
 msgstr ""
 "Zeit in Sekunden, die gewartet wird, bis \"Track\" Sequenz gesendet wird."
+
 #
 msgid "Track"
 msgstr ""
+
 #
 msgid ""
 "Value, for maximum  \"Not recived Standby Commands\" not sending \"Auto\" "
@@ -213,12 +269,15 @@ msgid ""
 msgstr ""
 "Wert für maximaler Anzahl \"nicht empfangener Standbys\", bis dann kein "
 "\"Auto\" gesendet wird"
+
 #
 msgid "WindTrim"
 msgstr ""
+
 #
 msgid "Write Message Info to OPENCPN Logfile"
 msgstr "Schreibe Info Meldungen in OPENCPN Logfile"
+
 #
 msgid "is set to  "
 msgstr "gesetzt auf  "
