@@ -2,7 +2,7 @@
 # Author:      Bernd Cirotzk   Copyright: License:     wxWidgets License
 # ---------------------------------------------------------------------------
 ## ---------------------------------------------------------------------------
-## Frontend Author: Jon Gough  Frontend2 Version: 1.0.223.1  23/01/2022  DD/MM/YYYY       
+## Frontend Author: Jon Gough  Frontend2 Version: 1.0.226.0  17/02/2023  DD/MM/YYYY       
 ##  buildCI:yes useODAPI:no validateJSON:no  
 ## ---------------------------------------------------------------------------
 ## 
@@ -35,15 +35,15 @@ set(VERBOSE_NAME "raymarine_autopilot")
 set(COMMON_NAME "Raymarine autopilot")
 set(TITLE_NAME "raymarine_autopilot")
 set(PACKAGE_CONTACT "Bernd Cirotzki")
-set(PACKAGE "raymarine_autopilot")
+set(PACKAGE "raymarine_autopilot_pi")
 set(SHORT_DESCRIPTION "Plugin to contol a Raymarine Seatalk 1 Autopilot")
 set(LONG_DESCRIPTION "testplugin Plugin is used to contol a Raymarine Seatalk 1 Autopilot")
 
 set(VERSION_MAJOR "1")
 set(VERSION_MINOR "0")
-set(VERSION_PATCH "2")
+set(VERSION_PATCH "3")
 set(VERSION_TWEAK "1")
-set(VERSION_DATE "23/01/2023") # DD/MM/YYYY format
+set(VERSION_DATE "08/03/2023") # DD/MM/YYYY format
 set(OCPN_MIN_VERSION "ov50")
 set(OCPN_API_VERSION_MAJOR "1")
 set(OCPN_API_VERSION_MINOR "16")
@@ -60,11 +60,13 @@ set(BETA "beta")    # Standard Repos
 set(ALPHA "alpha")  # Standard Repos
 
 # set this if your cloudsmith repository name does not match your git repository name
-#set(CLOUDSMITH_BASE_REPOSITORY "testplugin_pi")
-set(CLOUDSMITH_BASE_REPOSITORY "raymarine_autopilot_pi")
+#set(CLOUDSMITH_BASE_REPOSITORY  "${GIT_REPOSITORY_NAME}")
+#set(CLOUDSMITH_BASE_REPOSITORY "opencpn-plugins")  #Ricks's customization
+set(CLOUDSMITH_BASE_REPOSITORY "raymarine-autopilot") #without the _pi
+
 # Set the following to use OpenCPN cloudsmith repositories instead of own repositories
 set(CLOUDSMITH_USER "opencpn")
-#set(CLOUDSMITH_USER "jon-gough")
+#set(CLOUDSMITH_USER "rick-gleason")
 
 set(XML_INFO_URL "https://opencpn-manuals.github.io/main/autopilot-rm/0.1/index.html")
 set(XML_SUMMARY ${SHORT_DESCRIPTION})
