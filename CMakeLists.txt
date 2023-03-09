@@ -62,7 +62,7 @@ set(ALPHA "alpha")  # Standard Repos
 # set this if your cloudsmith repository name does not match your git repository name
 #set(CLOUDSMITH_BASE_REPOSITORY  "${GIT_REPOSITORY_NAME}")
 #set(CLOUDSMITH_BASE_REPOSITORY "opencpn-plugins")  #Ricks's customization
-set(CLOUDSMITH_BASE_REPOSITORY "raymarine_autopilot") #without the _pi
+set(CLOUDSMITH_BASE_REPOSITORY "raymarine-autopilot") #without the _pi
 
 # Set the following to use OpenCPN cloudsmith repositories instead of own repositories
 set(CLOUDSMITH_USER "opencpn")
