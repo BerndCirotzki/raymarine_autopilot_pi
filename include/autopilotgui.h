@@ -73,7 +73,9 @@ class m_dialog : public wxDialog
 		wxChoice* ParameterValue;
 		wxButton* buttonSet;
 		wxStaticLine* StaticLine3;
-
+#ifndef __WXMSW__
+		wxSize FromDIP(wxSize dummy) { return dummy; };
+#endif
 		m_dialog( wxWindow* parent, double Skalefaktor = 1, wxWindowID id = wxID_ANY, const wxString& title = _("Autopilot Control"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 220,216 ), long style = wxCAPTION, const wxString& name = wxT("Raymarine Autopilot") );
 
 		~m_dialog();
