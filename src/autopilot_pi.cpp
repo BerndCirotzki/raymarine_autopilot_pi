@@ -1257,7 +1257,7 @@ wxString raymarine_autopilot_pi::GetAutopilotCompassCourse(wxString &sentence)
 	wxString s = sentence, HexValue;
 
 	s.Trim();
-	unsigned char parameter[3];
+	unsigned char parameter[3] = { 0x00, 0x00, 0x00 };
 	int sLenght = s.Length();
 	int i = 0, CompassValue = -1;
 
@@ -1303,7 +1303,7 @@ wxString raymarine_autopilot_pi::GetAutopilotMAGCourse(wxString &sentence)
 	wxString s = sentence, HexValue;
 
 	s.Trim();
-	unsigned char parameter[3];
+	unsigned char parameter[3] = { 0x00, 0x00, 0x00 };
 	int sLenght = s.Length();
 	int i = 0, CompassValue = -1;
 
@@ -1352,7 +1352,7 @@ wxString raymarine_autopilot_pi::GetAutopilotCompassDifferenz(wxString &sentence
 	wxString s = sentence, HexValue;
 
 	s.Trim();
-	unsigned char parameter[3];
+	unsigned char parameter[3] = { 0x00, 0x00, 0x00 };
 	int sLenght = s.Length();
 	int i = 0, CompassValue = -1, AutoValue = -1, ReturnCompassValue;
 

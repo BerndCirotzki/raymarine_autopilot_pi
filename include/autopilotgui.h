@@ -126,6 +126,9 @@ class m_Parameterdialog : public wxDialog
 		wxCheckBox* m_WriteDebug;
 		wxCheckBox* m_ModyfyRMC;
 
+#ifndef __WXMSW__
+		wxSize FromDIP(wxSize dummy) { return dummy; };
+#endif
 		m_Parameterdialog( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Autopilot"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 694,501 ), long style = wxDEFAULT_DIALOG_STYLE );
 
 		~m_Parameterdialog();
