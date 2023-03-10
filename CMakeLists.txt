@@ -36,18 +36,18 @@ set(COMMON_NAME "Raymarine autopilot")
 set(TITLE_NAME "raymarine_autopilot")
 set(PACKAGE_CONTACT "Bernd Cirotzki")
 set(PACKAGE "raymarine_autopilot_pi")
-set(SHORT_DESCRIPTION "Plugin to contol a Raymarine Seatalk 1 Autopilot")
-set(LONG_DESCRIPTION "testplugin Plugin is used to contol a Raymarine Seatalk 1 Autopilot")
+set(SHORT_DESCRIPTION "Control a Raymarine Seatalk 1 Autopilot")
+set(LONG_DESCRIPTION "Control Raymarine ST1 Autopilot using a NMEA0183 to ST1 Converter")
 
 set(VERSION_MAJOR "1")
 set(VERSION_MINOR "0")
-set(VERSION_PATCH "3")
-set(VERSION_TWEAK "1")
-set(VERSION_DATE "08/03/2023") # DD/MM/YYYY format
-set(OCPN_MIN_VERSION "ov50")
+set(VERSION_PATCH "4")
+set(VERSION_TWEAK "0")
+set(VERSION_DATE "10/03/2023") # DD/MM/YYYY format
+set(OCPN_MIN_VERSION "ov57")
 set(OCPN_API_VERSION_MAJOR "1")
 set(OCPN_API_VERSION_MINOR "16")
-set(TP_COMMENT "  * Release for O5 using CI")
+set(TP_COMMENT "  * Release for O57 using CI")
 
 set(PARENT "opencpn")
 
@@ -62,7 +62,7 @@ set(ALPHA "alpha")  # Standard Repos
 # set this if your cloudsmith repository name does not match your git repository name
 #set(CLOUDSMITH_BASE_REPOSITORY  "${GIT_REPOSITORY_NAME}")
 #set(CLOUDSMITH_BASE_REPOSITORY "opencpn-plugins")  #Ricks's customization
-set(CLOUDSMITH_BASE_REPOSITORY "raymarine-autopilot") #without the _pi
+set(CLOUDSMITH_BASE_REPOSITORY "raymarine-autopilot") #without the _pi use - in lieu of _
 
 # Set the following to use OpenCPN cloudsmith repositories instead of own repositories
 set(CLOUDSMITH_USER "opencpn")
