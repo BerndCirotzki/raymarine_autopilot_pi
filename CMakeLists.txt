@@ -2,7 +2,7 @@
 # Author:      Bernd Cirotzk   Copyright: License:     wxWidgets License
 # ---------------------------------------------------------------------------
 ## ---------------------------------------------------------------------------
-## Frontend Author: Jon Gough  Frontend2 Version: 1.0.226.0  17/02/2023  DD/MM/YYYY       
+## Frontend Author: Jon Gough  Frontend2 Version: 1.0.253.0  06/08/2023  DD/MM/YYYY       
 ##  buildCI:yes useODAPI:no validateJSON:no  
 ## ---------------------------------------------------------------------------
 ## 
@@ -10,6 +10,8 @@
 ## ----- Changes should only be made between the section blocks that identify where     ----- ##
 ## ----- these changes should be. The whole configuration process relies on this        ----- ##
 ## ----- sequence to be successful                                                      ----- ##
+##
+
 ##
 ## ----- Modify section below to include all the details for your plugin ----- ##
 ##
@@ -36,18 +38,18 @@ set(COMMON_NAME "Raymarine autopilot")
 set(TITLE_NAME "raymarine_autopilot")
 set(PACKAGE_CONTACT "Bernd Cirotzki")
 set(PACKAGE "raymarine_autopilot_pi")
-set(SHORT_DESCRIPTION "Plugin to contol a Raymarine Seatalk 1 Autopilot")
-set(LONG_DESCRIPTION "testplugin Plugin is used to contol a Raymarine Seatalk 1 Autopilot")
+set(SHORT_DESCRIPTION "Control a Raymarine Seatalk 1 Autopilot")
+set(LONG_DESCRIPTION "Control Raymarine ST1 Autopilot using a NMEA0183 to ST1 Converter")
 
 set(VERSION_MAJOR "1")
 set(VERSION_MINOR "0")
-set(VERSION_PATCH "3")
-set(VERSION_TWEAK "1")
-set(VERSION_DATE "08/03/2023") # DD/MM/YYYY format
-set(OCPN_MIN_VERSION "ov50")
+set(VERSION_PATCH "5")
+set(VERSION_TWEAK "0")
+set(VERSION_DATE "08/08/2023") # DD/MM/YYYY format
+set(OCPN_MIN_VERSION "ov57")
 set(OCPN_API_VERSION_MAJOR "1")
 set(OCPN_API_VERSION_MINOR "16")
-set(TP_COMMENT "  * Release for O5 using CI")
+set(TP_COMMENT "  * Release for O58 using CI")
 
 set(PARENT "opencpn")
 
@@ -62,7 +64,7 @@ set(ALPHA "alpha")  # Standard Repos
 # set this if your cloudsmith repository name does not match your git repository name
 #set(CLOUDSMITH_BASE_REPOSITORY  "${GIT_REPOSITORY_NAME}")
 #set(CLOUDSMITH_BASE_REPOSITORY "opencpn-plugins")  #Ricks's customization
-set(CLOUDSMITH_BASE_REPOSITORY "raymarine-autopilot") #without the _pi
+set(CLOUDSMITH_BASE_REPOSITORY "raymarine-autopilot") #without the _pi use - in lieu of _
 
 # Set the following to use OpenCPN cloudsmith repositories instead of own repositories
 set(CLOUDSMITH_USER "opencpn")
@@ -245,7 +247,6 @@ if(NOT OCPN_FLATPAK_CONFIG)
     message(STATUS "${CMLOC}Adding target link libraries to ${PACKAGE_NAME}")
 
     add_subdirectory(libs/tinyxml)
-
     target_link_libraries(${PACKAGE_NAME} ocpn::tinyxml)
 endif(NOT OCPN_FLATPAK_CONFIG)
 
