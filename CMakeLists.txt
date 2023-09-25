@@ -55,9 +55,9 @@ set(LONG_DESCRIPTION "Control Raymarine ST1 Autopilot using a NMEA0183 to ST1 Co
 
 set(VERSION_MAJOR "1")
 set(VERSION_MINOR "0")
-set(VERSION_PATCH "6")
-set(VERSION_TWEAK "1")
-set(VERSION_DATE  "23/09/2023")#DD/MM/YYYY format
+set(VERSION_PATCH "8")
+set(VERSION_TWEAK "0")
+set(VERSION_DATE  "25/09/2023")#DD/MM/YYYY format
 set(OCPN_MIN_VERSION "ov58")
 
 set(OCPN_API_VERSION_MAJOR "1")
@@ -177,7 +177,7 @@ SET(SRC ${SRCS} ${HDRS} )
 ##=============================================================
 
 include_directories(BEFORE ${PROJECT_SOURCE_DIR}/include)
-include_directories(BEFORE ${PROJECT_SOURCE_DIR}/opencpn-libs/wxJSON/include/wx)
+#include_directories(BEFORE ${PROJECT_SOURCE_DIR}/opencpn-libs/wxJSON/include/wx)
 
 ## Change target_sources to match your project needs.
 ##==============================================================
