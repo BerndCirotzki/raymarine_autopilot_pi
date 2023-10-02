@@ -55,7 +55,7 @@ set(LONG_DESCRIPTION "Control Raymarine ST1 Autopilot using a NMEA0183 to ST1 Co
 
 set(VERSION_MAJOR "1")
 set(VERSION_MINOR "0")
-set(VERSION_PATCH "10")
+set(VERSION_PATCH "11")
 set(VERSION_TWEAK "0")
 set(VERSION_DATE  "02/10/2023")#DD/MM/YYYY format
 set(OCPN_MIN_VERSION "ov58")
@@ -177,7 +177,6 @@ SET(SRC ${SRCS} ${HDRS} )
 ##=============================================================
 
 include_directories(BEFORE ${PROJECT_SOURCE_DIR}/include)
-#include_directories(BEFORE ${PROJECT_SOURCE_DIR}/opencpn-libs/wxJSON/include/wx)
 
 ## Change target_sources to match your project needs.
 ##==============================================================
@@ -200,21 +199,11 @@ if(NOT OCPN_FLATPAK_CONFIG)
     add_subdirectory(opencpn-libs/tinyxml)
     target_link_libraries(${PACKAGE_NAME} ocpn::tinyxml)
 
-#    add_subdirectory(opencpn-libs/ODAPI)
-#    target_link_libraries(${PACKAGE_NAME} ocpn::odapi)
-
-#    add_subdirectory(opencpn-libs/jsonlib)
-#    target_link_libraries(${PACKAGE_NAME} ocpn::jsonlib)
-
     add_subdirectory(opencpn-libs/wxJSON)
     target_link_libraries(${PACKAGE_NAME} ocpn::wxjson)
 
     add_subdirectory(opencpn-libs/plugingl)
     target_link_libraries(${PACKAGE_NAME} ocpn::plugingl)
-
-#    add_subdirectory(opencpn-libs/nmea0183)
-#    target_link_libraries(${PACKAGE_NAME} ocpn::nmea0183)
-
 
 endif(NOT OCPN_FLATPAK_CONFIG)
 
