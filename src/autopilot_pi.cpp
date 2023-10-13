@@ -223,6 +223,11 @@ int raymarine_autopilot_pi::GetPlugInVersionMajor()
       return PLUGIN_VERSION_MAJOR;
 }
 
+int raymarine_autopilot_pi::GetPlugInVersionMinor()
+{
+      return PLUGIN_VERSION_MINOR;
+}
+
 int raymarine_autopilot_pi::GetPlugInVersionPatch()
 {
       return PLUGIN_VERSION_PATCH;
