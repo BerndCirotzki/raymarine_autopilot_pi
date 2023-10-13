@@ -39,8 +39,8 @@
 #include "ocpn_plugin.h" //Required for OCPN plugin functions
 #include "autopilotgui_impl.h"
 
-#include "jsonreader.h"
-#include "jsonwriter.h"
+#include "wx/jsonreader.h"
+#include "wx/jsonwriter.h"
 
 #include "version.h"
 
