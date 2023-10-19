@@ -39,8 +39,8 @@
 #include "ocpn_plugin.h" //Required for OCPN plugin functions
 #include "autopilotgui_impl.h"
 
-#include "jsonreader.h"
-#include "jsonwriter.h"
+#include "wx/jsonreader.h"
+#include "wx/jsonwriter.h"
 
 #include "version.h"
 
@@ -63,7 +63,7 @@ class localTimer;
 
 #define CALCULATOR_TOOL_POSITION    -1          // Request default positioning of toolbar tool
 
-class raymarine_autopilot_pi : public opencpn_plugin_116
+class raymarine_autopilot_pi : public opencpn_plugin_117
 {
 	
 public:
@@ -80,6 +80,8 @@ public:
       int GetAPIVersionMinor();
       int GetPlugInVersionMajor();
       int GetPlugInVersionMinor();
+      int GetPlugInVersionPatch();
+      int GetPlugInVersionPost();
       wxBitmap *GetPlugInBitmap();
       wxString GetCommonName();
       wxString GetShortDescription();
