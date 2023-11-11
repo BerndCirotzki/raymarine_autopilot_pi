@@ -5,29 +5,29 @@ msgstr ""
 "POT-Creation-Date: 2023-10-21 12:51+0200\n"
 "PO-Revision-Date: 2023-11-09 21:22\n"
 "Last-Translator: \n"
-"Language-Team: German\n"
-"Language: de_DE\n"
+"Language-Team: Swedish\n"
+"Language: sv_SE\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Crowdin-Project: opencpn\n"
 "X-Crowdin-Project-ID: 49843\n"
-"X-Crowdin-Language: de\n"
+"X-Crowdin-Language: sv-SE\n"
 "X-Crowdin-File: /plugins/raymarine_autopilot_pi/po/raymarine_autopilot_pi.pot\n"
 "X-Crowdin-File-ID: 454\n"
 
 #: include/autopilotgui.h:79 include/autopilotgui_impl.h:60
 msgid "Autopilot Control"
-msgstr ""
+msgstr "Autopilot. Inställningar"
 
 #: include/autopilotgui.h:132
 msgid "Autopilot"
-msgstr ""
+msgstr "Autopilot"
 
 #: src/autopilot_pi.cpp:130
 msgid "Raymarine Autopilot"
-msgstr ""
+msgstr "Raymarine Autopilot"
 
 #: src/autopilot_pi.cpp:248
 msgid "Raymarine autopilot"
