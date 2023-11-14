@@ -53,6 +53,8 @@ void ParameterDialog::OnStandbyCounterReset(wxCommandEvent& event)
 
 void ParameterDialog::OnNewAuto(wxCommandEvent& event)
 {
+    if (m_AutopilotType->GetSelection() != SMARTPILOT)
+        return;
 	if (m_SendNewAutoonStandby->GetValue() == TRUE)
 	{
 		m_NewStandbyNoStandbyReceived->Enable(false);
@@ -74,6 +76,80 @@ void ParameterDialog::OnNewAuto(wxCommandEvent& event)
 		m_SelectCounterStandby->Enable(true);
 		m_Text->Enable(true);
 	}
+}
+
+void ParameterDialog::OnAutoCogchange(wxCommandEvent& event)
+{
+    if (m_allowautocog->GetValue() == false)
+    {
+        m_sensebilitytext->Enable(false);
+        m_cogsensibility->Enable(false);
+        m_slowtext->Enable(false);
+        m_fast->Enable(false);
+        m_maxdegreediff->Enable(false);
+        m_maxdegtext->Enable(false);
+        m_minspeedcog->Enable(false);
+        m_minspeed->Enable(false);
+    }
+    else
+    {
+        m_sensebilitytext->Enable(true);
+        m_cogsensibility->Enable(true);
+        m_slowtext->Enable(true);
+        m_fast->Enable(true);
+        m_maxdegreediff->Enable(true);
+        m_maxdegtext->Enable(true);
+        m_minspeedcog->Enable(true);
+        m_minspeed->Enable(true);
+    }
+}
+
+void ParameterDialog::OnChoiceAutoPilot(wxCommandEvent& event)
+{
+    if (m_AutopilotType->GetSelection() == EVO)
+    {  
+        m_checkParameters->Enable(false);
+        m_ChangeValueToLast->Enable(false);
+        m_SendTrack->Enable(false);
+        m_TimeToSendNewWaypiont->Enable(false);
+        m_NewStandbyNoStandbyReceived->Enable(false);
+        m_NoStandbyCounter->Enable(false);
+        m_NoStandbyCounterValueText->Enable(false);
+        m_SelectCounterStandby->Enable(false);
+        m_ResetStandbyCounter->Enable(false);
+        m_SelectCounterStandby->Enable(false);
+        m_Text->Enable(false);
+        m_STALKreceivename->Enable(false);
+        m_staticText11->Enable(false);
+        m_STALKsendname->Enable(false);
+        m_staticText21->Enable(false);
+        m_Text1->Enable(false);
+        m_NoStandbyCounterValueText1->Enable(false);
+        m_ModyfyRMC->SetLabel(_("Send variation PNG 127258 to N2K/SeatalkNG with the value from WMM Plugin"));
+        m_SendNewAutoonStandby->SetLabel(_("Send PGN 126720 (keystroke) instead of PGN 126208 (set heading) in AutoMode"));
+    }
+    else
+    {        
+        m_checkParameters->Enable(true);
+        m_ChangeValueToLast->Enable(true);
+        m_SendTrack->Enable(true);
+        m_TimeToSendNewWaypiont->Enable(true);
+        m_NewStandbyNoStandbyReceived->Enable(true);
+        m_NoStandbyCounter->Enable(true);
+        m_NoStandbyCounterValueText->Enable(true);
+        m_SelectCounterStandby->Enable(true);
+        m_ResetStandbyCounter->Enable(true);
+        m_SelectCounterStandby->Enable(true);
+        m_Text->Enable(true);
+        m_STALKreceivename->Enable(true);
+        m_staticText11->Enable(true);
+        m_STALKsendname->Enable(true);
+        m_staticText21->Enable(true);
+        m_Text1->Enable(true);
+        m_NoStandbyCounterValueText1->Enable(true);
+        m_ModyfyRMC->SetLabel(_("Modify RMC Sentence as \"$ECRMC\" and replace or fill with Variationfield with the value from WMM Plugin"));
+        m_SendNewAutoonStandby->SetLabel(_("Send new \"Auto\" or \"Auto - Wind\" Command, when \"Standby\" is not send from here, but the \"Auto\" was from here"));
+    }
 }
 
 Dlg::Dlg( wxWindow* parent, double Skalefaktor, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style ) : m_dialog( parent, Skalefaktor, id, title, pos, size, style )
@@ -146,22 +222,28 @@ void Dlg::OnKlickInDisplay(wxMouseEvent& event)
 	plugin->NoStandbyCounter = 0;
 	plugin->Standbycommandreceived = TRUE;
 	plugin->NeedCompassCorrection = false;
+    plugin->DeActivateAutoCOG();
 }
 
 void Dlg::OnAuto(wxCommandEvent& event)
 {
-	wxString sentence = "$" + plugin->STALKSendName + ",86,21,01,FE";
-	plugin->SendNMEASentence(sentence);
-	if (plugin->WriteMessages) wxLogMessage((" Pushed Auto %s"), sentence);
-	plugin->NeedCompassCorrection = false;
+    if (plugin->Autopilot_Status == AUTO && plugin->allowautocog)
+    {
+        // AutoCOG aktivieren
+        plugin->ActivateAutoCOG();
+        return;
+    }
+    plugin->SendGotoAuto();
+	if (plugin->WriteMessages) wxLogMessage(" Pushed Auto");
+	plugin->NeedCompassCorrection = false;    
 }
 
 void Dlg::OnAutoWind(wxCommandEvent& event)
 {
-	wxString sentence = "$" + plugin->STALKSendName + ",86,21,23,DC";
-	plugin->SendNMEASentence(sentence);
-	if (plugin->WriteMessages) wxLogMessage((" Pushed Autowind %s"), sentence);
+    plugin->SendGotoAutoWind();	
+	if (plugin->WriteMessages) wxLogMessage(" Pushed Autowind");
 	plugin->NeedCompassCorrection = false;
+    plugin->DeActivateAutoCOG();    
 }
 
 void Dlg::OnTrack(wxCommandEvent& event)
@@ -173,76 +255,83 @@ void Dlg::OnTrack(wxCommandEvent& event)
 		this->TextStatus->SetValue("Not in Auto");
 		return;
 	}
-	wxString sentence = "$" + plugin->STALKSendName + ",86,21,03,FC";
-	plugin->SendNMEASentence(sentence);
-	if (plugin->WriteMessages) wxLogMessage((" Pushed Track %s"), sentence);
+    plugin->SendGotoAutoTrack();	
+	if (plugin->WriteMessages) wxLogMessage(" Pushed Track");
 	plugin->NeedCompassCorrection = false;
+    plugin->DeActivateAutoCOG();    
 }
 
 void Dlg::OnStandby(wxCommandEvent& event)
 {
-	wxString sentence;
 	plugin->StandbySelfPressed = TRUE;
 	plugin->Standbycommandreceived = TRUE;
 	plugin->NeedCompassCorrection = false;
-	// Das ist vermutlich Quatsch
-	/*if (plugin->Autopilot_Status == AUTOWIND || plugin->Autopilot_Status == AUTOTRACK)
-	{
-		// Muss erst nach AUTO gehen. sonst funktioniert es nicht.
-		sentence = "$" + plugin->STALKSendName + ",86,21,01,FE";
-		plugin->SendNMEASentence(sentence);
-		if (plugin->WriteMessages) wxLogMessage((" Pushed Standby in Autowind-Mode goto Auto %s"), sentence);
-	}*/
-	sentence = "$" + plugin->STALKSendName + ",86,21,02,FD";
-	plugin->SendNMEASentence(sentence);
+	plugin->SendGotoStandby();	
 	if (plugin->Autopilot_Status == STANDBY)
 	{
-		if (plugin->WriteMessages) wxLogMessage((" Pushed Standby in Standby-Mode %s"), sentence);
+		if (plugin->WriteMessages) wxLogMessage(" Pushed Standby in Standby-Mode");
 	}
 	else
 	{
-		if (plugin->WriteMessages) wxLogMessage((" Pushed Standby %s"), sentence);
+		if (plugin->WriteMessages) wxLogMessage(" Pushed Standby");
 	}
+    plugin->DeActivateAutoCOG();    
 }
 
 void Dlg::OnDecrementOne(wxCommandEvent& event)
 {
-	wxString sentence = "$" + plugin->STALKSendName + ",86,21,05,FA";
-	if (plugin->Autopilot_Status == AUTO ||
-		plugin->Autopilot_Status == AUTOWIND)
-		plugin->SendNMEASentence(sentence);
+    if (plugin->Autopilot_Status == AUTO ||
+        plugin->Autopilot_Status == AUTOWIND)
+        plugin->SendDecrementOne();
 	plugin->NeedCompassCorrection = false;
-	if (plugin->WriteMessages) wxLogMessage((" Pushed -1 %s"), sentence);
+    if (plugin->AutoCOGStatus == true)
+    {
+        plugin->COGCourse--;
+        if (plugin->COGCourse < 0) plugin->COGCourse = 359;
+    }
+	if (plugin->WriteMessages) wxLogMessage(" Pushed -1");    
 }
 
 void Dlg::OnDecrementTen(wxCommandEvent& event)
 {
-	wxString sentence = "$" + plugin->STALKSendName + ",86,21,06,F9";
 	if (plugin->Autopilot_Status == AUTO ||
-		plugin->Autopilot_Status == AUTOWIND)
-		plugin->SendNMEASentence(sentence);
+        plugin->Autopilot_Status == AUTOWIND)
+        plugin->SendDecrementTen();		
 	plugin->NeedCompassCorrection = false;
-	if (plugin->WriteMessages) wxLogMessage((" Pushed -10 %s"), sentence);
+    if (plugin->AutoCOGStatus == true)
+    {
+        plugin->COGCourse -= 10;
+        if (plugin->COGCourse < 0) plugin->COGCourse += 360;
+    }
+	if (plugin->WriteMessages) wxLogMessage(" Pushed -10 ");    
 }
 
 void Dlg::OnIncrementTen(wxCommandEvent& event)
 {
-	wxString sentence = "$" + plugin->STALKSendName + ",86,21,08,F7";
-	if (plugin->Autopilot_Status == AUTO ||
-		plugin->Autopilot_Status == AUTOWIND)
-		plugin->SendNMEASentence(sentence);
+    if (plugin->Autopilot_Status == AUTO ||
+        plugin->Autopilot_Status == AUTOWIND)
+        plugin->SendIncrementTen();
 	plugin->NeedCompassCorrection = false;
-	if (plugin->WriteMessages) wxLogMessage((" Pushed +10 %s"), sentence);
+    if (plugin->AutoCOGStatus == true)
+    {
+        plugin->COGCourse +=10;
+        if (plugin->COGCourse >= 360) plugin->COGCourse -= 360;
+    }
+	if (plugin->WriteMessages) wxLogMessage(" Pushed +10 ");
 }
 
 void Dlg::OnIncrementOne(wxCommandEvent& event)
-{
-	wxString sentence = "$" + plugin->STALKSendName + ",86,21,07,F8";
+{	
 	if (plugin->Autopilot_Status == AUTO ||
 		plugin->Autopilot_Status == AUTOWIND)
-		plugin->SendNMEASentence(sentence);
+		plugin->SendIncrementOne();
 	plugin->NeedCompassCorrection = false;
-	if (plugin->WriteMessages) wxLogMessage((" Pushed +1 %s"), sentence);
+    if (plugin->AutoCOGStatus == true)
+    {
+        plugin->COGCourse++;
+        if (plugin->COGCourse >= 360) plugin->COGCourse -= 360;
+    }
+	if (plugin->WriteMessages) wxLogMessage(" Pushed +1");    
 }
 
 void Dlg::OnActiveApp(wxCommandEvent& event)
@@ -252,6 +341,8 @@ void Dlg::OnActiveApp(wxCommandEvent& event)
 
 void Dlg::OnSetParameterValue(wxCommandEvent& event)
 {
+    if (plugin->AutoPilotType != SMARTPILOT)
+        return;
 	int Value;
 
 	if (plugin->DisplayShow > 0)   // Es wurde gerade ein Parameter gesetzt.
@@ -302,6 +393,8 @@ void Dlg::OnSetParameterValue(wxCommandEvent& event)
 
 void Dlg::OnSelectParameter(wxCommandEvent& event)
 {
+    if (plugin->AutoPilotType != SMARTPILOT)
+        return;
 	wxString Sentence;
 	// Set To DefaultValue because the aktive is not konwn.
 	switch (this->ParameterChoise->GetSelection())

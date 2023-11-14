@@ -42,6 +42,9 @@
 #include "wx/jsonreader.h"
 #include "wx/jsonwriter.h"
 
+#include "nmea0183.h"
+// #include <N2kMessages.h>
+#include "N2KParser.h"
 #include "version.h"
 
 #define AUTO		1
@@ -51,19 +54,31 @@
 #define	WINDSHIFT	5
 #define AUTOTRACK	6
 #define OFFCOURSE	7
+#define AUTOTURNWP  12
 #define UNKNOWN		0
-
+#define IncrementOne 8
+#define IncrementTen 9
+#define DecrementOne 10
+#define DecrementTen 11
+#define Nothing     0
+#define SMARTPILOT  0
+#define EVO         1
 
 class Dlg;
 class localTimer;
+class N2kContainer;
+class AutoCogTimer;
+class GPSTimer;
 
+// forgotten to define in N2KParser.h
+tN2kMsg MakeN2kMsg(std::vector<unsigned char>& v);
 //----------------------------------------------------------------------------------------------------------
 //    The PlugIn Class Definition
 //----------------------------------------------------------------------------------------------------------
 
 #define CALCULATOR_TOOL_POSITION    -1          // Request default positioning of toolbar tool
 
-class raymarine_autopilot_pi : public opencpn_plugin_117
+class raymarine_autopilot_pi : public wxEvtHandler, public opencpn_plugin_118
 {
 	
 public:
@@ -93,7 +108,6 @@ public:
       int GetToolbarToolCount(void);
 	  void ShowPreferencesDialog(wxWindow* parent);
       void OnToolbarToolCallback(int id);
-      void SetPluginSize(double Scalefaktor);
 
 //    Optional plugin overrides
       //void SetColorScheme(PI_ColorScheme cs);
@@ -108,6 +122,21 @@ public:
       void SetCalculatorDialogHeight    (int x){ m_route_dialog_height = x;};      
 	  void OnautopilotDialogClose();
 	  void AddVariationToRMCanSendOut(wxString &sentence_incomming);
+      void ActivateAutoCOG();
+      void DeActivateAutoCOG();
+      void ResetAUTOCOGValues();
+      // pushed Buttons
+      void SendGotoAuto();
+      void SendGotoStandby();
+      void SendGotoAutoWind();
+      void SendGotoAutoTrack();
+      void SendIncrementOne();
+      void SendIncrementTen();
+      void SendDecrementOne();
+      void SendDecrementTen();
+
+      wxTimer          *p_GPSTimer;
+      uint8_t          AutoPilotType;
 	  int			   Autopilot_Status;
 	  int			   Autopilot_Status_Before;
 	  int			   DisplayShow; // Anzahl ser $STALK,84, ... Sequenzen, bis wieder Werte anzezeigt werden.
@@ -136,11 +165,34 @@ public:
 	  double           BoatVariation;
       double           Skalefaktor;
 	  Dlg			   *m_pDialog;
-	  wxString			WayPointBearing;
+	  wxString		   WayPointBearing;
+      int              MAGcourse;
+      uint8_t          MyLastSend;
+      // AUTO-COG
+      bool             AutoCOGStatus;
+      bool             allowautocog;
+      int              cogsensibility;
+      int              maxdegreediff;
+      double           minspeedcog;
+      int              SOG_counter;
+      int              COG_counter;
+      int              SOG_valid;
+      int              COG_valid;
+      double           SOGA[3];
+      double           SOG;
+      int              COGA[30];
+      int              COG;
+      int              COGCourse;
+      int8_t           LastChange;
+      double           EVOLockeHeading;
+      bool             Received_65379;
+      bool             GetHeadingFromSeatalkNG;
+      bool             Received_Heading_126208;
+      bool             Received_AUTO_126208;
+      bool             Received_LockedHeading_inStandby;
 
 private:
       
-	  void OnClose( wxCloseEvent& event );
 	  int GetAutopilotMode(wxString &sentence);
 	  bool ConfirmNextWaypoint(const wxString &sentence);
 	  void GetWaypointBearing(const wxString &sentence);
@@ -149,8 +201,38 @@ private:
 	  wxString GetAutopilotCompassDifferenz(wxString &sentence);
 	  char GetHexValue(char AsChar);
 	  void SetAutopilotparametersChangeable();
+      void ActualisateCOGSOG(wxString &sentence);
+      void WriteCOGStatus();
+      void MakeCOGSOG(double SpeedOverGroundKnots, int TrackMadeGoodDegreesTrue);
+      void SendBoatVariationToN2k();
+      void SendN2kMessage(tN2kMsg N2kMsg);
+      void ToUpdateAutoPilotControlDisplay(wxString& sentence = (wxString)"EVO");
+      
 	  raymarine_autopilot_pi *plugin;
-  
+
+      // Thanks for that from AutoTrackRaymarine Plugin !
+      void HandleN2K_65360(ObservedEvt ev); // Pilot heading
+      void HandleN2K_126208(ObservedEvt ev); // Set Set pilot heading or set auto/standby
+      void HandleN2K_126720(ObservedEvt ev); // From EV1 indicating auto or standby state  ... and more !!!
+      void HandleN2K_65379(ObservedEvt ev); // Pilot State
+      void HandleN2K_65288(ObservedEvt ev); // Pilot Alarm
+      void HandleN2K_65359(ObservedEvt ev); // Vessel heading, proprietary
+      void HandleN2K_127250(ObservedEvt ev); // Vessel heading, standerd NMEA2000 
+      void HandleN2K_129026(ObservedEvt ev); // COG SOG for AutoCOG 
+      void HandleN2K_126992(ObservedEvt ev); // SystemTime
+      void HandleN2K_129029(ObservedEvt ev); // Position
+
+      std::shared_ptr<ObservableListener> listener_65360;  // Autopilot heading if auto
+      std::shared_ptr<ObservableListener> listener_126208; // Set pilot heading or set auto/standby
+      std::shared_ptr<ObservableListener> listener_126720; // From EV1 indicating auto or standby state  ... and more !!
+      std::shared_ptr<ObservableListener> listener_65379;  // Pilot State
+      std::shared_ptr<ObservableListener> listener_65288;  // Pilot Alarm
+      std::shared_ptr<ObservableListener> listener_65359;  // Vessel heading
+      std::shared_ptr<ObservableListener> listener_127250; // Vessel heading
+      std::shared_ptr<ObservableListener> listener_129026; // COG SOG for AutoCOG
+      std::shared_ptr<ObservableListener> listener_126992; // SystemTime
+      std::shared_ptr<ObservableListener> listener_129029; // Position
+
 	  wxLog				*pLogger;
 	  wxFileConfig      *m_pconfig;
       wxWindow          *m_parent_window;
@@ -164,8 +246,20 @@ private:
 	  bool              m_bautopilotShowIcon;
 	  bool              m_bShowautopilot;
 	  wxTimer		   *p_Resettimer;
+      wxTimer          *p_AutoCogTimer;
 	  int				LastCompassCourse;
       int               WMM_receive_count;
+      N2kContainer*     pHandleN2k;
+      uint16_t          DaysSince1970;      
+};
+
+class N2kContainer
+{
+public :
+    N2kContainer(DriverHandle Handler) { pNext = NULL; HandleN2k = Handler; };
+    ~N2kContainer() { if (pNext != NULL) delete pNext; };
+    DriverHandle  HandleN2k;
+    N2kContainer *pNext;
 };
 
 class localTimer :public wxTimer
@@ -178,5 +272,35 @@ private:
 		raymarine_autopilot_pi *pAutopilot;
 };
 
+class AutoCogTimer :public wxTimer
+{
+public:
+    AutoCogTimer(raymarine_autopilot_pi* pAuto) { pAutopilot = pAuto; };
+    ~AutoCogTimer() {};
+    void Notify();
+private:
+    raymarine_autopilot_pi* pAutopilot;
+};
+
+class GPSTimer :public wxTimer
+{
+public:
+    GPSTimer(raymarine_autopilot_pi* pAuto) { pAutopilot = pAuto; };
+    ~GPSTimer() {};
+    void Notify() { pAutopilot->ResetAUTOCOGValues(); };
+private:
+    raymarine_autopilot_pi* pAutopilot;
+};
+
+// N2k
+void SetN2kPGN126208(tN2kMsg& N2kMsg, uint8_t mode, uint8_t PilotSourceAddress);
+void SetRaymarineLockedHeadingN2kPGN126208(tN2kMsg& N2kMsg, double Heading);
+void SetRaymarineKeyCommandPGN126720(tN2kMsg& N2kMsg, uint8_t destinationAddress, uint16_t command);
+bool ParseN2kPGN65360(const tN2kMsg& N2kMsg, double& HeadingTrue, double& HeadingMagnetic);
+bool ParseN2kPGN65379(const tN2kMsg& N2kMsg, unsigned char& Mode, unsigned char& Submode);
+bool ParseN2kPGN65288(const tN2kMsg& N2kMsg, unsigned char& AlarmStatus, unsigned char& AlarmCode, unsigned char& AlarmGroup);
+bool ParseN2kPGN126208(const tN2kMsg& N2kMsg, uint8_t& CommandMode, double& Value);
+bool ParseN2kPGN126720(const tN2kMsg& N2kMsg, uint8_t& Mode, uint8_t& SubMode, uint16_t& commandValues);
+bool ParseN2kPGN65359(const tN2kMsg& N2kMsg, double& HeadingTrue, double& HeadingMagnetic);
 
 #endif
