@@ -9,7 +9,7 @@ The Raymarine EVO Pilot must be connected over NMEA2000 (SeatlakNG) to OpenCPN.
 when a new NMEA2000 Connection is activated in the Option->Connections, OpenCPN must be restated once.
 - The Track function can be activated, but OpenCPN is not sending out NMEA2000 messages when a route is activ. So I think it will not work at the moment.
 
-Also New in this version ist the "AUTOCOG" function
+Also New in this version ist an featue "AUTOCOG"
 -----------------------------------------------
 - the Use can be activated in the preferences
 - COG and SOG will be needed fom a GPS connected to OPENCPN, over NMEA0183, or NMEA2000.
