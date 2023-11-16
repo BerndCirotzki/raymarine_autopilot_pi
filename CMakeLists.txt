@@ -1,7 +1,7 @@
 # ---------------------------------------------------------------------------
-# Author:      Bernd Cirotzk   Copyright: License:     wxWidgets License
+# Author:      Bernd Cirotzki   Copyright: License:     wxWidgets License
 # ---------------------------------------------------------------------------
-## *   Copyright (C) 2010 by Bernd Cirotzk                            *
+## *   Copyright (C) 2010 by Bernd Cirotzki		                             *
 ## *   License:     GPLv3+
 ## *   This program is free software; you can redistribute it and/or modify  *
 ## *   it under the terms of the GNU General Public License as published by  *
@@ -53,15 +53,18 @@ set(PACKAGE "raymarine_autopilot_pi")
 set(SHORT_DESCRIPTION "Control a Raymarine Seatalk 1 Autopilot")
 set(LONG_DESCRIPTION "Control Raymarine ST1 Autopilot using a NMEA0183 to ST1 Converter")
 
-set(VERSION_MAJOR "1")
+set(VERSION_MAJOR "2")
 set(VERSION_MINOR "0")
 set(VERSION_PATCH "40")
 set(VERSION_TWEAK "3")
 set(VERSION_DATE  "12/10/2023")#DD/MM/YYYY format
+set(VERSION_PATCH "0")
+set(VERSION_TWEAK "0")
+set(VERSION_DATE  "14/11/2023")#DD/MM/YYYY format
 set(OCPN_MIN_VERSION "ov58")
 
 set(OCPN_API_VERSION_MAJOR "1")
-set(OCPN_API_VERSION_MINOR "17")
+set(OCPN_API_VERSION_MINOR "18")
 set(TP_COMMENT "  * Release using CI")
 
 set(PARENT "opencpn")
@@ -192,7 +195,7 @@ if(NOT OCPN_FLATPAK_CONFIG)
         target_link_libraries(${PACKAGE_NAME} windows::headers)
     endif()
 
-    add_subdirectory(opencpn-libs/api-17)
+    add_subdirectory(opencpn-libs/api-18)
     target_link_libraries(${PACKAGE_NAME} ocpn::api)
 
     add_subdirectory(opencpn-libs/tinyxml)
@@ -206,6 +209,12 @@ if(NOT OCPN_FLATPAK_CONFIG)
 
 	add_subdirectory(opencpn-libs/jsonlib)
     target_link_libraries(${PACKAGE_NAME} ocpn::jsonlib)
+	
+	add_subdirectory(opencpn-libs/nmea0183)
+    target_link_libraries(${PACKAGE_NAME} ocpn::nmea0183)
+	
+	add_subdirectory(opencpn-libs/n2kparser)
+    target_link_libraries(${PACKAGE_NAME} ocpn::N2KParser)
 
 endif(NOT OCPN_FLATPAK_CONFIG)
 
