@@ -2,7 +2,6 @@
 // C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b3)
 // http://www.wxformbuilder.org/
 //
-// PLEASE DO *NOT* EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
 #include "autopilotgui.h"
@@ -195,6 +194,32 @@ m_Parameterdialog::m_Parameterdialog( wxWindow* parent, wxWindowID id, const wxS
 	wxBoxSizer* bSizer2;
 	bSizer2 = new wxBoxSizer( wxVERTICAL );
 
+wxFlexGridSizer* fgSizer12;
+	fgSizer12 = new wxFlexGridSizer( 0, 3, 0, 0 );
+	fgSizer12->SetFlexibleDirection( wxBOTH );
+	fgSizer12->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
+
+	fgSizer12->SetMinSize( FromDIP(wxSize( -1,40 )) );
+
+	fgSizer12->Add( 12, 0, 1, wxEXPAND, 5 );
+
+	m_AutopilotTypeText = new wxStaticText( this, wxID_ANY, _("Autopilot Type  :"), wxDefaultPosition, FromDIP(wxSize( -1,-1 )), 0 );
+	m_AutopilotTypeText->Wrap( -1 );
+	m_AutopilotTypeText->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD, false, wxEmptyString ) );
+
+	fgSizer12->Add( m_AutopilotTypeText, 0, wxALL, 14 );
+
+	wxString m_AutopilotTypeChoices[] = { _("Raymarine Seatalk1 Autopilots (S1,S2,S3, ...), connected over NMEA0183/Seatalk1 translater"), _("Raymarine EVO Autopilot (connected over N2K / SeatalkNG)") };
+	int m_AutopilotTypeNChoices = sizeof( m_AutopilotTypeChoices ) / sizeof( wxString );
+	m_AutopilotType = new wxChoice( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_AutopilotTypeNChoices, m_AutopilotTypeChoices, 0 );
+	m_AutopilotType->SetSelection( 0 );
+	fgSizer12->Add( m_AutopilotType, 0, wxALL, 11 );
+
+
+	bSizer2->Add( fgSizer12, 0, wxEXPAND, 20 );
+
+	m_staticline42 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
+	bSizer2->Add( m_staticline42, 0, wxEXPAND | wxALL, 5 );
 	m_checkParameters = new wxCheckBox( this, wxID_ANY, _("Autopilot Parameters changeable"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_checkParameters->SetValue(true);
 	bSizer2->Add( m_checkParameters, 0, wxALL, 5 );
@@ -207,11 +232,11 @@ m_Parameterdialog::m_Parameterdialog( wxWindow* parent, wxWindowID id, const wxS
 
 	fgSizer51->Add( 20, 0, 1, wxEXPAND, 5 );
 
-	m_NoStandbyCounterValueText11 = new wxStaticText( this, wxID_ANY, _("Autopilot Control display zoom factor          "), wxDefaultPosition, wxSize( -1,-1 ), 0 );
+	m_NoStandbyCounterValueText11 = new wxStaticText( this, wxID_ANY, _("Autopilot Control display zoom factor          "), wxDefaultPosition, FromDIP(wxSize( -1,-1 )), 0 );
 	m_NoStandbyCounterValueText11->Wrap( -1 );
 	fgSizer51->Add( m_NoStandbyCounterValueText11, 0, wxALIGN_CENTER_VERTICAL|wxALL, 3 );
 
-	m_Skalefaktor = new wxSlider( this, wxID_ANY, 0, 0, 10, wxDefaultPosition, wxSize( 220,-1 ), wxSL_BOTH|wxSL_BOTTOM|wxSL_HORIZONTAL|wxSL_LABELS );
+	m_Skalefaktor = new wxSlider( this, wxID_ANY, 0, 0, 10, wxDefaultPosition, FromDIP(wxSize( 220,-1 )), wxSL_BOTH|wxSL_BOTTOM|wxSL_HORIZONTAL|wxSL_LABELS );
 	m_Skalefaktor->SetFont( wxFont( 7, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_ITALIC, wxFONTWEIGHT_NORMAL, false, wxEmptyString ) );
 
 	fgSizer51->Add( m_Skalefaktor, 0, wxALIGN_CENTER_HORIZONTAL|wxALL, 0 );
@@ -223,12 +248,11 @@ m_Parameterdialog::m_Parameterdialog( wxWindow* parent, wxWindowID id, const wxS
 	bSizer2->Add( m_SendNewAutoWind, 0, wxALL, 5 );
 
 	m_SendNewAutoonStandby = new wxCheckBox( this, wxID_ANY, _("Send new \"Auto\" or \"Auto-Wind\" Command, when \"Standby\" is not send from here, but the \"Auto\" was from here"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_SendNewAutoonStandby->SetMaxSize( wxSize( 680,-1 ) );
+	m_SendNewAutoonStandby->SetMaxSize( FromDIP(wxSize( 680,-1 )) );
 
 	bSizer2->Add( m_SendNewAutoonStandby, 0, wxALL|wxEXPAND, 5 );
 
 	m_NewStandbyNoStandbyReceived = new wxCheckBox( this, wxID_ANY, _("Send new \"Auto\" Command, when No Standby-Information is received from other Instrument or from here"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_NewStandbyNoStandbyReceived->SetValue(true);
 	bSizer2->Add( m_NewStandbyNoStandbyReceived, 0, wxALL, 5 );
 
 	wxFlexGridSizer* fgSizer2;
@@ -237,9 +261,9 @@ m_Parameterdialog::m_Parameterdialog( wxWindow* parent, wxWindowID id, const wxS
 	fgSizer2->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 
 
-	fgSizer2->Add( 20, 0, 1, wxEXPAND, 3 );
+	fgSizer2->Add( 18, 0, 1, wxEXPAND, 3 );
 
-	m_NoStandbyCounter = new wxTextCtrl( this, wxID_ANY, _("0"), wxDefaultPosition, FromDIP(wxSize( 40,20 )), wxTE_CENTER );
+	m_NoStandbyCounter =  new wxTextCtrl( this, wxID_ANY, ("0"), wxDefaultPosition, FromDIP(wxSize( 40,20 )), wxTE_CENTER );
 	#ifdef __WXGTK__
 	if ( !m_NoStandbyCounter->HasFlag( wxTE_MULTILINE ) )
 	{
@@ -250,7 +274,7 @@ m_Parameterdialog::m_Parameterdialog( wxWindow* parent, wxWindowID id, const wxS
 	#endif
 	fgSizer2->Add( m_NoStandbyCounter, 0, wxALL|wxALIGN_CENTER_VERTICAL, 3 );
 
-	m_NoStandbyCounterValueText = new wxStaticText( this, wxID_ANY, _("Counter for Autopilot is in Standby Mode, but without \"Standby\" Command received"), wxDefaultPosition, wxSize( -1,-1 ), 0 );
+	m_NoStandbyCounterValueText = new wxStaticText( this, wxID_ANY, _("Counter for Autopilot is in Standby Mode, but without \"Standby\" Command received"), wxDefaultPosition, FromDIP(wxSize( -1,-1 )), 0 );
 	m_NoStandbyCounterValueText->Wrap( -1 );
 	fgSizer2->Add( m_NoStandbyCounterValueText, 0, wxALL|wxALIGN_CENTER_VERTICAL, 3 );
 
@@ -262,13 +286,13 @@ m_Parameterdialog::m_Parameterdialog( wxWindow* parent, wxWindowID id, const wxS
 
 	fgSizer2->Add( 0, 0, 1, wxEXPAND, 3 );
 
-	wxString m_SelectCounterStandbyChoices[] = { _("1"), _("2"), _("3"), _("4"), _("5"), _("6"), _("7"), _("8"), _("9"), _("10") };
+	wxString m_SelectCounterStandbyChoices[] = { ("1"), ("2"), ("3"), ("4"), ("5"), ("6"), ("7"), ("8"), ("9"), ("10") };
 	int m_SelectCounterStandbyNChoices = sizeof( m_SelectCounterStandbyChoices ) / sizeof( wxString );
 	m_SelectCounterStandby = new wxChoice( this, wxID_ANY, wxDefaultPosition, FromDIP(wxSize( 40,20 )), m_SelectCounterStandbyNChoices, m_SelectCounterStandbyChoices, 0 );
 	m_SelectCounterStandby->SetSelection( 0 );
 	fgSizer2->Add( m_SelectCounterStandby, 0, wxALL|wxALIGN_CENTER_VERTICAL|wxALIGN_CENTER_HORIZONTAL, 3 );
 
-	m_Text = new wxStaticText( this, wxID_ANY, _("Value, for maximum  \"Not recived Standby Commands\" not sending \"Auto\" Command again"), wxDefaultPosition, wxSize( 500,-1 ), 0 );
+	m_Text = new wxStaticText( this, wxID_ANY, _("Value, for maximum  \"Not recived Standby Commands\" not sending \"Auto\" Command again"), wxDefaultPosition, FromDIP(wxSize( 500,-1 )), 0 );
 	m_Text->Wrap( -1 );
 	fgSizer2->Add( m_Text, 0, wxALL|wxALIGN_CENTER_VERTICAL, 3 );
 
@@ -282,7 +306,7 @@ m_Parameterdialog::m_Parameterdialog( wxWindow* parent, wxWindowID id, const wxS
 	m_ChangeValueToLast->SetValue(true);
 	fgSizer2->Add( m_ChangeValueToLast, 0, wxALL|wxALIGN_CENTER_VERTICAL, 3 );
 
-	m_Text1 = new wxStaticText( this, wxID_ANY, _("Change course value back to the last Compass course value, the Course Computer\nhad, before the Auto Signal lost"), wxDefaultPosition, wxSize( 500,-1 ), 0 );
+	m_Text1 = new wxStaticText( this, wxID_ANY, _("Change course value back to the last Compass course value, the Course Computer\nhad, before the Auto Signal lost"), wxDefaultPosition, FromDIP(wxSize( 500,-1 )), 0 );
 	m_Text1->Wrap( -1 );
 	fgSizer2->Add( m_Text1, 0, wxALL|wxALIGN_CENTER_VERTICAL, 3 );
 
@@ -298,9 +322,9 @@ m_Parameterdialog::m_Parameterdialog( wxWindow* parent, wxWindowID id, const wxS
 	fgSizer5->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 
 
-	fgSizer5->Add( 20, 0, 1, wxEXPAND, 5 );
+	fgSizer5->Add( 18, 0, 1, wxEXPAND, 5 );
 
-	m_TimeToSendNewWaypiont = new wxTextCtrl( this, wxID_ANY, _("10"), wxDefaultPosition, FromDIP(wxSize( 40,20 )), wxTE_CENTER );
+	m_TimeToSendNewWaypiont = new wxTextCtrl( this, wxID_ANY, ("10"), wxDefaultPosition, FromDIP(wxSize( 40,20 )), wxTE_CENTER );
 	#ifdef __WXGTK__
 	if ( !m_TimeToSendNewWaypiont->HasFlag( wxTE_MULTILINE ) )
 	{
@@ -311,7 +335,7 @@ m_Parameterdialog::m_Parameterdialog( wxWindow* parent, wxWindowID id, const wxS
 	#endif
 	fgSizer5->Add( m_TimeToSendNewWaypiont, 0, wxALL, 5 );
 
-	m_NoStandbyCounterValueText1 = new wxStaticText( this, wxID_ANY, _("Time in seconds to wait before sending \"Track\" sentence."), wxDefaultPosition, wxSize( -1,-1 ), 0 );
+	m_NoStandbyCounterValueText1 = new wxStaticText( this, wxID_ANY, _("Time in seconds to wait before sending \"Track\" sentence."), wxDefaultPosition, FromDIP(wxSize( -1,-1 )), 0 );
 	m_NoStandbyCounterValueText1->Wrap( -1 );
 	fgSizer5->Add( m_NoStandbyCounterValueText1, 0, wxALIGN_CENTER_VERTICAL|wxALL, 3 );
 
@@ -323,7 +347,7 @@ m_Parameterdialog::m_Parameterdialog( wxWindow* parent, wxWindowID id, const wxS
 	fgSizer1->SetFlexibleDirection( wxBOTH );
 	fgSizer1->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 
-	m_STALKreceivename = new wxTextCtrl( this, wxID_ANY, _("STALK"), wxDefaultPosition, FromDIP(wxSize( 45,20 )), wxTE_CENTER );
+	m_STALKreceivename = new wxTextCtrl( this, wxID_ANY, ("STALK"), wxDefaultPosition, FromDIP(wxSize( 45,20 )), wxTE_CENTER );
 	#ifdef __WXGTK__
 	if ( !m_STALKreceivename->HasFlag( wxTE_MULTILINE ) )
 	{
@@ -338,7 +362,7 @@ m_Parameterdialog::m_Parameterdialog( wxWindow* parent, wxWindowID id, const wxS
 	m_staticText11->Wrap( -1 );
 	fgSizer1->Add( m_staticText11, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 
-	m_STALKsendname = new wxTextCtrl( this, wxID_ANY, _("STALK"), wxDefaultPosition, FromDIP(wxSize( 45,20 )), wxTE_CENTER );
+	m_STALKsendname = new wxTextCtrl( this, wxID_ANY, ("STALK"), wxDefaultPosition, FromDIP(wxSize( 45,20 )), wxTE_CENTER );
 	#ifdef __WXGTK__
 	if ( !m_STALKsendname->HasFlag( wxTE_MULTILINE ) )
 	{
@@ -354,7 +378,7 @@ m_Parameterdialog::m_Parameterdialog( wxWindow* parent, wxWindowID id, const wxS
 	fgSizer1->Add( m_staticText21, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 
 
-	bSizer2->Add( fgSizer1, 1, wxEXPAND, 5 );
+	bSizer2->Add( fgSizer1, 0, wxEXPAND, 5 );
 
 	m_WriteMessages = new wxCheckBox( this, wxID_ANY, _("Write Message Info to OPENCPN Logfile"), wxDefaultPosition, wxDefaultSize, 0 );
 	bSizer2->Add( m_WriteMessages, 0, wxALL, 5 );
@@ -362,8 +386,121 @@ m_Parameterdialog::m_Parameterdialog( wxWindow* parent, wxWindowID id, const wxS
 	m_WriteDebug = new wxCheckBox( this, wxID_ANY, _("Debug all \"$STALK\" Messages into OPENCPN Logfile"), wxDefaultPosition, wxDefaultSize, 0 );
 	bSizer2->Add( m_WriteDebug, 0, wxALL, 5 );
 
-	m_ModyfyRMC = new wxCheckBox( this, wxID_ANY, _("Modify RMC Sentence as \"$ECRMC\" and replace or fill with Variationfield with the value from WMM Plugin"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_ModyfyRMC = new wxCheckBox( this, wxID_ANY, _("Modify RMC Sentence as \"$ECRMC\" and replace or fill with Variationfield with the value from WMM Plugin"), wxDefaultPosition, FromDIP(wxSize(690, -1)), 0 );
 	bSizer2->Add( m_ModyfyRMC, 0, wxALL, 5 );
+
+	m_staticline4 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
+	bSizer2->Add( m_staticline4, 0, wxALL|wxEXPAND, 5 );
+
+	m_allowautocog = new wxCheckBox( this, wxID_ANY, _("Allow use AUTO-COG function"), wxDefaultPosition, wxDefaultSize, 0 );
+	bSizer2->Add( m_allowautocog, 0, wxALL, 5 );
+
+	wxFlexGridSizer* fgSizer5111;
+	fgSizer5111 = new wxFlexGridSizer( 0, 6, 0, 0 );
+	fgSizer5111->SetFlexibleDirection( wxBOTH );
+	fgSizer5111->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
+
+
+	fgSizer5111->Add( 20, 0, 1, wxEXPAND, 5 );
+
+	m_sensebilitytext1 = new wxStaticText( this, wxID_ANY, _("the autopilot controller will get new +1 or -1 keystroke information to hold the Course Over Ground."), wxDefaultPosition, FromDIP(wxSize( -1,-1 )), 0 );
+	m_sensebilitytext1->Wrap( -1 );
+	fgSizer5111->Add( m_sensebilitytext1, 0, wxALL, 0 );
+
+
+	bSizer2->Add( fgSizer5111, 0, wxEXPAND, 0 );
+
+	wxFlexGridSizer* fgSizer511;
+	fgSizer511 = new wxFlexGridSizer( 0, 6, 0, 0 );
+	fgSizer511->SetFlexibleDirection( wxBOTH );
+	fgSizer511->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
+
+
+	fgSizer511->Add( 20, 0, 1, wxEXPAND, 7 );
+
+	m_sensebilitytext = new wxStaticText( this, wxID_ANY, _("Sensibility "), wxDefaultPosition, FromDIP(wxSize( -1,-1 )), 0 );
+	m_sensebilitytext->Wrap( -1 );
+	fgSizer511->Add( m_sensebilitytext, 0, wxALIGN_CENTER_VERTICAL|wxALL, 3 );
+
+
+	fgSizer511->Add( 30, 0, 1, wxEXPAND, 5 );
+
+	m_slowtext = new wxStaticText( this, wxID_ANY, _("slow"), wxDefaultPosition, FromDIP(wxSize( -1,-1 )), 0 );
+	m_slowtext->Wrap( -1 );
+	m_slowtext->SetFont( wxFont( 7, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, wxEmptyString ) );
+	m_slowtext->SetForegroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_HIGHLIGHT ) );
+
+	fgSizer511->Add( m_slowtext, 0, wxALL, 8 );
+
+	m_cogsensibility = new wxSlider( this, wxID_ANY, 15, 1, 30, wxDefaultPosition, FromDIP(wxSize( 220,-1 )), wxSL_BOTH|wxSL_BOTTOM|wxSL_HORIZONTAL|wxSL_INVERSE );
+	m_cogsensibility->SetFont( wxFont( 7, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_ITALIC, wxFONTWEIGHT_NORMAL, false, wxEmptyString ) );
+
+	fgSizer511->Add( m_cogsensibility, 0, wxALIGN_CENTER_HORIZONTAL|wxALL, 2 );
+
+	m_fast = new wxStaticText( this, wxID_ANY, _("fast"), wxDefaultPosition, FromDIP(wxSize( -1,-1 )), 0 );
+	m_fast->Wrap( -1 );
+	m_fast->SetFont( wxFont( 7, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, wxEmptyString ) );
+	m_fast->SetForegroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_HIGHLIGHT ) );
+
+	fgSizer511->Add( m_fast, 0, wxALL, 8 );
+
+
+	bSizer2->Add( fgSizer511, 0, wxEXPAND, 6 );
+
+	wxFlexGridSizer* fgSizer52;
+	fgSizer52 = new wxFlexGridSizer( 0, 3, 0, 0 );
+	fgSizer52->SetFlexibleDirection( wxBOTH );
+	fgSizer52->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
+
+
+	fgSizer52->Add( 18, 0, 0, wxEXPAND, 5 );
+
+	m_maxdegreediff = new wxTextCtrl( this, wxID_ANY, ("45"), wxDefaultPosition, FromDIP(wxSize( 40,20 )), wxTE_CENTER );
+	#ifdef __WXGTK__
+	if ( !m_maxdegreediff->HasFlag( wxTE_MULTILINE ) )
+	{
+	m_maxdegreediff->SetMaxLength( 3 );
+	}
+	#else
+	m_maxdegreediff->SetMaxLength( 3 );
+	#endif
+	fgSizer52->Add( m_maxdegreediff, 0, wxALL, 3 );
+
+	m_maxdegtext = new wxStaticText( this, wxID_ANY, _("maximum difference between COG and magnetic heading in degrees"), wxDefaultPosition, FromDIP(wxSize( -1,-1 )), 0 );
+	m_maxdegtext->Wrap( -1 );
+	fgSizer52->Add( m_maxdegtext, 0, wxALIGN_CENTER_VERTICAL|wxALL, 3 );
+
+
+	bSizer2->Add( fgSizer52, 0, wxEXPAND, 0 );
+
+	wxFlexGridSizer* fgSizer521;
+	fgSizer521 = new wxFlexGridSizer( 0, 3, 0, 0 );
+	fgSizer521->SetFlexibleDirection( wxBOTH );
+	fgSizer521->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
+
+
+	fgSizer521->Add( 18, 0, 0, wxEXPAND, 5 );
+
+	m_minspeedcog = new wxTextCtrl( this, wxID_ANY, ("1.5"), wxDefaultPosition, FromDIP(wxSize( 40,20 )), wxTE_CENTER );
+	#ifdef __WXGTK__
+	if ( !m_minspeedcog->HasFlag( wxTE_MULTILINE ) )
+	{
+	m_minspeedcog->SetMaxLength( 3 );
+	}
+	#else
+	m_minspeedcog->SetMaxLength( 3 );
+	#endif
+	fgSizer521->Add( m_minspeedcog, 0, wxALL, 3 );
+
+	m_minspeed = new wxStaticText( this, wxID_ANY, _("minimun speed in nodes (SOG) for using AUTO-COG function"), wxDefaultPosition, FromDIP(wxSize( -1,-1 )), 0 );
+	m_minspeed->Wrap( -1 );
+	fgSizer521->Add( m_minspeed, 0, wxALIGN_CENTER_VERTICAL|wxALL, 3 );
+
+
+	bSizer2->Add( fgSizer521, 0, wxEXPAND, 0 );
+
+	m_staticline41 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
+	bSizer2->Add( m_staticline41, 0, wxEXPAND | wxALL, 6 );
 
 	m_sdbSizer1 = new wxStdDialogButtonSizer();
 	m_sdbSizer1OK = new wxButton( this, wxID_OK );
@@ -381,18 +518,21 @@ m_Parameterdialog::m_Parameterdialog( wxWindow* parent, wxWindowID id, const wxS
 	this->Centre( wxBOTH );
 
 	// Connect Events
+	m_AutopilotType->Connect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( m_Parameterdialog::OnChoiceAutoPilot ), NULL, this );
 	m_checkParameters->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( m_Parameterdialog::OnParameterChanged ), NULL, this );
 	m_SendNewAutoWind->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( m_Parameterdialog::OnAutoWindNew ), NULL, this );
 	m_SendNewAutoonStandby->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( m_Parameterdialog::OnNewAuto ), NULL, this );
 	m_ResetStandbyCounter->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( m_Parameterdialog::OnStandbyCounterReset ), NULL, this );
+	m_allowautocog->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( m_Parameterdialog::OnAutoCogchange ), NULL, this );
 }
 
 m_Parameterdialog::~m_Parameterdialog()
 {
 	// Disconnect Events
+	m_AutopilotType->Disconnect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( m_Parameterdialog::OnChoiceAutoPilot ), NULL, this );
 	m_checkParameters->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( m_Parameterdialog::OnParameterChanged ), NULL, this );
 	m_SendNewAutoWind->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( m_Parameterdialog::OnAutoWindNew ), NULL, this );
 	m_SendNewAutoonStandby->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( m_Parameterdialog::OnNewAuto ), NULL, this );
 	m_ResetStandbyCounter->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( m_Parameterdialog::OnStandbyCounterReset ), NULL, this );
-
+	m_allowautocog->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( m_Parameterdialog::OnAutoCogchange ), NULL, this );
 }

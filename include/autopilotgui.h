@@ -1,8 +1,6 @@
 ///////////////////////////////////////////////////////////////////////////
 // C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b3)
-// http://www.wxformbuilder.org/
-//
-// PLEASE DO *NOT* EDIT THIS FILE!
+// 
 ///////////////////////////////////////////////////////////////////////////
 
 #pragma once
@@ -47,7 +45,6 @@ class m_dialog : public wxDialog
 		wxButton* buttonDecTen;
 		wxButton* buttonIncTen;
 		wxButton* buttonIncOne;
-		wxButton* buttonAuto;
 		wxButton* buttonStandby;
 		wxButton* buttonAutoWind;
 		wxButton* buttonTrack;
@@ -73,6 +70,8 @@ class m_dialog : public wxDialog
 		wxChoice* ParameterValue;
 		wxButton* buttonSet;
 		wxStaticLine* StaticLine3;
+        wxButton* buttonAuto;
+
 #ifndef __WXMSW__
 		wxSize FromDIP(wxSize dummy) { return dummy; };
 #endif
@@ -90,20 +89,25 @@ class m_Parameterdialog : public wxDialog
 	private:
 
 	protected:
-		wxStaticText* m_staticText11;
-		wxStaticText* m_staticText21;
+		wxStaticLine* m_staticline42;		
+		wxStaticLine* m_staticline4;
+		wxStaticLine* m_staticline41;
 		wxStdDialogButtonSizer* m_sdbSizer1;
 		wxButton* m_sdbSizer1OK;
 		wxButton* m_sdbSizer1Cancel;
 
 		// Virtual event handlers, override them in your derived class
+		virtual void OnChoiceAutoPilot( wxCommandEvent& event ) { event.Skip(); }																   
 		virtual void OnParameterChanged( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnAutoWindNew( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnNewAuto( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnStandbyCounterReset( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnAutoCogchange( wxCommandEvent& event ) { event.Skip(); }
 
 
 	public:
+		wxStaticText* m_AutopilotTypeText;
+		wxChoice* m_AutopilotType;			
 		wxCheckBox* m_checkParameters;
 		wxStaticText* m_NoStandbyCounterValueText11;
 		wxSlider* m_Skalefaktor;
@@ -120,16 +124,28 @@ class m_Parameterdialog : public wxDialog
 		wxCheckBox* m_SendTrack;
 		wxTextCtrl* m_TimeToSendNewWaypiont;
 		wxStaticText* m_NoStandbyCounterValueText1;
+        wxStaticText* m_staticText11;
+        wxStaticText* m_staticText21;
 		wxTextCtrl* m_STALKreceivename;
 		wxTextCtrl* m_STALKsendname;
 		wxCheckBox* m_WriteMessages;
 		wxCheckBox* m_WriteDebug;
 		wxCheckBox* m_ModyfyRMC;
+		wxCheckBox* m_allowautocog;
+		wxStaticText* m_sensebilitytext1;
+		wxStaticText* m_sensebilitytext;
+		wxStaticText* m_slowtext;
+		wxSlider* m_cogsensibility;
+		wxStaticText* m_fast;
+		wxTextCtrl* m_maxdegreediff;
+		wxStaticText* m_maxdegtext;
+		wxTextCtrl* m_minspeedcog;
+		wxStaticText* m_minspeed;
 
 #ifndef __WXMSW__
 		wxSize FromDIP(wxSize dummy) { return dummy; };
-#endif
-		m_Parameterdialog( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Autopilot"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 694,501 ), long style = wxDEFAULT_DIALOG_STYLE );
+#endif  
+		m_Parameterdialog( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Autopilot"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 737,698 ), long style = wxDEFAULT_DIALOG_STYLE );
 
 		~m_Parameterdialog();
 
