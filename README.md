@@ -1,12 +1,12 @@
 Plugin for OpenCPN to control a Raymarine Seatalk 1 Autopilot
-and NEW for Raymarine EVO Autopilots  ( OpenCPN now can ... a little ... NMEA2000 ) 
+and NEW for Raymarine EVO Autopilots  ( OpenCPN now can NMEA2000 ) 
 
 this Version 2.x works only since OpenCPN Version 5.8.x and up. (NMEA2000 is needed.)
 
 The Type of Autopilot can be selected in the preferences.
 
 The Raymarine EVO Pilot must be connected over NMEA2000 (SeatlakNG) to OpenCPN.
-when a new NMEA2000 Connection is activated in the Option->Connections, OpenCPN must be restated once.
+when a new NMEA2000 Connection is activated in the Option Connections, OpenCPN must be restated once.
 - The Track function can be activated, but OpenCPN is not sending out NMEA2000 messages when a route is activ. So I think it will not work at the moment.
 
 Also New in this version is the "AUTOCOG" function
@@ -20,7 +20,7 @@ It can also be use from an other Terminal (for example ST600x)
 - Wenn is is Aktiv, the plugin sends new set heading Information to the Raymarine Autopilot-computer to set the heading fit to selected COG.
 - The Set-COG Value can be changed with the normal buttons (+1,-1 ...)
 - the sensebilty can be changed in the preferences.
-- Also min SOG and max difference between SOG and HDM can be set in the preferences.
+- Also min SOG and max difference between COG and HDM can be set in the preferences.
 
 
 Seatalk 1 Autopilots
