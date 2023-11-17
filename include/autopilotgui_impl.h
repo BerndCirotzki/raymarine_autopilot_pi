@@ -48,8 +48,10 @@ class ParameterDialog : public m_Parameterdialog
 {
 public:
 	ParameterDialog(raymarine_autopilot_pi* p, wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style);
+    void OnChoiceAutoPilot(wxCommandEvent& event);
 	void OnStandbyCounterReset(wxCommandEvent& event);
 	void OnNewAuto(wxCommandEvent& event);
+    void OnAutoCogchange(wxCommandEvent& event);
 private:
 	raymarine_autopilot_pi* ptoPlugin;
 };
