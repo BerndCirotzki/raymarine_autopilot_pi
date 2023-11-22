@@ -1,4 +1,6 @@
-Plugin for OpenCPN to control a Raymarine Seatalk 1 Autopilot
+Plugin for OpenCPN to control a Raymarine Autopilots
+----------------------------------------------------
+for Raymarine Seatalk1 (S1,S2,S3 ...)
 and NEW for Raymarine EVO Autopilots  ( OpenCPN now can NMEA2000 ) 
 
 this Version 2.x works only since OpenCPN Version 5.8.x and up. (NMEA2000 is needed.)
@@ -50,9 +52,5 @@ If you don't want that, build your own OPENCPN and change the following line in 
 if (params.Type == SERIAL || driver->iface != source_iface) {
   ... change to    
 if (driver->iface != source_iface) {
-
-I added some translations for Spanish, Dutch and French. .... but I think it's not perfekt.
-If anyone likes to make a better One this will be OK. It's not my mother tongue.
-
 	
 
