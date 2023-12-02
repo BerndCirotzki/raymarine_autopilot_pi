@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: raymarine_autopilot_pi 0.3\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-11-14 12:54+0100\n"
-"PO-Revision-Date: 2023-11-14 13:06+0100\n"
+"POT-Creation-Date: 2023-11-30 15:37+0100\n"
+"PO-Revision-Date: 2023-11-30 15:48+0100\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: de_DE\n"
@@ -89,6 +89,13 @@ msgstr ""
 #
 msgid "Debug all \"$STALK\" Messages into OPENCPN Logfile"
 msgstr "Schreibe alle \"$STALK\" Nachrichten in OPENCPN Logfile"
+
+#
+msgid ""
+"For use EVO Pilot, define NMEA2000/SeatalkNG connection and restart OpenCPN"
+msgstr ""
+"Um den EVO Autopiloten zu nutzen bitte eine NMEA2000/SeatalkNG Verbindung "
+"erstellen und OpenCPN neu starten"
 
 #
 msgid ""
@@ -233,6 +240,11 @@ msgid "is set to  "
 msgstr "gesetzt auf  "
 
 #
+msgid "maximum change of the \"is set pilot heading\" from last set in degrees"
+msgstr ""
+"Maximale automatische Änderung des \"gesetzten Autopilot Kurses\" in Grad"
+
+#
 msgid "maximum difference between COG and magnetic heading in degrees"
 msgstr "Maximale Differenz zwischen COG und magnetischer Peilung in Grad"
 
@@ -254,6 +266,8 @@ msgstr ""
 "Der Autopilot Controller erhält +1 oder -1 Tasten Informationen um den Kurs "
 "über Grund zu halten."
 
+#
+#
 #
 #
 #

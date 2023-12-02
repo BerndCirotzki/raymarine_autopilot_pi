@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: raymarine_autopilot_pi 1.0.000.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-11-14 12:54+0100\n"
-"PO-Revision-Date: 2023-11-14 13:09+0100\n"
+"POT-Creation-Date: 2023-11-30 15:37+0100\n"
+"PO-Revision-Date: 2023-12-02 11:07+0100\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: fr_FR\n"
@@ -93,6 +93,13 @@ msgstr "Déboguer tous les messages \"$STALK\" dans le fichier journal d'OPENCPN
 
 #
 msgid ""
+"For use EVO Pilot, define NMEA2000/SeatalkNG connection and restart OpenCPN"
+msgstr ""
+"Pour l'utilisation d'EVO Pilot, définir la connexion NMEA2000/SeatalkNG et "
+"redémarrer OpenCPN"
+
+#
+msgid ""
 "Modify RMC Sentence as \"$ECRMC\" and replace or fill with Variationfield "
 "with the value from WMM Plugin"
 msgstr ""
@@ -129,13 +136,15 @@ msgstr ""
 
 #
 msgid "Raymarine EVO Autopilot (connected over N2K / SeatalkNG)"
-msgstr ""
+msgstr "Pilote automatique Raymarine EVO (connecté par N2K / SeatalkNG)"
 
 #
 msgid ""
 "Raymarine Seatalk1 Autopilots (S1,S2,S3, ...), connected over NMEA0183/"
 "Seatalk1 translater"
 msgstr ""
+"Autopilotes Raymarine Seatalk1 (S1,S2,S3, ...), connectés via un traducteur "
+"NMEA0183/Seatalk1"
 
 #
 msgid "Reset"
@@ -231,6 +240,12 @@ msgid "is set to  "
 msgstr "est réglé sur  "
 
 #
+msgid "maximum change of the \"is set pilot heading\" from last set in degrees"
+msgstr ""
+"changement maximum du \"cap pilote réglé\" par rapport au dernier réglage en "
+"degrés"
+
+#
 msgid "maximum difference between COG and magnetic heading in degrees"
 msgstr "différence maximale entre le COG et le cap magnétique en degrés"
 
@@ -257,10 +272,14 @@ msgstr ""
 #
 #
 #
+#
+#
 #, fuzzy
 #~ msgid "Raymarine COG Autopilot"
 #~ msgstr "Raymarine Autopilot"
 
+#
+#
 #
 #
 #
@@ -270,6 +289,8 @@ msgstr ""
 #~ "Envoyer la variante PGN 277258 à N2K/SeatalkNG avec la valeur du plug-in "
 #~ "WMM"
 
+#
+#
 #
 #
 #

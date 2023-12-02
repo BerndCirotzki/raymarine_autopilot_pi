@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: raymarine_autopilot_pi 1.0.2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-11-14 12:54+0100\n"
-"PO-Revision-Date: 2023-11-14 13:08+0100\n"
+"POT-Creation-Date: 2023-11-30 15:37+0100\n"
+"PO-Revision-Date: 2023-12-02 11:09+0100\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: es\n"
@@ -94,6 +94,13 @@ msgstr ""
 
 #
 msgid ""
+"For use EVO Pilot, define NMEA2000/SeatalkNG connection and restart OpenCPN"
+msgstr ""
+"Para utilizar EVO Pilot, defina la conexión NMEA2000/SeatalkNG y reinicie "
+"OpenCPN"
+
+#
+msgid ""
 "Modify RMC Sentence as \"$ECRMC\" and replace or fill with Variationfield "
 "with the value from WMM Plugin"
 msgstr ""
@@ -129,13 +136,15 @@ msgstr "Control de piloto automático para pilotos Raymarine Smartpilot y EVO"
 
 #
 msgid "Raymarine EVO Autopilot (connected over N2K / SeatalkNG)"
-msgstr ""
+msgstr "Piloto automático Raymarine EVO (conectado a través de N2K / SeatalkNG)"
 
 #
 msgid ""
 "Raymarine Seatalk1 Autopilots (S1,S2,S3, ...), connected over NMEA0183/"
 "Seatalk1 translater"
 msgstr ""
+"Pilotos Raymarine Seatalk1 (S1,S2,S3, ...), conectados a través del traductor "
+"NMEA0183/Seatalk1"
 
 #
 msgid "Reset"
@@ -230,12 +239,18 @@ msgid "is set to  "
 msgstr "se establece en   "
 
 #
+msgid "maximum change of the \"is set pilot heading\" from last set in degrees"
+msgstr ""
+"cambio máximo del \"rumbo piloto establecido\" desde el último establecido en "
+"grados"
+
+#
 msgid "maximum difference between COG and magnetic heading in degrees"
 msgstr "diferencia máxima entre COG y rumbo magnético en grados"
 
 #
 msgid "minimun speed in nodes (SOG) for using AUTO-COG function"
-msgstr "velocidad mínima en nodos (SOG) para usar la función AUTO-COG."
+msgstr "velocidad mínima en nodos (SOG) para usar la función AUTO-COG"
 
 #
 msgid "slow"
@@ -256,10 +271,14 @@ msgstr ""
 #
 #
 #
+#
+#
 #, fuzzy
 #~ msgid "Raymarine COG Autopilot"
 #~ msgstr "Raymarine Autopilot"
 
+#
+#
 #
 #
 #
