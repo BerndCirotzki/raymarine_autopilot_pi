@@ -71,7 +71,7 @@ class AutoCogTimer;
 class GPSTimer;
 
 // forgotten to define in N2KParser.h
-tN2kMsg MakeN2kMsg(std::vector<unsigned char>& v);
+extern tN2kMsg MakeN2kMsg(std::vector<unsigned char>& v);
 //----------------------------------------------------------------------------------------------------------
 //    The PlugIn Class Definition
 //----------------------------------------------------------------------------------------------------------
@@ -134,6 +134,8 @@ public:
       void SendIncrementTen();
       void SendDecrementOne();
       void SendDecrementTen();
+      bool EnableEVOEvents();
+      void DisableEVOEvents();
 
       wxTimer          *p_GPSTimer;
       uint8_t          AutoPilotType;
@@ -150,6 +152,7 @@ public:
 	  bool			   WriteMessages;
 	  bool			   WriteDebug;
 	  bool			   ModyfyRMC;
+      int			   LastCompassCourse;
 	  bool             NewStandbyNoStandbyReceived;
 	  wxString	       STALKSendName;
 	  wxString		   STALKReceiveName;
@@ -174,6 +177,7 @@ public:
       int              cogsensibility;
       int              maxdegreediff;
       double           minspeedcog;
+      int              maxchangehdg;
       int              SOG_counter;
       int              COG_counter;
       int              SOG_valid;
@@ -190,6 +194,7 @@ public:
       bool             Received_Heading_126208;
       bool             Received_AUTO_126208;
       bool             Received_LockedHeading_inStandby;
+      int              AutoCOGHeadingChange;
 
 private:
       
@@ -237,7 +242,7 @@ private:
 	  wxFileConfig      *m_pconfig;
       wxWindow          *m_parent_window;
       bool              LoadConfig(void);
-      bool              SaveConfig(void);
+      bool              SaveConfig(void);      
       int               m_route_dialog_x, m_route_dialog_y,m_route_dialog_width,m_route_dialog_height;
       int               m_display_width, m_display_height;      
       int               m_leftclick_tool_id;
@@ -246,8 +251,7 @@ private:
 	  bool              m_bautopilotShowIcon;
 	  bool              m_bShowautopilot;
 	  wxTimer		   *p_Resettimer;
-      wxTimer          *p_AutoCogTimer;
-	  int				LastCompassCourse;
+      wxTimer          *p_AutoCogTimer;	  
       int               WMM_receive_count;
       N2kContainer*     pHandleN2k;
       uint16_t          DaysSince1970;      

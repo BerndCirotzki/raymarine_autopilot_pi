@@ -141,11 +141,13 @@ class m_Parameterdialog : public wxDialog
 		wxStaticText* m_maxdegtext;
 		wxTextCtrl* m_minspeedcog;
 		wxStaticText* m_minspeed;
+		wxTextCtrl* m_maxchangehdg;
+		wxStaticText* m_maxchangehdgtext;					 
 
 #ifndef __WXMSW__
 		wxSize FromDIP(wxSize dummy) { return dummy; };
 #endif  
-		m_Parameterdialog( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Autopilot"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 737,698 ), long style = wxDEFAULT_DIALOG_STYLE );
+		m_Parameterdialog( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Autopilot"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 737,718 ), long style = wxDEFAULT_DIALOG_STYLE );
 
 		~m_Parameterdialog();
 

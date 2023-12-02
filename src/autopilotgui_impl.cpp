@@ -90,6 +90,8 @@ void ParameterDialog::OnAutoCogchange(wxCommandEvent& event)
         m_maxdegtext->Enable(false);
         m_minspeedcog->Enable(false);
         m_minspeed->Enable(false);
+        m_maxchangehdg->Enable(false);
+        m_maxchangehdgtext->Enable(false);
     }
     else
     {
@@ -101,6 +103,8 @@ void ParameterDialog::OnAutoCogchange(wxCommandEvent& event)
         m_maxdegtext->Enable(true);
         m_minspeedcog->Enable(true);
         m_minspeed->Enable(true);
+        m_maxchangehdg->Enable(true);
+        m_maxchangehdgtext->Enable(true);
     }
 }
 
@@ -227,6 +231,7 @@ void Dlg::OnKlickInDisplay(wxMouseEvent& event)
 
 void Dlg::OnAuto(wxCommandEvent& event)
 {
+    plugin->AutoCOGHeadingChange = 0;
     if (plugin->Autopilot_Status == AUTO && plugin->allowautocog)
     {
         // AutoCOG aktivieren
@@ -235,7 +240,7 @@ void Dlg::OnAuto(wxCommandEvent& event)
     }
     plugin->SendGotoAuto();
 	if (plugin->WriteMessages) wxLogMessage(" Pushed Auto");
-	plugin->NeedCompassCorrection = false;    
+	plugin->NeedCompassCorrection = false;
 }
 
 void Dlg::OnAutoWind(wxCommandEvent& event)
@@ -289,7 +294,8 @@ void Dlg::OnDecrementOne(wxCommandEvent& event)
         plugin->COGCourse--;
         if (plugin->COGCourse < 0) plugin->COGCourse = 359;
     }
-	if (plugin->WriteMessages) wxLogMessage(" Pushed -1");    
+	if (plugin->WriteMessages) wxLogMessage(" Pushed -1");
+    plugin->AutoCOGHeadingChange = 0;
 }
 
 void Dlg::OnDecrementTen(wxCommandEvent& event)
@@ -303,7 +309,8 @@ void Dlg::OnDecrementTen(wxCommandEvent& event)
         plugin->COGCourse -= 10;
         if (plugin->COGCourse < 0) plugin->COGCourse += 360;
     }
-	if (plugin->WriteMessages) wxLogMessage(" Pushed -10 ");    
+	if (plugin->WriteMessages) wxLogMessage(" Pushed -10 ");
+    plugin->AutoCOGHeadingChange = 0;
 }
 
 void Dlg::OnIncrementTen(wxCommandEvent& event)
@@ -318,6 +325,7 @@ void Dlg::OnIncrementTen(wxCommandEvent& event)
         if (plugin->COGCourse >= 360) plugin->COGCourse -= 360;
     }
 	if (plugin->WriteMessages) wxLogMessage(" Pushed +10 ");
+    plugin->AutoCOGHeadingChange = 0;
 }
 
 void Dlg::OnIncrementOne(wxCommandEvent& event)
@@ -331,7 +339,8 @@ void Dlg::OnIncrementOne(wxCommandEvent& event)
         plugin->COGCourse++;
         if (plugin->COGCourse >= 360) plugin->COGCourse -= 360;
     }
-	if (plugin->WriteMessages) wxLogMessage(" Pushed +1");    
+	if (plugin->WriteMessages) wxLogMessage(" Pushed +1");
+    plugin->AutoCOGHeadingChange = 0;
 }
 
 void Dlg::OnActiveApp(wxCommandEvent& event)

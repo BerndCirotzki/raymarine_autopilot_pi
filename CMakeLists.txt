@@ -50,14 +50,14 @@ set(COMMON_NAME "Raymarine autopilot")
 set(TITLE_NAME "raymarine_autopilot")
 set(PACKAGE_CONTACT "Bernd Cirotzki")
 set(PACKAGE "raymarine_autopilot_pi")
-set(SHORT_DESCRIPTION "Control a Raymarine Seatalk 1 Autopilot")
-set(LONG_DESCRIPTION "Control Raymarine ST1 Autopilot using a NMEA0183 to ST1 Converter")
+set(SHORT_DESCRIPTION "Control a Raymarine Autopilot")
+set(LONG_DESCRIPTION "Control Raymarine Autopilot using a NMEA0183 to ST1 Converter or NMEA2000 for EVO")
 
 set(VERSION_MAJOR "2")
-set(VERSION_MINOR "0")
+set(VERSION_MINOR "1")
 set(VERSION_PATCH "0")
 set(VERSION_TWEAK "0")
-set(VERSION_DATE  "14/11/2023")#DD/MM/YYYY format
+set(VERSION_DATE  "30/11/2023")#DD/MM/YYYY format
 set(OCPN_MIN_VERSION "ov58")
 
 set(OCPN_API_VERSION_MAJOR "1")
