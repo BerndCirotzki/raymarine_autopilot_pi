@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: opencpn\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-10-21 12:51+0200\n"
-"PO-Revision-Date: 2023-11-09 21:22\n"
+"POT-Creation-Date: 2023-11-30 15:37+0100\n"
+"PO-Revision-Date: 2023-12-02 11:09+0100\n"
 "Last-Translator: \n"
 "Language-Team: Spanish\n"
 "Language: es_ES\n"
@@ -69,9 +69,20 @@ msgstr "Factor de zoom del control Autopilot          "
 msgid "Send new \"Auto-Wind\" Command when \"Wind Shift\""
 msgstr "Enviar nuevo comando \"Auto-Wind\" cuando \"Wind Shift\""
 
-#: src/autopilotgui.cpp:225
-msgid "Send new \"Auto\" or \"Auto-Wind\" Command, when \"Standby\" is not send from here, but the \"Auto\" was from here"
-msgstr "Enviar nuevo comando \"Auto\" o \"Auto-Wind\", cuando \"Standby\" no sea enviado desde aquí, pero el \"Auto\" fue desde aquí"
+#
+msgid ""
+"For use EVO Pilot, define NMEA2000/SeatalkNG connection and restart OpenCPN"
+msgstr ""
+"Para utilizar EVO Pilot, defina la conexión NMEA2000/SeatalkNG y reinicie "
+"OpenCPN"
+
+#
+msgid ""
+"Modify RMC Sentence as \"$ECRMC\" and replace or fill with Variationfield "
+"with the value from WMM Plugin"
+msgstr ""
+"Modifique la oración RMC como \"$ECRMC\" y reemplace o rellene el campo "
+"Variación con el valor del complemento WMM"
 
 #: src/autopilotgui.cpp:230
 msgid "Send new \"Auto\" Command, when No Standby-Information is received from other Instrument or from here"
@@ -97,13 +108,17 @@ msgstr "1"
 msgid "10"
 msgstr "10"
 
-#: src/autopilotgui.cpp:265
-msgid "2"
-msgstr "2"
+#
+msgid "Raymarine EVO Autopilot (connected over N2K / SeatalkNG)"
+msgstr "Piloto automático Raymarine EVO (conectado a través de N2K / SeatalkNG)"
 
-#: src/autopilotgui.cpp:265
-msgid "3"
-msgstr "3"
+#
+msgid ""
+"Raymarine Seatalk1 Autopilots (S1,S2,S3, ...), connected over NMEA0183/"
+"Seatalk1 translater"
+msgstr ""
+"Pilotos Raymarine Seatalk1 (S1,S2,S3, ...), conectados a través del traductor "
+"NMEA0183/Seatalk1"
 
 #: src/autopilotgui.cpp:265
 msgid "4"
@@ -171,15 +186,51 @@ msgstr "Depura todos los mensajes \"$STALK\" en archivo registro OPENCPN"
 msgid "Modify RMC Sentence as \"$ECRMC\" and replace or fill with Variationfield with the value from WMM Plugin"
 msgstr "Modificar la oración RMC como \"$ECRMC\" y reemplazar o rellenar con el valor Variationfield  del Plugin WMM"
 
-#: src/autopilotgui_impl.cpp:264
-msgid "No Value selected"
-msgstr "Ningún valor seleccionado"
+#
+msgid "maximum change of the \"is set pilot heading\" from last set in degrees"
+msgstr ""
+"cambio máximo del \"rumbo piloto establecido\" desde el último establecido en "
+"grados"
 
-#: src/autopilotgui_impl.cpp:269
-msgid "No Parameter selected"
-msgstr "Ningún parámetro seleccionado"
+#
+msgid "maximum difference between COG and magnetic heading in degrees"
+msgstr "diferencia máxima entre COG y rumbo magnético en grados"
+
+#
+msgid "minimun speed in nodes (SOG) for using AUTO-COG function"
 
 #: src/autopilotgui_impl.cpp:272
 msgid "is set to  "
 msgstr "se establece en  "
 
+#
+msgid ""
+"the autopilot controller will get new +1 or -1 keystroke information to hold "
+"the Course Over Ground."
+msgstr ""
+"el piloto automático obtendrá nueva información de pulsación de tecla +1 o -1 "
+"para mantener el rumbo sobre el terreno."
+
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#, fuzzy
+#~ msgid "Raymarine COG Autopilot"
+#~ msgstr "Raymarine Autopilot"
+
+#
+#
+#
+#
+#
+#~ msgid ""
+#~ "Send variation PNG 277258 to N2K/SeatalkNG with the value from WMM Plugin"
+#~ msgstr ""
+#~ "Envíe la variación PGN 277258 a N2K/SeatalkNG con el valor del complemento "
+#~ "WMM"

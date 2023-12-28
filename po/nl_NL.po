@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: opencpn\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-10-21 12:51+0200\n"
-"PO-Revision-Date: 2023-11-09 21:22\n"
+"POT-Creation-Date: 2023-11-30 15:37+0100\n"
+"PO-Revision-Date: 2023-12-02 11:10+0100\n"
 "Last-Translator: \n"
 "Language-Team: Dutch\n"
 "Language: nl_NL\n"
@@ -65,8 +65,17 @@ msgstr ""
 msgid "Send new \"Auto-Wind\" Command when \"Wind Shift\""
 msgstr ""
 
-#: src/autopilotgui.cpp:225
-msgid "Send new \"Auto\" or \"Auto-Wind\" Command, when \"Standby\" is not send from here, but the \"Auto\" was from here"
+#
+msgid ""
+"For use EVO Pilot, define NMEA2000/SeatalkNG connection and restart OpenCPN"
+msgstr ""
+"Voor gebruik EVO Pilot, definieer NMEA2000/SeatalkNG verbinding en start "
+"OpenCPN opnieuw"
+
+#
+msgid ""
+"Modify RMC Sentence as \"$ECRMC\" and replace or fill with Variationfield "
+"with the value from WMM Plugin"
 msgstr ""
 
 #: src/autopilotgui.cpp:230
@@ -93,13 +102,15 @@ msgstr ""
 msgid "10"
 msgstr ""
 
-#: src/autopilotgui.cpp:265
-msgid "2"
-msgstr ""
+#
+msgid "Raymarine EVO Autopilot (connected over N2K / SeatalkNG)"
+msgstr "Raymarine EVO stuurautomaat (aangesloten via N2K / SeatalkNG)"
 
 #: src/autopilotgui.cpp:265
 msgid "3"
 msgstr ""
+"Raymarine Seatalk1 stuurautomaten (S1,S2,S3, ...), aangesloten via NMEA0183/"
+"Seatalk1 translater"
 
 #: src/autopilotgui.cpp:265
 msgid "4"
@@ -166,9 +177,15 @@ msgstr ""
 msgid "Modify RMC Sentence as \"$ECRMC\" and replace or fill with Variationfield with the value from WMM Plugin"
 msgstr ""
 
-#: src/autopilotgui_impl.cpp:264
-msgid "No Value selected"
+#
+msgid "maximum change of the \"is set pilot heading\" from last set in degrees"
 msgstr ""
+"maximale verandering van de \"is ingestelde pilot koers\" ten opzichte van de "
+"laatst ingestelde in graden"
+
+#
+msgid "maximum difference between COG and magnetic heading in degrees"
+msgstr "maximaal verschil tussen COG en magnetische koers in graden"
 
 #: src/autopilotgui_impl.cpp:269
 msgid "No Parameter selected"
@@ -178,3 +195,33 @@ msgstr ""
 msgid "is set to  "
 msgstr ""
 
+#
+msgid ""
+"the autopilot controller will get new +1 or -1 keystroke information to hold "
+"the Course Over Ground."
+msgstr ""
+"de stuurautomaatcontroller krijgt nieuwe +1 of -1 toetsaanslaginformatie om "
+"de koers over de grond vast te houden."
+
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#, fuzzy
+#~ msgid "Raymarine COG Autopilot"
+#~ msgstr "Raymarine Autopilot"
+
+#
+#
+#
+#
+#
+#~ msgid ""
+#~ "Send variation PNG 277258 to N2K/SeatalkNG with the value from WMM Plugin"
+#~ msgstr ""
+#~ "Stuur variatie PGN 277258 naar N2K/SeatalkNG met de waarde van WMM Plugin"

@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: opencpn\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-10-21 12:51+0200\n"
-"PO-Revision-Date: 2023-11-09 21:22\n"
+"POT-Creation-Date: 2023-11-30 15:37+0100\n"
+"PO-Revision-Date: 2023-12-02 11:07+0100\n"
 "Last-Translator: \n"
 "Language-Team: French\n"
 "Language: fr_FR\n"
@@ -65,8 +65,17 @@ msgstr ""
 msgid "Send new \"Auto-Wind\" Command when \"Wind Shift\""
 msgstr ""
 
-#: src/autopilotgui.cpp:225
-msgid "Send new \"Auto\" or \"Auto-Wind\" Command, when \"Standby\" is not send from here, but the \"Auto\" was from here"
+#
+msgid ""
+"For use EVO Pilot, define NMEA2000/SeatalkNG connection and restart OpenCPN"
+msgstr ""
+"Pour l'utilisation d'EVO Pilot, définir la connexion NMEA2000/SeatalkNG et "
+"redémarrer OpenCPN"
+
+#
+msgid ""
+"Modify RMC Sentence as \"$ECRMC\" and replace or fill with Variationfield "
+"with the value from WMM Plugin"
 msgstr ""
 
 #: src/autopilotgui.cpp:230
@@ -93,13 +102,15 @@ msgstr ""
 msgid "10"
 msgstr ""
 
-#: src/autopilotgui.cpp:265
-msgid "2"
-msgstr ""
+#
+msgid "Raymarine EVO Autopilot (connected over N2K / SeatalkNG)"
+msgstr "Pilote automatique Raymarine EVO (connecté par N2K / SeatalkNG)"
 
 #: src/autopilotgui.cpp:265
 msgid "3"
 msgstr ""
+"Autopilotes Raymarine Seatalk1 (S1,S2,S3, ...), connectés via un traducteur "
+"NMEA0183/Seatalk1"
 
 #: src/autopilotgui.cpp:265
 msgid "4"
@@ -166,9 +177,15 @@ msgstr ""
 msgid "Modify RMC Sentence as \"$ECRMC\" and replace or fill with Variationfield with the value from WMM Plugin"
 msgstr ""
 
-#: src/autopilotgui_impl.cpp:264
-msgid "No Value selected"
+#
+msgid "maximum change of the \"is set pilot heading\" from last set in degrees"
 msgstr ""
+"changement maximum du \"cap pilote réglé\" par rapport au dernier réglage en "
+"degrés"
+
+#
+msgid "maximum difference between COG and magnetic heading in degrees"
+msgstr "différence maximale entre le COG et le cap magnétique en degrés"
 
 #: src/autopilotgui_impl.cpp:269
 msgid "No Parameter selected"
@@ -177,4 +194,50 @@ msgstr ""
 #: src/autopilotgui_impl.cpp:272
 msgid "is set to  "
 msgstr ""
+
+#
+msgid ""
+"the autopilot controller will get new +1 or -1 keystroke information to hold "
+"the Course Over Ground."
+msgstr ""
+"le contrôleur du pilote obtiendra de nouvelles informations de frappe +1 ou "
+"-1 pour maintenir la route au sol."
+
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#, fuzzy
+#~ msgid "Raymarine COG Autopilot"
+#~ msgstr "Raymarine Autopilot"
+
+#
+#
+#
+#
+#
+#~ msgid ""
+#~ "Send variation PNG 277258 to N2K/SeatalkNG with the value from WMM Plugin"
+#~ msgstr ""
+#~ "Envoyer la variante PGN 277258 à N2K/SeatalkNG avec la valeur du plug-in "
+#~ "WMM"
+
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#~ msgid "Track"
+#~ msgstr "Track"
 

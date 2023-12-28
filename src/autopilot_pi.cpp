@@ -126,6 +126,7 @@ int raymarine_autopilot_pi::Init(void)
       cogsensibility = 15;
       maxdegreediff = 45;
       minspeedcog = 1.5;
+      maxchangehdg = 20;
       p_AutoCogTimer = NULL;
       p_GPSTimer = NULL;
       MAGcourse = -1;
@@ -133,6 +134,7 @@ int raymarine_autopilot_pi::Init(void)
       AutoPilotType = SMARTPILOT;
       DaysSince1970 = N2kUInt16NA;
       EVOLockeHeading = N2kDoubleNA;
+      AutoCOGHeadingChange = 0;
       //    And load the configuration items
       LoadConfig();
 	  if (Skalefaktor < 1 || Skalefaktor > 2.1)
@@ -197,77 +199,44 @@ int raymarine_autopilot_pi::Init(void)
           }
       } 
 
-      std::vector<int> pgn_list = { 127258, 126208, 126720 };
-      
-      N2kContainer* pH = pHandleN2k;
-      while (pH != NULL)
+      if (pHandleN2k != NULL) // NMEA2000 Connection is avalibal
       {
-          RegisterTXPGNs(pH->HandleN2k, pgn_list);
-          pH = pH->pNext;
+          // COG SOG rapid   PGN 129026
+          wxDEFINE_EVENT(EVT_N2K_129026, ObservedEvt);
+          NMEA2000Id id_129026 = NMEA2000Id(129026);
+          listener_129026 = std::move(GetListener(id_129026, EVT_N2K_129026, this));
+          Bind(EVT_N2K_129026, [&](ObservedEvt ev) { HandleN2K_129026(ev); });
+
+          // Heading PGN 127250
+          wxDEFINE_EVENT(EVT_N2K_127250, ObservedEvt);
+          NMEA2000Id id_127250 = NMEA2000Id(127250);
+          listener_127250 = std::move(GetListener(id_127250, EVT_N2K_127250, this));
+          Bind(EVT_N2K_127250, [&](ObservedEvt ev) { HandleN2K_127250(ev); });
+
+          // SystemTime
+          wxDEFINE_EVENT(EVT_N2K_126992, ObservedEvt);
+          NMEA2000Id id_126992 = NMEA2000Id(126992);
+          listener_126992 = std::move(GetListener(id_126992, EVT_N2K_126992, this));
+          Bind(EVT_N2K_126992, [&](ObservedEvt ev) { HandleN2K_126992(ev); });
+
+          // Position
+          wxDEFINE_EVENT(EVT_N2K_129029, ObservedEvt);
+          NMEA2000Id id_129029 = NMEA2000Id(129029);
+          listener_129029 = std::move(GetListener(id_129029, EVT_N2K_129029, this));
+          Bind(EVT_N2K_129029, [&](ObservedEvt ev) { HandleN2K_129029(ev); });
+
+          std::vector<int> pgn_list = { 127258, 126208, 126720 };
+
+          N2kContainer* pH = pHandleN2k;
+          while (pH != NULL)
+          {
+              RegisterTXPGNs(pH->HandleN2k, pgn_list);
+              pH = pH->pNext;
+          }          
       }
-
-      // COG SOG rapid   PGN 129026
-      wxDEFINE_EVENT(EVT_N2K_129026, ObservedEvt);
-      NMEA2000Id id_129026 = NMEA2000Id(129026);
-      listener_129026 = std::move(GetListener(id_129026, EVT_N2K_129026, this));
-      Bind(EVT_N2K_129026, [&](ObservedEvt ev) {
-          HandleN2K_129026(ev);
-       });
-
-      // Heading PGN 127250
-      wxDEFINE_EVENT(EVT_N2K_127250, ObservedEvt);
-      NMEA2000Id id_127250 = NMEA2000Id(127250);
-      listener_127250 = std::move(GetListener(id_127250, EVT_N2K_127250, this));
-      Bind(EVT_N2K_127250, [&](ObservedEvt ev) { HandleN2K_127250(ev); });
-
-      // Pilot heading
-      wxDEFINE_EVENT(EVT_N2K_65360, ObservedEvt);
-      NMEA2000Id id_65360 = NMEA2000Id(65360);
-      listener_65360 = std::move(GetListener(id_65360, EVT_N2K_65360, this));
-      Bind(EVT_N2K_65360, [&](ObservedEvt ev) { HandleN2K_65360(ev); });
-
-      // Set Set pilot heading or set auto/standby
-      wxDEFINE_EVENT(EVT_N2K_126208, ObservedEvt);
-      NMEA2000Id id_126208 = NMEA2000Id(126208);
-      listener_126208 = std::move(GetListener(id_126208, EVT_N2K_126208, this));
-      Bind(EVT_N2K_126208, [&](ObservedEvt ev) { HandleN2K_126208(ev); });
-
-      // From EV1 indicating auto or standby state ... Is this only from Seatlak SeatalkNG translaterfrom Raymarine ???
-      wxDEFINE_EVENT(EVT_N2K_126720, ObservedEvt);
-      NMEA2000Id id_126720 = NMEA2000Id(126720);
-      listener_126720 = std::move(GetListener(id_126720, EVT_N2K_126720, this));
-      Bind(EVT_N2K_126720, [&](ObservedEvt ev) { HandleN2K_126720(ev); });
-
-      // From EV1 Pilotstate
-      wxDEFINE_EVENT(EVT_N2K_65379, ObservedEvt);
-      NMEA2000Id id_65379 = NMEA2000Id(65379);
-      listener_65379 = std::move(GetListener(id_65379, EVT_N2K_65379, this));
-      Bind(EVT_N2K_65379, [&](ObservedEvt ev) { HandleN2K_65379(ev); });
-
-      // From EV1 PilotAlarm
-      wxDEFINE_EVENT(EVT_N2K_65288, ObservedEvt);
-      NMEA2000Id id_65288 = NMEA2000Id(65288);
-      listener_65288 = std::move(GetListener(id_65288, EVT_N2K_65288, this));
-      Bind(EVT_N2K_65288, [&](ObservedEvt ev) { HandleN2K_65288(ev); });
+      if (AutoPilotType == EVO)
+          EnableEVOEvents();
       
-      // Vessel heading, proprietary
-      wxDEFINE_EVENT(EVT_N2K_65359, ObservedEvt);
-      NMEA2000Id id_65359 = NMEA2000Id(65359);
-      listener_65359 = std::move(GetListener(id_65359, EVT_N2K_65359, this));
-      Bind(EVT_N2K_65359, [&](ObservedEvt ev) { HandleN2K_65359(ev); });
-
-      // SystemTime
-      wxDEFINE_EVENT(EVT_N2K_126992, ObservedEvt);
-      NMEA2000Id id_126992 = NMEA2000Id(126992);
-      listener_126992 = std::move(GetListener(id_126992, EVT_N2K_126992, this));
-      Bind(EVT_N2K_126992, [&](ObservedEvt ev) { HandleN2K_126992(ev); });
-
-      // Position
-      wxDEFINE_EVENT(EVT_N2K_129029, ObservedEvt);
-      NMEA2000Id id_129029 = NMEA2000Id(129029);
-      listener_129029 = std::move(GetListener(id_129029, EVT_N2K_129029, this));
-      Bind(EVT_N2K_129029, [&](ObservedEvt ev) { HandleN2K_129029(ev); });
-
       return (WANTS_PREFERENCES |
 		      WANTS_TOOLBAR_CALLBACK |
 		      WANTS_NMEA_EVENTS |
@@ -286,6 +255,54 @@ int raymarine_autopilot_pi::Init(void)
 		  WANTS_CONFIG |
 		  WANTS_PLUGIN_MESSAGING);
         */ 
+}
+
+
+bool raymarine_autopilot_pi::EnableEVOEvents()
+{
+    if (pHandleN2k == NULL) // No NMEA2000 Connection in OpenCPN defined
+    {
+        AutoPilotType = SMARTPILOT;
+        wxMessageBox(_("For use EVO Pilot, define NMEA2000/SeatalkNG connection and restart OpenCPN"));
+        return false;
+    }
+
+    // Pilot heading
+    wxDEFINE_EVENT(EVT_N2K_65360, ObservedEvt);
+    NMEA2000Id id_65360 = NMEA2000Id(65360);
+    listener_65360 = std::move(GetListener(id_65360, EVT_N2K_65360, this));
+    Bind(EVT_N2K_65360, [&](ObservedEvt ev) { HandleN2K_65360(ev); });
+
+    // Set Set pilot heading or set auto/standby
+    wxDEFINE_EVENT(EVT_N2K_126208, ObservedEvt);
+    NMEA2000Id id_126208 = NMEA2000Id(126208);
+    listener_126208 = std::move(GetListener(id_126208, EVT_N2K_126208, this));
+    Bind(EVT_N2K_126208, [&](ObservedEvt ev) { HandleN2K_126208(ev); });
+
+    // From EV1 indicating auto or standby state ... Is this only from Seatlak SeatalkNG translaterfrom Raymarine ???
+    wxDEFINE_EVENT(EVT_N2K_126720, ObservedEvt);
+    NMEA2000Id id_126720 = NMEA2000Id(126720);
+    listener_126720 = std::move(GetListener(id_126720, EVT_N2K_126720, this));
+    Bind(EVT_N2K_126720, [&](ObservedEvt ev) { HandleN2K_126720(ev); });
+
+    // From EV1 Pilotstate
+    wxDEFINE_EVENT(EVT_N2K_65379, ObservedEvt);
+    NMEA2000Id id_65379 = NMEA2000Id(65379);
+    listener_65379 = std::move(GetListener(id_65379, EVT_N2K_65379, this));
+    Bind(EVT_N2K_65379, [&](ObservedEvt ev) { HandleN2K_65379(ev); });
+
+    // From EV1 PilotAlarm
+    wxDEFINE_EVENT(EVT_N2K_65288, ObservedEvt);
+    NMEA2000Id id_65288 = NMEA2000Id(65288);
+    listener_65288 = std::move(GetListener(id_65288, EVT_N2K_65288, this));
+    Bind(EVT_N2K_65288, [&](ObservedEvt ev) { HandleN2K_65288(ev); });
+
+    // Vessel heading, proprietary
+    wxDEFINE_EVENT(EVT_N2K_65359, ObservedEvt);
+    NMEA2000Id id_65359 = NMEA2000Id(65359);
+    listener_65359 = std::move(GetListener(id_65359, EVT_N2K_65359, this));
+    Bind(EVT_N2K_65359, [&](ObservedEvt ev) { HandleN2K_65359(ev); });
+    return true;
 }
 
 bool raymarine_autopilot_pi::DeInit(void)
@@ -326,10 +343,43 @@ bool raymarine_autopilot_pi::DeInit(void)
           delete pHandleN2k;
           pHandleN2k = NULL;
       }
+      if (AutoPilotType == EVO)
+        DisableEVOEvents();
     SaveConfig();
     RequestRefresh(m_parent_window); // refresh mainn window 
     return true;
 }
+
+void raymarine_autopilot_pi::DisableEVOEvents()
+{
+    if (pHandleN2k == NULL) // No NMEA2000 Connection in OpenCPN defined
+        return;
+
+    // Pilot heading
+    wxDEFINE_EVENT(EVT_N2K_65360, ObservedEvt);    
+    Unbind(EVT_N2K_65360, [&](ObservedEvt ev) { HandleN2K_65360(ev); });
+
+    // Set Set pilot heading or set auto/standby
+    wxDEFINE_EVENT(EVT_N2K_126208, ObservedEvt);    
+    Unbind(EVT_N2K_126208, [&](ObservedEvt ev) { HandleN2K_126208(ev); });
+
+    // From EV1 indicating auto or standby state ... Is this only from Seatlak SeatalkNG translaterfrom Raymarine ???
+    wxDEFINE_EVENT(EVT_N2K_126720, ObservedEvt);    
+    Unbind(EVT_N2K_126720, [&](ObservedEvt ev) { HandleN2K_126720(ev); });
+
+    // From EV1 Pilotstate
+    wxDEFINE_EVENT(EVT_N2K_65379, ObservedEvt);    
+    Unbind(EVT_N2K_65379, [&](ObservedEvt ev) { HandleN2K_65379(ev); });
+
+    // From EV1 PilotAlarm
+    wxDEFINE_EVENT(EVT_N2K_65288, ObservedEvt);    
+    Unbind(EVT_N2K_65288, [&](ObservedEvt ev) { HandleN2K_65288(ev); });
+
+    // Vessel heading, proprietary
+    wxDEFINE_EVENT(EVT_N2K_65359, ObservedEvt);    
+    Unbind(EVT_N2K_65359, [&](ObservedEvt ev) { HandleN2K_65359(ev); });
+}
+
 
 int raymarine_autopilot_pi::GetAPIVersionMajor()
 {
@@ -477,6 +527,7 @@ bool raymarine_autopilot_pi::LoadConfig(void)
             cogsensibility = pConf->Read(_T("cogsensibility"), cogsensibility);
             maxdegreediff = pConf->Read(_T("maxdegreediff"), maxdegreediff);
             minspeedcog = ((double)pConf->Read(_T("minspeedcog"), minspeedcog)) / 10;
+            maxchangehdg = pConf->Read(_T("maxchangehdg"), maxchangehdg);
             return true;
       }
       else
@@ -515,6 +566,7 @@ bool raymarine_autopilot_pi::SaveConfig(void)
             pConf->Write(_T("cogsensibility"), cogsensibility);
             pConf->Write(_T("maxdegreediff"), maxdegreediff);
             pConf->Write(_T("minspeedcog"), (int)(minspeedcog * 10));
+            pConf->Write(_T("maxchangehdg"), maxchangehdg);
             return true;
       }
       else
@@ -525,6 +577,7 @@ void raymarine_autopilot_pi::ShowPreferencesDialog(wxWindow* parent)
 {
     int x, y;
 	ParameterDialog *dialog = new ParameterDialog(this, parent, wxID_ANY, _("Autopilot Preferences"), wxDefaultPosition, wxDefaultSize, wxDEFAULT_DIALOG_STYLE);
+
 	dialog->Fit();
     dialog->GetPosition(&x, &y);
     if (y >= 200)
@@ -589,6 +642,7 @@ void raymarine_autopilot_pi::ShowPreferencesDialog(wxWindow* parent)
     dialog->m_cogsensibility->SetValue(cogsensibility);
     dialog->m_maxdegreediff->SetValue(wxString::Format(wxT("%i"), maxdegreediff));
     dialog->m_minspeedcog->SetValue(wxString::Format(wxT("%.1f"), minspeedcog));
+    dialog->m_maxchangehdg->SetValue(wxString::Format(wxT("%i"), maxchangehdg));
     if (allowautocog == false)
     {
         dialog->m_sensebilitytext->Enable(false);
@@ -599,10 +653,20 @@ void raymarine_autopilot_pi::ShowPreferencesDialog(wxWindow* parent)
         dialog->m_maxdegtext->Enable(false);
         dialog->m_minspeedcog->Enable(false);
         dialog->m_minspeed->Enable(false);
+        dialog->m_maxchangehdg->Enable(false);
+        dialog->m_maxchangehdgtext->Enable(false);
     }
 	if (dialog->ShowModal() == wxID_OK)
 	{
+        int OldAutoPilotType = AutoPilotType;
         AutoPilotType = dialog->m_AutopilotType->GetSelection();
+        if (OldAutoPilotType != AutoPilotType)
+        {
+            if (AutoPilotType == EVO)
+                EnableEVOEvents();            
+            else
+                DisableEVOEvents();
+        }
         ShowParameters = dialog->m_checkParameters->GetValue();        
 		NewAutoWindCommand = dialog->m_SendNewAutoWind->GetValue();
 		NewAutoOnStandby = dialog->m_SendNewAutoonStandby->GetValue();
@@ -629,6 +693,7 @@ void raymarine_autopilot_pi::ShowPreferencesDialog(wxWindow* parent)
         cogsensibility = dialog->m_cogsensibility->GetValue();
         maxdegreediff = atoi(dialog->m_maxdegreediff->GetValue());
         minspeedcog = atof(dialog->m_minspeedcog->GetValue());
+        maxchangehdg = atoi(dialog->m_maxchangehdg->GetValue());
         ResetAUTOCOGValues();
 		if (NULL != m_pDialog)
 		{
@@ -794,7 +859,7 @@ void raymarine_autopilot_pi::SetNMEASentence(wxString& sentence_incomming)
             }
             else
             {
-                if (WriteMessages) wxLogMessage(("Received Button Pressed from ST6001 %s"), sentence);
+                // My Own mirred Sentence
                 NeedCompassCorrection = false;
             }
             MyLastSend = Nothing;
@@ -805,6 +870,7 @@ void raymarine_autopilot_pi::SetNMEASentence(wxString& sentence_incomming)
             if (sentence.Mid(11, 7) == "1,01,FE" && MyLastSend != AUTO) // Auto
             {
                 ActivateAutoCOG();
+                if (WriteMessages) wxLogMessage(("Received Auto pressed in Auto Mode from ST6001 %s"), sentence);
                 MyLastSend = Nothing;
                 return;
             }
@@ -815,13 +881,29 @@ void raymarine_autopilot_pi::SetNMEASentence(wxString& sentence_incomming)
             return;
         }
         if (sentence.Mid(11, 7) == "1,07,F8" && MyLastSend != IncrementOne) // +1
+        {
             COGCourse++;
+            AutoCOGHeadingChange = 0;
+            if (WriteMessages) wxLogMessage(("Received +1 pressed in AutoCOG Mode from ST6001 %s"), sentence);
+        }
         if (sentence.Mid(11, 7) == "1,08,F7" && MyLastSend != IncrementTen) // +10
+        {
             COGCourse += 10;
+            AutoCOGHeadingChange = 0;
+            if (WriteMessages) wxLogMessage(("Received +10 pressed in AutoCOG Mode from ST6001 %s"), sentence);
+        }
         if (sentence.Mid(11, 7) == "1,05,FA" && MyLastSend != DecrementOne) // -1
+        {
             COGCourse--;
+            AutoCOGHeadingChange = 0;
+            if (WriteMessages) wxLogMessage(("Received -1 pressed in AutoCOG Mode from ST6001 %s"), sentence);
+        }
         if (sentence.Mid(11, 7) == "1,06,F9" && MyLastSend != DecrementTen) // -10
+        {
             COGCourse -= 10;
+            AutoCOGHeadingChange = 0;
+            if (WriteMessages) wxLogMessage(("Received -10 pressed in AutoCOG Mode from ST6001 %s"), sentence);
+        }
         if (COGCourse < 0) COGCourse += 360;
         if (COGCourse >= 360) COGCourse -= 360;
         MyLastSend = Nothing;
@@ -829,6 +911,7 @@ void raymarine_autopilot_pi::SetNMEASentence(wxString& sentence_incomming)
     }
     if (sentence.Left(9) != Lsentence) // Comes in 1 Second delay
         return;
+    MyLastSend = Nothing;
     if (CounterStandbySentencesReceived == 0) // falls noch kein Kommando gekommen ist, bleibt der alte Status.
         Autopilot_Status_Before = Autopilot_Status;
     ToUpdateAutoPilotControlDisplay(sentence);
@@ -1029,7 +1112,7 @@ void raymarine_autopilot_pi::ToUpdateAutoPilotControlDisplay(wxString sentence)
                         }
 					}
 				}
-			}
+			}            
 			if (IS_standby != 0)
 				if (WriteMessages) wxLogMessage(("No Standby Message comming don't know why. Say in Auto Mode. Sentence %s"), sentence);
 			IS_standby = 0;
@@ -1041,7 +1124,7 @@ void raymarine_autopilot_pi::ToUpdateAutoPilotControlDisplay(wxString sentence)
 			if (WriteDebug) wxLogInfo(("Received Auto-Track %s"), sentence);
 			if (Autopilot_Status_Before != Autopilot_Status)
 			{
-				// Nur f?r Logging
+				// Nur für Logging
 				if (WriteMessages) wxLogMessage("Auto-Status changed to AUTO-TRACK");
                 if (allowautocog)
                 {
@@ -1361,6 +1444,8 @@ void raymarine_autopilot_pi::ToUpdateAutoPilotControlDisplay(wxString sentence)
             Received_Heading_126208 = false;
             Received_AUTO_126208 = false;
             Received_LockedHeading_inStandby = false;
+            AutoCOGHeadingChange = 0;
+            LastCompassCourse = -1;
             if (allowautocog)
             {
                 m_pDialog->buttonAuto->SetLabel("Auto");
@@ -1940,6 +2025,8 @@ void raymarine_autopilot_pi::SendIncrementOne()
                 if (NewEVOLockeHeading >= 360) NewEVOLockeHeading -= 360;
                 SetRaymarineLockedHeadingN2kPGN126208(N2kMsg, DegToRad(NewEVOLockeHeading));
             }
+            else
+               return;
         }
         else
             SetRaymarineKeyCommandPGN126720(N2kMsg, 255, 0x07F8);
@@ -1966,12 +2053,14 @@ void raymarine_autopilot_pi::SendIncrementTen()
                 if (NewEVOLockeHeading >= 360) NewEVOLockeHeading -= 360;
                 SetRaymarineLockedHeadingN2kPGN126208(N2kMsg, DegToRad(NewEVOLockeHeading));
             }
+            else
+                return;
         }
         else
             SetRaymarineKeyCommandPGN126720(N2kMsg, 255, 0x08F7);
         SendN2kMessage(N2kMsg);
     }
-    MyLastSend = IncrementTen;    
+    MyLastSend = IncrementTen;
 }
 
 void raymarine_autopilot_pi::SendDecrementOne()
@@ -1992,12 +2081,14 @@ void raymarine_autopilot_pi::SendDecrementOne()
                 if (NewEVOLockeHeading < 0) NewEVOLockeHeading += 360;
                 SetRaymarineLockedHeadingN2kPGN126208(N2kMsg, DegToRad(NewEVOLockeHeading));
             }
+            else
+                return;
         }
         else
             SetRaymarineKeyCommandPGN126720(N2kMsg, 255, 0x05FA);
         SendN2kMessage(N2kMsg);
     }
-    MyLastSend = DecrementOne;    
+    MyLastSend = DecrementOne;
 }
 
 void raymarine_autopilot_pi::SendDecrementTen()
@@ -2018,6 +2109,8 @@ void raymarine_autopilot_pi::SendDecrementTen()
                 if (NewEVOLockeHeading < 0) NewEVOLockeHeading += 360;
                 SetRaymarineLockedHeadingN2kPGN126208(N2kMsg, DegToRad(NewEVOLockeHeading));
             }
+            else
+                return;
         }
         else
             SetRaymarineKeyCommandPGN126720(N2kMsg, 255, 0x06F9);
@@ -2210,7 +2303,7 @@ void raymarine_autopilot_pi::DeActivateAutoCOG()
 
 void raymarine_autopilot_pi::WriteCOGStatus()
 {
-    m_pDialog->SetStatusText("AutoCOG");
+    m_pDialog->SetStatusText("  AutoCOG  ");
     if (COG == -1)
         m_pDialog->SetCompassText("set: " + wxString::Format(wxT("%i"), COGCourse) + "  is: ---");
     else
@@ -2307,6 +2400,34 @@ void AutoCogTimer::Notify()
         Stop();
         return;
     }
+    // Check Max Autopilot Set Heading change.
+    if (abs(pAutopilot->AutoCOGHeadingChange) > pAutopilot->maxchangehdg)
+    {
+        // Set HDG of Autopilot too big
+        if (pAutopilot->WriteMessages) wxLogMessage(" Set HDG too big");
+        pAutopilot->AutoCOGStatus = false;
+        if (pAutopilot->p_GPSTimer != NULL)
+        {
+            delete (pAutopilot->p_GPSTimer);
+            pAutopilot->p_GPSTimer = NULL;
+        }
+        if (pAutopilot->m_pDialog != 0)
+        {
+            if (pAutopilot->allowautocog)
+            {
+                pAutopilot->m_pDialog->buttonAuto->SetLabel("AutoCOG");
+                pAutopilot->m_pDialog->buttonAuto->SetBackgroundColour(wxColour(148, 88, 167));
+            }
+            if (pAutopilot->DisplayShow == 0)
+            {
+                pAutopilot->m_pDialog->SetStatusText("Big Change");
+                pAutopilot->DisplayShow = 9;
+            }
+        }
+        Stop();
+        return;
+    }
+    // Now change Course 
     int COGdiff = pAutopilot->COGCourse - pAutopilot->COG;
     wxString sentence;
     // check if around 0 deg
@@ -2321,25 +2442,39 @@ void AutoCogTimer::Notify()
     {
         if (pAutopilot->LastChange == -1)
         {
-            // Nicht gleich wider zur?cktoggeln.
+            // Nicht gleich wieder zurücktoggeln.
             pAutopilot->LastChange = 0;
             return;
         }
-        if (pAutopilot->WriteMessages) wxLogMessage("AutoCOG + 1");
+        if (pAutopilot->WriteMessages) wxLogMessage("AutoCOG +1");
         pAutopilot->SendIncrementOne();
+        pAutopilot->AutoCOGHeadingChange++;
         pAutopilot->LastChange = 1;
+        if (pAutopilot->DisplayShow == 0)
+        {
+            pAutopilot->m_pDialog->SetStatusText("   AutoCOG >");
+            pAutopilot->DisplayShow = 2;
+        }
+        return;
     }
     if (COGdiff < 0)  // istkurs ist gr?sser als sollkurs -1
     {
         if (pAutopilot->LastChange == 1)
         {
-            // Nicht gleich wider zur?cktoggeln.
+            // Nicht gleich wieder zurücktoggeln.
             pAutopilot->LastChange = 0;
             return;
         }
-        if (pAutopilot->WriteMessages) wxLogMessage("AutoCOG - 1");
+        if (pAutopilot->WriteMessages) wxLogMessage("AutoCOG -1");
         pAutopilot->SendDecrementOne();
+        pAutopilot->AutoCOGHeadingChange--;
         pAutopilot->LastChange = -1;
+        if (pAutopilot->DisplayShow == 0)
+        {
+            pAutopilot->m_pDialog->SetStatusText("< AutoCOG   ");
+            pAutopilot->DisplayShow = 2;
+        }
+        return;
     }
     pAutopilot->LastChange = 0;
 }
@@ -2361,6 +2496,8 @@ void localTimer::Notify()
     pAutopilot->Received_Heading_126208 = false;
     pAutopilot->Received_AUTO_126208 = false;
     pAutopilot->Received_LockedHeading_inStandby = false;
+    pAutopilot->AutoCOGHeadingChange = 0;
+    pAutopilot->LastCompassCourse = -1;
 	if (NULL != pAutopilot->m_pDialog)
 	{
 		pAutopilot->m_pDialog->SetCopmpassTextColor(wxColour(0, 0, 64));
@@ -2436,17 +2573,17 @@ void SetRaymarineLockedHeadingN2kPGN126208(tN2kMsg& N2kMsg, double Heading)
     N2kMsg.Priority = 3;
 
     N2kMsg.AddByte(0x01);  // Field 1, 1 = Command Message, 2 = Acknowledge Message...
-    N2kMsg.AddByte(0x50);  // PGN 65379 
+    N2kMsg.AddByte(0x50);  // PGN 65360 
     N2kMsg.AddByte(0xff);  //
     N2kMsg.AddByte(0x00);  // end PGN
     N2kMsg.AddByte(0xf8);  // priority + reserved
     N2kMsg.AddByte(0x03);  // 3 Parameter
-    N2kMsg.AddByte(0x01);  // // first param - 1 of PGN 65379 (manufacturer code)
+    N2kMsg.AddByte(0x01);  // // first param - 1 of PGN 65360 (manufacturer code)
     N2kMsg.AddByte(0x3b);  // Raymarine
     N2kMsg.AddByte(0x07);  //     "
-    N2kMsg.AddByte(0x03);  // second param -  3 of pgn 65369 (Industry code)
+    N2kMsg.AddByte(0x03);  // second param -  3 of pgn 65360 (Industry code)
     N2kMsg.AddByte(0x04);  // Ind. code 4
-    N2kMsg.AddByte(0x06);  // third parameter - 4 of pgn 65379 (mode)
+    N2kMsg.AddByte(0x06);  // third parameter - 4 of pgn 65360 (mode)
     N2kMsg.Add2ByteUDouble(Heading, 0.0001);
 }
 
@@ -2751,7 +2888,7 @@ void raymarine_autopilot_pi::HandleN2K_65360(ObservedEvt ev) // Pilot heading
         {
             Received_LockedHeading_inStandby = true;
             Autopilot_Status = AUTO;
-        }
+        }        
     }
 }
 
@@ -2776,6 +2913,7 @@ void raymarine_autopilot_pi::HandleN2K_126208(ObservedEvt ev) // Received Set pi
         if ((int)Value == AUTO)
         {
             Received_AUTO_126208 = true;
+            AutoCOGHeadingChange = 0;
             if (WriteMessages) wxLogMessage("Received Auto Pressed from n2k PNG 126208");
             if (Autopilot_Status == AUTO && Received_LockedHeading_inStandby == false && allowautocog)
             {
@@ -2810,6 +2948,7 @@ void raymarine_autopilot_pi::HandleN2K_126208(ObservedEvt ev) // Received Set pi
             if (COGCourse < 0) COGCourse += 360;
             if (COGCourse >= 360) COGCourse -= 360;
             MyLastSend = Nothing;
+            AutoCOGHeadingChange = 0;
             if (WriteMessages) wxLogMessage(("Received new Set Pilot Locked Heading from n2k %i COGDiff %i"), (int)NewLockedHeading, Headingdiff);
             break;
         // New Winddirection in AutoWindmode. Could not save.  ... needs work what to do with it. ?!?
@@ -2852,6 +2991,7 @@ void raymarine_autopilot_pi::HandleN2K_126720(ObservedEvt ev) // From EV1 indica
                 if (WriteMessages) wxLogMessage("Received Auto Pressed from n2k in Auto State PGN 126720");
                 if(Received_AUTO_126208 == false)
                 {
+                    AutoCOGHeadingChange = 0;
                     if (Autopilot_Status == AUTO && Received_LockedHeading_inStandby == false && allowautocog)
                     {
                         ActivateAutoCOG();
@@ -2868,22 +3008,34 @@ void raymarine_autopilot_pi::HandleN2K_126720(ObservedEvt ev) // From EV1 indica
             case 0x05FA: // Receives -1
                 if (WriteMessages) wxLogMessage("Received -1 Pressed from n2k in Auto State");
                 if (Received_Heading_126208 == false) // -1
+                {
+                    AutoCOGHeadingChange = 0;
                     COGCourse--;
+                }
                 break;
             case 0x06F9: // Received -10
                 if (WriteMessages) wxLogMessage("Received -10 Pressed from n2k in Auto State");
                 if (Received_Heading_126208 == false) // -10
+                {
+                    AutoCOGHeadingChange = 0;
                     COGCourse -= 10;
+                }
                 break;
             case 0x07F8: // Received +1
                 if (WriteMessages) wxLogMessage("Received +1 Pressed from n2k in Auto State");
-                if(Received_Heading_126208 == false) // +1
+                if (Received_Heading_126208 == false) // +1
+                {
+                    AutoCOGHeadingChange = 0;
                     COGCourse++;
+                }
                 break;
             case 0x08F7: // Received +10
                 if (WriteMessages) wxLogMessage("Received +10 Pressed from n2k in Auto State");
                 if (Received_Heading_126208 == false) // +1
+                {
+                    AutoCOGHeadingChange = 0;
                     COGCourse += 10;
+                }
                 break;
             }
             if (COGCourse < 0) COGCourse += 360;
@@ -2980,7 +3132,7 @@ void raymarine_autopilot_pi::HandleN2K_65288(ObservedEvt ev) // Pilot Alarm
                 Autopilot_Status = OFFCOURSE;
                 ToUpdateAutoPilotControlDisplay();
             }
-            if (AlarmCode == 21 && AlarmGroup == 1) // Off Course;
+            if (AlarmCode == 21 && AlarmGroup == 1) // windshift
             {
                 Autopilot_Status_Before = Autopilot_Status;
                 AutoCOGStatus = false;
