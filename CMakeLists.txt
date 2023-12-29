@@ -19,7 +19,7 @@
 ## *   xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx                                       *
 #-----------------------------------------------------------------------------
 # Frontend2 Author: Jon Gough 
-# Testplugin(TP) v1.0.286.2 24/12/2023 DD/MM/YYYY format
+# Testplugin(TP) v1.0.286.3 29/12/2023 DD/MM/YYYY format
 # buildCI:yes useODAPI:no validateJSON:no
 # ---------------------------------------------------------------------------
 ## -- When changing this file do NOT change the order of the sections.    -- ##
@@ -56,9 +56,9 @@ set(LONG_DESCRIPTION "Control Raymarine ST1 Autopilot using a NMEA0183 to ST1 Co
 
 set(VERSION_MAJOR "2")
 set(VERSION_MINOR "0")
-set(VERSION_PATCH "0")
-set(VERSION_TWEAK "3")
-set(VERSION_DATE  "26/12/2023")#DD/MM/YYYY format
+set(VERSION_PATCH "1")
+set(VERSION_TWEAK "0")
+set(VERSION_DATE  "29/12/2023")#DD/MM/YYYY format
 set(OCPN_MIN_VERSION "ov58")
 
 set(OCPN_API_VERSION_MAJOR "1")
@@ -162,6 +162,8 @@ add_definitions(-DPLUGIN_USE_SVG)
 
 ## ----- If using JSON validation in plugin section above is needed --------##
 
+if(QT_ANDROID)
+endif(QT_ANDROID)
 
 ##=============================================================
 ## Change as required to collect all the set( headers and SRCS
@@ -188,10 +190,10 @@ if(NOT OCPN_FLATPAK_CONFIG)
 	# so following statements will not work
     message(STATUS "${CMLOC}Adding target link libraries to ${PACKAGE_NAME}")
 
-    if(WIN32)
+    if (WIN32)
         add_subdirectory(opencpn-libs/WindowsHeaders)
         target_link_libraries(${PACKAGE_NAME} windows::headers)
-    endif()
+    endif (WIN32)
 
     add_subdirectory(opencpn-libs/api-18)
     target_link_libraries(${PACKAGE_NAME} ocpn::api)
