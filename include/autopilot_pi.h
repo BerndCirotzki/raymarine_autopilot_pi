@@ -211,7 +211,7 @@ private:
       void MakeCOGSOG(double SpeedOverGroundKnots, int TrackMadeGoodDegreesTrue);
       void SendBoatVariationToN2k();
       void SendN2kMessage(tN2kMsg N2kMsg);
-      void ToUpdateAutoPilotControlDisplay(wxString& sentence = (wxString)"EVO");
+      void ToUpdateAutoPilotControlDisplay(wxString sentence = "EVO");
       
 	  raymarine_autopilot_pi *plugin;
 

@@ -66,7 +66,7 @@ raymarine_autopilot_pi::raymarine_autopilot_pi(void *ppimgr) :opencpn_plugin_118
 	  m_bShowautopilot = false;
 	  Autopilot_Status = UNKNOWN;
 	  StandbySelfPressed = FALSE;
-	  LastCompassCourse = -1; // Nicht gültig
+	  LastCompassCourse = -1; // Nicht g?ltig
 	  NeedCompassCorrection = false;
 	  wxLogMessage(("    Creating Raymarine Autopilot Plugin"));
 }
@@ -577,6 +577,7 @@ void raymarine_autopilot_pi::ShowPreferencesDialog(wxWindow* parent)
 {
     int x, y;
 	ParameterDialog *dialog = new ParameterDialog(this, parent, wxID_ANY, _("Autopilot Preferences"), wxDefaultPosition, wxDefaultSize, wxDEFAULT_DIALOG_STYLE);
+
 	dialog->Fit();
     dialog->GetPosition(&x, &y);
     if (y >= 200)
@@ -916,7 +917,7 @@ void raymarine_autopilot_pi::SetNMEASentence(wxString& sentence_incomming)
     ToUpdateAutoPilotControlDisplay(sentence);
 }
 
-void raymarine_autopilot_pi::ToUpdateAutoPilotControlDisplay(wxString& sentence)
+void raymarine_autopilot_pi::ToUpdateAutoPilotControlDisplay(wxString sentence)
 {
     int tmp;
 
@@ -939,7 +940,7 @@ void raymarine_autopilot_pi::ToUpdateAutoPilotControlDisplay(wxString& sentence)
 			if (WriteDebug) wxLogInfo(("Received Auto %s"), sentence);
 			if (Autopilot_Status_Before != Autopilot_Status)
 			{
-				// Nur für Logging
+				// Nur f?r Logging
 				if (WriteMessages) wxLogMessage("Auto-Status changed to AUTO");
                 if (allowautocog)
                 {
@@ -965,7 +966,7 @@ void raymarine_autopilot_pi::ToUpdateAutoPilotControlDisplay(wxString& sentence)
 			if (Standbycommandreceived == TRUE && Autopilot_Status_Before != UNKNOWN)
 			{
 				// Warten ob Der Autopilot noch in Standbymode geht, falls Dieses "Auto" Signal kurz hinter dem
-				// Drücken der Standbytaste noch kam, und dadurch den "Standbycommandreceived Status wieder nach
+				// Dr?cken der Standbytaste noch kam, und dadurch den "Standbycommandreceived Status wieder nach
 				// FALSE setzt.
 				// Zwei Sequenzen abwarten.
 				if (WriteMessages) wxLogMessage(("Standby from St6001 detected in Auto Mode %s"), sentence);
@@ -995,7 +996,7 @@ void raymarine_autopilot_pi::ToUpdateAutoPilotControlDisplay(wxString& sentence)
 				}
 				else
 				{
-					// Korrectur durchführen
+					// Korrectur durchf?hren
 					// -------------------------------
 					tmp = atoi(GetAutopilotCompassCourse(sentence));
 					if (tmp < 0 || tmp > 360)
@@ -1007,7 +1008,7 @@ void raymarine_autopilot_pi::ToUpdateAutoPilotControlDisplay(wxString& sentence)
 					}
 					if (180 > abs(tmp - LastCompassCourse) &&  30 < abs(tmp - LastCompassCourse))
 					{
-						// Nicht mehr als 30 Grad Änderung !!
+						// Nicht mehr als 30 Grad ?nderung !!
 						if (WriteMessages) wxLogMessage("No Correction more than 30 degree");
 						NeedCompassCorrection = false;
 						break;
@@ -1015,35 +1016,35 @@ void raymarine_autopilot_pi::ToUpdateAutoPilotControlDisplay(wxString& sentence)
 					if (WriteMessages) wxLogMessage(("Correct Compass course from %i to %i"),tmp, LastCompassCourse);
 					if (180 < abs(tmp - LastCompassCourse))
 					{
-						// Über Nodern ändern
+						// ?ber Nodern ?ndern
 						if (tmp > LastCompassCourse)
 						{
-							// Compasskurs muss über Norden mit PLus verändert werden. (bis 0 Grad.)
+							// Compasskurs muss ?ber Norden mit PLus ver?ndert werden. (bis 0 Grad.)
 							if ((tmp - LastCompassCourse) >= 10)
 							{
-								// Mehr als 10 Grad differenz !! also +10 Grad ändern.
+								// Mehr als 10 Grad differenz !! also +10 Grad ?ndern.
 								if (WriteMessages) wxLogMessage("Over North + 10");
                                 SendIncrementTen();
 							}
 							else
 							{
-								// Weniger als 10 Grad ändern.
+								// Weniger als 10 Grad ?ndern.
 								if (WriteMessages) wxLogMessage("Over North + 1");
                                 SendIncrementOne();
 							}
 						}
 						else
 						{
-							// Compasskurs von z.B. 5 nach 340 ... ändern mit Minus
+							// Compasskurs von z.B. 5 nach 340 ... ?ndern mit Minus
 							if ((LastCompassCourse - tmp) >= 10)
 							{
-								// Mehr als 10 Grad differenz !! also +10 Grad ändern.
+								// Mehr als 10 Grad differenz !! also +10 Grad ?ndern.
 								if (WriteMessages) wxLogMessage("Over North - 10");
                                 SendDecrementTen();
 							}
 							else
 							{
-								// Weniger als 10 Grad ändern.
+								// Weniger als 10 Grad ?ndern.
 								if (WriteMessages) wxLogMessage("Over North - 1");
                                 SendDecrementOne();
 							}
@@ -1051,35 +1052,35 @@ void raymarine_autopilot_pi::ToUpdateAutoPilotControlDisplay(wxString& sentence)
 					}
 					else
 					{
-						// Normale Änderung nicht über Norden.
+						// Normale ?nderung nicht ?ber Norden.
 						if (tmp > LastCompassCourse)
 						{
-							// Der Neue Compasskurs ist grösser als der alte also Verkleineren.
+							// Der Neue Compasskurs ist gr?sser als der alte also Verkleineren.
 							if ((tmp - LastCompassCourse) >= 10)
 							{
-								// Mehr als 10 Grad differenz !! also +10 Grad ändern.
+								// Mehr als 10 Grad differenz !! also +10 Grad ?ndern.
 								if (WriteMessages) wxLogMessage("Korrectur - 10");
                                 SendDecrementTen();
 							}
 							else
 							{
-								// Weniger als 10 Grad ändern.
+								// Weniger als 10 Grad ?ndern.
 								if (WriteMessages) wxLogMessage("Korrectur - 1");
                                 SendDecrementOne();
 							}
 						}
 						else
 						{
-							// Der neue Compass kurs ist kleiner als der alte. also Vergrössern.
+							// Der neue Compass kurs ist kleiner als der alte. also Vergr?ssern.
 							if ((LastCompassCourse - tmp) >= 10)
 							{
-								// Mehr als 10 Grad differenz !! also +10 Grad ändern.
+								// Mehr als 10 Grad differenz !! also +10 Grad ?ndern.
 								if (WriteMessages) wxLogMessage("Korrectur + 10");
                                 SendIncrementTen();
 							}
 							else
 							{
-								// Weniger als 10 Grad ändern.
+								// Weniger als 10 Grad ?ndern.
 								if (WriteMessages) wxLogMessage("Korrectur + 1");
                                 SendIncrementOne();
 							}
@@ -1123,7 +1124,7 @@ void raymarine_autopilot_pi::ToUpdateAutoPilotControlDisplay(wxString& sentence)
 			if (WriteDebug) wxLogInfo(("Received Auto-Track %s"), sentence);
 			if (Autopilot_Status_Before != Autopilot_Status)
 			{
-				// Nur für Logging
+				// Nur fÃ¼r Logging
 				if (WriteMessages) wxLogMessage("Auto-Status changed to AUTO-TRACK");
                 if (allowautocog)
                 {
@@ -1147,7 +1148,7 @@ void raymarine_autopilot_pi::ToUpdateAutoPilotControlDisplay(wxString& sentence)
 			if (Standbycommandreceived == TRUE && Autopilot_Status_Before != UNKNOWN)
 			{
 				// Warten ob Der Autopilot noch in Standbymode geht, falls Dieses "Auto" Signal kurz hinter dem
-				// Drücken der Standbytaste noch kam, und dadurch den "Standbycommandreceived Status wieder nach
+				// Dr?cken der Standbytaste noch kam, und dadurch den "Standbycommandreceived Status wieder nach
 				// FALSE setzt.
 				// Zwei Sequenzen abwarten.
 				if (WriteMessages) wxLogMessage(("Standby from St6001 detected in Auto-Track Mode %s"), sentence);
@@ -1176,7 +1177,7 @@ void raymarine_autopilot_pi::ToUpdateAutoPilotControlDisplay(wxString& sentence)
 			if (WriteDebug) wxLogInfo(("Received Auto-Wind %s"), sentence);
 			if (Autopilot_Status_Before != Autopilot_Status)
 			{
-				// Nur für Logging
+				// Nur f?r Logging
 				if (WriteMessages) wxLogMessage("Auto-Status changed to AUTO-WIND");
                 if (allowautocog)
                 {
@@ -1200,7 +1201,7 @@ void raymarine_autopilot_pi::ToUpdateAutoPilotControlDisplay(wxString& sentence)
 			if (Standbycommandreceived == TRUE && Autopilot_Status_Before != UNKNOWN)
 			{
 				// Warten ob Der Autopilot noch in Standbymode geht, falls Dieses "Auto" Signal kurz hinter dem
-				// Drücken der Standbytaste noch kam, und dadurch den "Standbycommandreceived Status wieder nach
+				// Dr?cken der Standbytaste noch kam, und dadurch den "Standbycommandreceived Status wieder nach
 				// FALSE setzt.
 				// Zwei Sequenzen abwarten.
 				if (WriteMessages) wxLogMessage(("Standby from St6001 detected in Auto-Wind Mode %s"), sentence);
@@ -1226,7 +1227,7 @@ void raymarine_autopilot_pi::ToUpdateAutoPilotControlDisplay(wxString& sentence)
 			if (WriteDebug) wxLogInfo(("Received Windshift %s"), sentence);
 			if (Autopilot_Status_Before != Autopilot_Status)
 			{
-				// Nur für Logging
+				// Nur f?r Logging
 				if (WriteMessages) wxLogMessage("Auto-Status .... Windshift received");
                 if (allowautocog)
                 {
@@ -1264,7 +1265,7 @@ void raymarine_autopilot_pi::ToUpdateAutoPilotControlDisplay(wxString& sentence)
 			if (WriteDebug) wxLogInfo(("Received Off-Course %s"), sentence);
 			if (Autopilot_Status_Before != Autopilot_Status)
 			{
-				// Nur für Logging
+				// Nur f?r Logging
 				if (WriteMessages) wxLogMessage("Auto-Status .... Off-Course received");
                 if (allowautocog)
                 {
@@ -1296,7 +1297,7 @@ void raymarine_autopilot_pi::ToUpdateAutoPilotControlDisplay(wxString& sentence)
 			if (WriteDebug) wxLogInfo(("Received Standby %s"), sentence);
 			if (Autopilot_Status_Before != Autopilot_Status)
 			{
-				// Nur für Logging
+				// Nur f?r Logging
 				if (WriteMessages) wxLogMessage("Auto-Status changed to STANDBY");
                 if (allowautocog)
                 {
@@ -1307,7 +1308,7 @@ void raymarine_autopilot_pi::ToUpdateAutoPilotControlDisplay(wxString& sentence)
                 }
 			}
 			if (Autopilot_Status_Before != STANDBY &&
-				NewStandbyNoStandbyReceived == TRUE &&  // Sool Überhaupt ein Neues Standby gesendent werden ?
+				NewStandbyNoStandbyReceived == TRUE &&  // Sool ?berhaupt ein Neues Standby gesendent werden ?
 				Standbycommandreceived == FALSE &&
 				NoStandbyCounter <= SelectCounterStandby &&  // Es soll StandbyCommando ausgewertet werden. Maximale Anzahl.
 				ConfirmNextWaypoint(sentence) == false) // Kein Fehler aufgetreten, sonst geht der Autopilot selber in Standby
@@ -1330,14 +1331,14 @@ void raymarine_autopilot_pi::ToUpdateAutoPilotControlDisplay(wxString& sentence)
 					IS_standby = 0;
 					if (WriteMessages) wxLogMessage(("StandbyCommandreceived = False %s"), sentence);
 					CounterStandbySentencesReceived = 0;
-					Autopilot_Status = Autopilot_Status_Before; // Dadurch werden mehrere Seqnenzen gesendet, wenn nötig.
+					Autopilot_Status = Autopilot_Status_Before; // Dadurch werden mehrere Seqnenzen gesendet, wenn n?tig.
 					if (Autopilot_Status_Before == AUTO)
 					{
 						if (WriteMessages) wxLogMessage("---------------Send New Auto------------");
                         SendGotoAuto();
 						if (ChangeValueToLast == true)
 						{
-							// Kurskorrectur durchführen
+							// Kurskorrectur durchf?hren
 							if (WriteMessages) wxLogMessage("Course correction is enabled");
 							NeedCompassCorrection = true;
 						}
@@ -1356,7 +1357,7 @@ void raymarine_autopilot_pi::ToUpdateAutoPilotControlDisplay(wxString& sentence)
 						if (WriteMessages) wxLogMessage("-------------Send New Auto-Track--------");
                         SendGotoAutoTrack();
 					}
-					// FehlerCounter hohchzählen.
+					// FehlerCounter hohchz?hlen.
 					NoStandbyCounter++;
 					if (NoStandbyCounter > SelectCounterStandby)
 					{
@@ -1378,14 +1379,14 @@ void raymarine_autopilot_pi::ToUpdateAutoPilotControlDisplay(wxString& sentence)
 				CounterStandbySentencesReceived = 0;
 				NeedCompassCorrection = false;
 			}
-			if (Autopilot_Status_Before == AUTO || Autopilot_Status_Before == AUTOWIND) // Zustandänderung von Auto -> Standby
+			if (Autopilot_Status_Before == AUTO || Autopilot_Status_Before == AUTOWIND) // Zustand?nderung von Auto -> Standby
 			{
 				CounterStandbySentencesReceived = 0;
 				if (StandbySelfPressed == FALSE &&
                     AutoPilotType == SMARTPILOT &&  // Nur bei Seatalk1 Autopilot
 					NewAutoOnStandby == TRUE)  // Generell neues Auto Senden, wenn nicht von hier gesendet.
 					                           // Ignoriert St6001 Standby Signal !! Vorsiht.
-                                               // Wird auch genutzt für PGN EVO Set Pilot Heading oder Windmode Sendewahl.
+                                               // Wird auch genutzt f?r PGN EVO Set Pilot Heading oder Windmode Sendewahl.
 				{
 					// Standby not from here !! goto AUTO
 					//
@@ -1398,7 +1399,7 @@ void raymarine_autopilot_pi::ToUpdateAutoPilotControlDisplay(wxString& sentence)
 					MyLastSend = AUTO;
 					if (ChangeValueToLast == true)
 					{
-						// Kurskorrectur durchführen
+						// Kurskorrectur durchf?hren
 						if (WriteMessages) wxLogMessage("Course correction(2) is enabled");
 						NeedCompassCorrection = true;
 					}
@@ -1546,7 +1547,7 @@ void raymarine_autopilot_pi::GetWaypointBearing(const wxString &sentence)
 			WayPointBearing = s.Left(s.find(wxT(",")));
 			if (WayPointBearing.find(wxT(".")) != -1)
 				WayPointBearing = WayPointBearing.Left(WayPointBearing.find(wxT(".")));
-			WayPointBearing += " °";
+			WayPointBearing += " ?";
 			return;
 		}
 	}
@@ -2232,7 +2233,7 @@ void raymarine_autopilot_pi::ActivateAutoCOG()
 {
     if (AutoCOGStatus == true && Autopilot_Status == AUTO)
     {
-        // wieder zurück zu normal Auto
+        // wieder zur?ck zu normal Auto
         DeActivateAutoCOG();        
         return;
     }
@@ -2437,11 +2438,11 @@ void AutoCogTimer::Notify()
         else
             COGdiff = pAutopilot->COG - (pAutopilot->COGCourse + 360);
     }    
-    if (COGdiff > 0) // Sollkurs ist grösser als istkurs  +1
+    if (COGdiff > 0) // Sollkurs ist gr?sser als istkurs  +1
     {
         if (pAutopilot->LastChange == -1)
         {
-            // Nicht gleich wieder zurücktoggeln.
+            // Nicht gleich wieder zurÃ¼cktoggeln.
             pAutopilot->LastChange = 0;
             return;
         }
@@ -2456,11 +2457,11 @@ void AutoCogTimer::Notify()
         }
         return;
     }
-    if (COGdiff < 0)  // istkurs ist grösser als sollkurs -1
+    if (COGdiff < 0)  // istkurs ist gr?sser als sollkurs -1
     {
         if (pAutopilot->LastChange == 1)
         {
-            // Nicht gleich wieder zurücktoggeln.
+            // Nicht gleich wieder zurÃ¼cktoggeln.
             pAutopilot->LastChange = 0;
             return;
         }
@@ -2720,7 +2721,7 @@ bool ParseN2kPGN126208(const tN2kMsg& N2kMsg, uint8_t& CommandMode, double& Valu
         if (0x04 != N2kMsg.GetByte(Index)) return false; // Industrial Code
         N2kMsg.GetByte(Index); // 0x04  third Parameter
 
-        Value = 0xFF;  // ungültig
+        Value = 0xFF;  // ung?ltig
         switch (N2kMsg.Get2ByteUInt(Index))
         {
         case 0x0000: Value = STANDBY;
