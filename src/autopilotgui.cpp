@@ -209,7 +209,7 @@ m_Parameterdialog::m_Parameterdialog( wxWindow* parent, wxWindowID id, const wxS
 
 	fgSizer12->Add( m_AutopilotTypeText, 0, wxALL, 14 );
 
-	wxString m_AutopilotTypeChoices[] = { _("Raymarine Seatalk1 Autopilots (S1,S2,S3, ...), connected over NMEA0183/Seatalk1 translater"), _("Raymarine EVO Autopilot (connected over N2K / SeatalkNG)") };
+	wxString m_AutopilotTypeChoices[] = { _("Raymarine Seatalk1 Autopilots (S1,S2,S3, ...), connected over NMEA0183/Seatalk1 translater"), _("Raymarine EVO Autopilot (connected over N2K / SeatalkNG)"), _("Raymarine EVO Autopilot (connected over Seasmart NMEA0183 $PCDIN)") };
 	int m_AutopilotTypeNChoices = sizeof( m_AutopilotTypeChoices ) / sizeof( wxString );
 	m_AutopilotType = new wxChoice( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_AutopilotTypeNChoices, m_AutopilotTypeChoices, 0 );
 	m_AutopilotType->SetSelection( 0 );

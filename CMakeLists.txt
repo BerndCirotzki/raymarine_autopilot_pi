@@ -55,10 +55,10 @@ set(SHORT_DESCRIPTION "Control a Raymarine Autopilot")
 set(LONG_DESCRIPTION "Control Raymarine Autopilot using a NMEA0183 to ST1 Converter or NMEA2000 for EVO")
 
 set(VERSION_MAJOR "2")
-set(VERSION_MINOR "0")
-set(VERSION_PATCH "2")
+set(VERSION_MINOR "2")
+set(VERSION_PATCH "0")
 set(VERSION_TWEAK "0")
-set(VERSION_DATE  "29/12/2023")#DD/MM/YYYY format
+set(VERSION_DATE  "29/09/2024")#DD/MM/YYYY format
 set(OCPN_MIN_VERSION "ov58")
 
 set(OCPN_API_VERSION_MAJOR "1")
@@ -144,13 +144,15 @@ set(SRCS
     src/icons.cpp
     src/autopilot_pi.cpp
 	src/autopilotgui.cpp
-	src/autopilotgui_impl.cpp)
+	src/autopilotgui_impl.cpp
+	src/Seasmart.cpp)
 
 set(HDRS
     include/autopilot_pi.h
     include/icons.h
     include/autopilotgui.h
-    include/autopilotgui_impl.h)
+    include/autopilotgui_impl.h
+	include/Seasmart.h)
 
 
 add_definitions(-DPLUGIN_USE_SVG)

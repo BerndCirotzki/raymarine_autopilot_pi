@@ -33,10 +33,6 @@
 #include "autopilot_pi.h"
 
 
-class Position;
-
-#define FAIL(X) do { error = X; goto failed; } while(0)
-
 ParameterDialog::ParameterDialog(raymarine_autopilot_pi* p, wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style) : m_Parameterdialog(parent, id, title, pos, size, style)
 {
 	ptoPlugin = p;
@@ -110,7 +106,7 @@ void ParameterDialog::OnAutoCogchange(wxCommandEvent& event)
 
 void ParameterDialog::OnChoiceAutoPilot(wxCommandEvent& event)
 {
-    if (m_AutopilotType->GetSelection() == EVO)
+    if (m_AutopilotType->GetSelection() == EVO || m_AutopilotType->GetSelection() == EVOSEASMART)
     {  
         m_checkParameters->Enable(false);
         m_ChangeValueToLast->Enable(false);
@@ -156,11 +152,17 @@ void ParameterDialog::OnChoiceAutoPilot(wxCommandEvent& event)
     }
 }
 
-Dlg::Dlg( wxWindow* parent, double Skalefaktor, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style ) : m_dialog( parent, Skalefaktor, id, title, pos, size, style )
+Dlg::Dlg( wxWindow* parent, double Skalefaktor, long style, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size) : m_dialog( parent, Skalefaktor, id, title, pos, size, style )
 {	
     this->Fit();
-	SetToggel = 0;
-    dbg=false; //for debug output set to true
+	SetToggel = 0;    
+    m_parent = parent;
+    Connect(wxEVT_CONTEXT_MENU,
+        wxContextMenuEventHandler(Dlg::OnContextMenu), NULL,
+        this);
+    Connect(wxEVT_COMMAND_MENU_SELECTED,
+        wxCommandEventHandler(Dlg::OnContextMenuSelect), NULL,
+        this);
 }
 
 void Dlg::SetStatusText(wxString Text)
@@ -428,3 +430,69 @@ void Dlg::OnSelectParameter(wxCommandEvent& event)
 		break;
 	}
 }
+
+void Dlg::OnContextMenu(wxContextMenuEvent& event)
+{
+    wxMenu* contextMenu = new wxMenu();
+
+    if (plugin->DialogStyle)
+    {
+        contextMenu->Append(1, _("Dock Window"));        
+    }
+    else
+    {
+        contextMenu->Append(1, _("Undock Window"));       
+    }
+    contextMenu->AppendSeparator();
+    contextMenu->Append(0, _("Close Window"));
+    contextMenu->AppendSeparator();
+    contextMenu->Append(2, _("Preferences..."));
+    PopupMenu(contextMenu);
+
+    delete contextMenu;
+}
+
+void Dlg::OnContextMenuSelect(wxCommandEvent& event)
+{
+    switch (event.GetId()) {
+    case 0: {
+        Hide();
+        return;
+    }
+    case 1: {
+        wxPoint p = GetPosition();
+        plugin->SetCalculatorDialogX(p.x);
+        plugin->SetCalculatorDialogY(p.y);
+        if (plugin->DialogStyle)
+        {
+            plugin->DialogStyle = 0;
+            plugin->m_route_dialog_x += 6;
+        }
+        else
+        {
+            plugin->DialogStyle = wxDEFAULT_DIALOG_STYLE;
+            if ((plugin->m_route_dialog_x -= 6) < 0) plugin->m_route_dialog_x = 0;
+        }
+        wxWindow* pW = plugin->m_pDialog->m_parent;
+        plugin->m_pDialog = NULL;
+        plugin->m_pDialog = new Dlg(pW, plugin->Skalefaktor, plugin->DialogStyle);
+        plugin->m_pDialog->plugin = plugin;
+        plugin->m_pDialog->Move(wxPoint(plugin->m_route_dialog_x, plugin->m_route_dialog_y));
+        if (plugin->Autopilot_Status == AUTO && plugin->allowautocog == true && plugin->AutoCOGStatus == false)
+        {
+            plugin->m_pDialog->buttonAuto->SetLabel("AutoCOG");
+            plugin->m_pDialog->buttonAuto->SetBackgroundColour(wxColour(148, 88, 167));
+        }
+        if (plugin->m_bShowautopilot)
+            plugin->m_pDialog->Show();
+        plugin->SetAutopilotparametersChangeable();
+        delete this;
+        return;
+    }
+    case 2: {
+        plugin->ShowPreferencesDialog(m_parent);
+        return;  // Does it's own save.
+    }
+    }
+}
+

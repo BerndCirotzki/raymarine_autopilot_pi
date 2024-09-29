@@ -35,14 +35,7 @@
 #include "autopilotgui.h"
 #include "autopilot_pi.h"
 
-#include <list>
-#include <vector>
-
-using namespace std;
-
 class raymarine_autopilot_pi;
-
-class Position;
 
 class ParameterDialog : public m_Parameterdialog
 {
@@ -59,15 +52,9 @@ private:
 class Dlg : public m_dialog
 {
 public:
-        Dlg( wxWindow* parent,double Skalefaktor = 1, wxWindowID id = wxID_ANY, const wxString& title = _("Autopilot Control"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxCLOSE_BOX|wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
+        Dlg( wxWindow* parent,double Skalefaktor = 1, long style = wxDEFAULT_DIALOG_STYLE, wxWindowID id = wxID_ANY, const wxString& title = _("Autopilot Control"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ));
 
-        void OnPSGPX( wxCommandEvent& event );		
-		bool OpenXML();
-		
-		vector<Position> my_positions;
-		vector<Position> my_points;
-
-		//void OnGenerate(autopilot_pi& a);
+        //void OnGenerate(autopilot_pi& a);
 		void OnKlickInDisplay(wxMouseEvent& event);
 		void OnAuto(wxCommandEvent& event);
 		void OnAutoWind(wxCommandEvent& event);
@@ -87,29 +74,12 @@ public:
 		void OnSetParameterValue(wxCommandEvent& event);
 		void OnSelectParameter(wxCommandEvent& event);
 		void OnCloseApp(wxCloseEvent& event);
+        void OnContextMenu(wxContextMenuEvent& evt);
+        void OnContextMenuSelect(wxCommandEvent& evt);
 		raymarine_autopilot_pi *plugin; 
-
-		wxString rte_start;
-	    wxString rte_end;
-
 private:
-	    void OnClose( wxCloseEvent& event );
-        double lat1, lon1, lat2, lon2;
-        bool error_found;
-        bool dbg;
-		wxString     m_gpx_path;
+	    void OnClose( wxCloseEvent& event );        
 		short int SetToggel;
-};
-
-
-class Position
-{
-public:
-
-    wxString lat, lon, wpt_num;
-    Position *prev, *next; /* doubly linked circular list of positions */
-    int routepoint;
-
 };
 
 #endif
