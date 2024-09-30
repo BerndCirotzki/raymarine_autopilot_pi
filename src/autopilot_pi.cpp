@@ -1988,7 +1988,7 @@ void raymarine_autopilot_pi::SendGotoAuto()
     else
     {
         tN2kMsg N2kMsg;
-        SetN2kPGN126208(N2kMsg, AUTO, 255); // Send to all dont know if 204 is alway correct
+        SetN2kPGN126208(N2kMsg, AUTO, 204); // Send to all dont know if 204 is alway correct
         SendN2kMessage(N2kMsg);
     }
     MyLastSend = AUTO;    
@@ -2004,7 +2004,7 @@ void raymarine_autopilot_pi::SendGotoStandby()
     else
     {
         tN2kMsg N2kMsg;
-        SetN2kPGN126208(N2kMsg, STANDBY, 255);
+        SetN2kPGN126208(N2kMsg, STANDBY, 204);
         SendN2kMessage(N2kMsg);
     }
     MyLastSend = STANDBY;    
@@ -2020,7 +2020,7 @@ void raymarine_autopilot_pi::SendGotoAutoWind()
     else
     {
         tN2kMsg N2kMsg;
-        SetN2kPGN126208(N2kMsg, AUTOWIND, 255);
+        SetN2kPGN126208(N2kMsg, AUTOWIND, 204);
         SendN2kMessage(N2kMsg);
     }
     MyLastSend = AUTOWIND;    
@@ -2036,7 +2036,7 @@ void raymarine_autopilot_pi::SendGotoAutoTrack()
     else
     {
         tN2kMsg N2kMsg;
-        SetN2kPGN126208(N2kMsg, AUTOTRACK, 255);
+        SetN2kPGN126208(N2kMsg, AUTOTRACK, 204);
         SendN2kMessage(N2kMsg);
     }
     MyLastSend = AUTOTRACK;
@@ -2052,6 +2052,7 @@ void raymarine_autopilot_pi::SendIncrementOne()
     else
     {
         tN2kMsg N2kMsg;
+        N2kMsg.Destination = 204;  // Default address of EVO1 Pilot.
         if (Autopilot_Status == AUTO  && NewAutoOnStandby == false)  // NewAutoOnStandby is now send better Keystroke
         {
             if (EVOLockeHeading != N2kDoubleNA)
@@ -2064,7 +2065,7 @@ void raymarine_autopilot_pi::SendIncrementOne()
                return;
         }
         else
-            SetRaymarineKeyCommandPGN126720(N2kMsg, 255, 0x07F8);
+            SetRaymarineKeyCommandPGN126720(N2kMsg, 204, 0x07F8);
         SendN2kMessage(N2kMsg);
     }
     MyLastSend = IncrementOne;
@@ -2080,6 +2081,7 @@ void raymarine_autopilot_pi::SendIncrementTen()
     else
     {
         tN2kMsg N2kMsg;
+        N2kMsg.Destination = 204;  // Default address of EVO1 Pilot.
         if (Autopilot_Status == AUTO && NewAutoOnStandby == false) // NewAutoOnStandby is now send better Keystroke
         {
             if (EVOLockeHeading != N2kDoubleNA)
@@ -2092,7 +2094,7 @@ void raymarine_autopilot_pi::SendIncrementTen()
                 return;
         }
         else
-            SetRaymarineKeyCommandPGN126720(N2kMsg, 255, 0x08F7);
+            SetRaymarineKeyCommandPGN126720(N2kMsg, 204, 0x08F7);
         SendN2kMessage(N2kMsg);
     }
     MyLastSend = IncrementTen;
@@ -2108,6 +2110,7 @@ void raymarine_autopilot_pi::SendDecrementOne()
     else
     {
         tN2kMsg N2kMsg;
+        N2kMsg.Destination = 204;  // Default address of EVO1 Pilot.
         if (Autopilot_Status == AUTO && NewAutoOnStandby == false) // NewAutoOnStandby is now send better Keystroke
         {
             if (EVOLockeHeading != N2kDoubleNA)
@@ -2120,7 +2123,7 @@ void raymarine_autopilot_pi::SendDecrementOne()
                 return;
         }
         else
-            SetRaymarineKeyCommandPGN126720(N2kMsg, 255, 0x05FA);
+            SetRaymarineKeyCommandPGN126720(N2kMsg, 204, 0x05FA);
         SendN2kMessage(N2kMsg);
     }
     MyLastSend = DecrementOne;
@@ -2136,6 +2139,7 @@ void raymarine_autopilot_pi::SendDecrementTen()
     else
     {
         tN2kMsg N2kMsg;
+        N2kMsg.Destination = 204;  // Default address of EVO1 Pilot.
         if (Autopilot_Status == AUTO && NewAutoOnStandby == false) // NewAutoOnStandby is now send better Keystroke
         {
             if (EVOLockeHeading != N2kDoubleNA)
@@ -2148,7 +2152,7 @@ void raymarine_autopilot_pi::SendDecrementTen()
                 return;
         }
         else
-            SetRaymarineKeyCommandPGN126720(N2kMsg, 255, 0x06F9);
+            SetRaymarineKeyCommandPGN126720(N2kMsg, 204, 0x06F9);
         SendN2kMessage(N2kMsg);
     }
     MyLastSend = DecrementTen;
@@ -2874,8 +2878,7 @@ void raymarine_autopilot_pi::SendN2kMessage(tN2kMsg N2kMsg)
         else
         {
             if (WriteMessages) wxLogMessage("Not enought space for sending $PCDIN Sentence");
-        }
-            
+        }            
     }
 }
 
