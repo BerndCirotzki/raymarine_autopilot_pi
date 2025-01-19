@@ -18,8 +18,7 @@
 ## *   xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx,                                       *
 ## *   xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx                                       *
 #-----------------------------------------------------------------------------
-# Frontend2 Author: Jon Gough 
-# Testplugin(TP) v1.0.286.3 29/12/2023 DD/MM/YYYY format
+# Frontend2 Author: Jon Gough Testplugin(TP) v1.0.326.0 18/01/2025 DD/MM/YYYY
 # buildCI:yes useODAPI:no validateJSON:no
 # ---------------------------------------------------------------------------
 ## -- When changing this file do NOT change the order of the sections.    -- ##
@@ -44,6 +43,8 @@ if(COMMAND cmake_policy)
         cmake_policy(SET CMP0077 NEW)
     endif(POLICY CMP0077)
 endif(COMMAND cmake_policy)
+# set for vscode/vscodium
+set(CMAKE_BUILD_WITH_INSTALL_RPATH ON)
 
 # define plugin name, owner and versions
 set(VERBOSE_NAME "raymarine_autopilot")
@@ -102,13 +103,20 @@ set(OpenGL_GL_PREFERENCE "LEGACY")   #not operational
 option(USE_GL "Enable OpenGL support" ON)
 message(STATUS "${CMLOC}USE_GL: ${USE_GL}")
 
-if("${CMAKE_BUILD_TYPE}" STREQUAL "")
-    set(CMAKE_BUILD_TYPE "Release" CACHE STRING "Choose the type of build" FORCE)
-endif("${CMAKE_BUILD_TYPE}" STREQUAL "")
-set_property(CACHE CMAKE_BUILD_TYPE PROPERTY STRINGS "" "Debug" "Release" "RelWithDebInfo" "MinSizeRel")
+if ("${CMAKE_BUILD_TYPE}" STREQUAL "")
+  set(CMAKE_BUILD_TYPE
+      "Release"
+      CACHE STRING "Choose the type of build" FORCE
+  )
+endif ("${CMAKE_BUILD_TYPE}" STREQUAL "")
+set_property(
+  CACHE CMAKE_BUILD_TYPE PROPERTY STRINGS "" "Debug" "Release" "RelWithDebInfo"
+                                  "MinSizeRel"
+)
 message(STATUS "${CMLOC}Build type: ${CMAKE_BUILD_TYPE}")
 
-## ----- Statements below used to setup standard variables required by the CMAKE process -- Do not remove - ##
+# ----- Statements below used to setup standard variables required by the CMAKE  -##
+# ----- process -- Do not remove -##
 
 project(${PACKAGE})
 
@@ -138,7 +146,8 @@ include("PluginConfigure")
 
 add_definitions(-DUSE_S57)
 
-## ---- Section Below - Add your project SET(SRCS and SET(HDRS  etc..
+## ----- Section above - Add your project SET(SRCS and SET(HDRS  etc.-------##
+
 
 set(SRCS
     src/icons.cpp
@@ -162,15 +171,15 @@ add_definitions(-DPLUGIN_USE_SVG)
 
 ## ----- If using JSON validation in plugin section above is needed --------##
 
-if(QT_ANDROID)
-endif(QT_ANDROID)
+if (QT_ANDROID)
+endif (QT_ANDROID)
 
 ##=============================================================
 ## Change as required to collect all the set( headers and SRCS
 ## This add_library  can be used in conditionals below.
 ##=============================================================
 
-SET(SRC ${SRCS} ${HDRS} )
+set(SRC ${SRCS} ${HDRS})
 
 ##=============================================================
 ## Modify/configure 'Include' Directories below for the Plugin
@@ -181,7 +190,7 @@ include_directories(BEFORE ${PROJECT_SOURCE_DIR}/include)
 ## Change target_sources to match your project needs.
 ##==============================================================
 
-target_sources(${PACKAGE_NAME} PUBLIC ${SRC} )
+target_sources(${PACKAGE_NAME} PUBLIC ${SRC})
 
 ##==============================================================
 
@@ -230,9 +239,9 @@ add_definitions(-DTIXML_USE_STL)
 ##------- Change below to match project requirements --------------------##
 
 # Needed for android builds
-if(QT_ANDROID)
-    include_directories(BEFORE ${qt_android_include})
-endif(QT_ANDROID)
+if (QT_ANDROID)
+  include_directories(BEFORE ${qt_android_include})
+endif (QT_ANDROID)
 
 ## Needed for all builds Do not change - needed to build app -------------##
 ##===============================================================
@@ -245,7 +254,11 @@ include("PluginPackage")
 ## ----- Do not change section above - needed to configure build process --##
 
 message(STATUS "${CMLOC}include directories: ")
-get_property(dirs DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} PROPERTY INCLUDE_DIRECTORIES)
-foreach(dir ${dirs})
-    message(STATUS "${CMLOC}dir='${dir}'")
-endforeach()
+get_property(
+  dirs
+  DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
+  PROPERTY INCLUDE_DIRECTORIES
+)
+foreach (dir ${dirs})
+  message(STATUS "${CMLOC}dir='${dir}'")
+endforeach ()
