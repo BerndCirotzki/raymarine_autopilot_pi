@@ -135,6 +135,7 @@ int raymarine_autopilot_pi::Init(void)
       DaysSince1970 = N2kUInt16NA;
       EVOLockeHeading = N2kDoubleNA;
       AutoCOGHeadingChange = 0;
+      DialogStyle = wxDEFAULT_DIALOG_STYLE;
       //    And load the configuration items
       LoadConfig();
 	  if (Skalefaktor < 1 || Skalefaktor > 2.1)
@@ -147,7 +148,7 @@ int raymarine_autopilot_pi::Init(void)
 
       m_pDialog = NULL;
 	  DisplayShow = 0;
-	  m_pDialog = new Dlg(m_parent_window, Skalefaktor);
+	  m_pDialog = new Dlg(m_parent_window, Skalefaktor, DialogStyle);
 	  m_pDialog->plugin = this;
 	  m_pDialog->Move(wxPoint(m_route_dialog_x, m_route_dialog_y));
       ResetAUTOCOGValues();
@@ -446,7 +447,7 @@ void raymarine_autopilot_pi::OnToolbarToolCallback(int id)
 {
       if(NULL == m_pDialog)
       {
-            m_pDialog = new Dlg(m_parent_window, Skalefaktor);
+            m_pDialog = new Dlg(m_parent_window, Skalefaktor, DialogStyle);
             m_pDialog->plugin = this;
 			m_pDialog->Move(wxPoint(m_route_dialog_x, m_route_dialog_y));
       }
@@ -528,6 +529,7 @@ bool raymarine_autopilot_pi::LoadConfig(void)
             maxdegreediff = pConf->Read(_T("maxdegreediff"), maxdegreediff);
             minspeedcog = ((double)pConf->Read(_T("minspeedcog"), minspeedcog)) / 10;
             maxchangehdg = pConf->Read(_T("maxchangehdg"), maxchangehdg);
+            DialogStyle = pConf->Read(_T("Style"), DialogStyle);
             return true;
       }
       else
@@ -567,6 +569,7 @@ bool raymarine_autopilot_pi::SaveConfig(void)
             pConf->Write(_T("maxdegreediff"), maxdegreediff);
             pConf->Write(_T("minspeedcog"), (int)(minspeedcog * 10));
             pConf->Write(_T("maxchangehdg"), maxchangehdg);
+            pConf->Write(_T("Style"), DialogStyle);
             return true;
       }
       else
@@ -584,7 +587,7 @@ void raymarine_autopilot_pi::ShowPreferencesDialog(wxWindow* parent)
         dialog->Move(wxPoint(x, y-200));
 	DimeWindow(dialog);
     dialog->m_AutopilotType->SetSelection(AutoPilotType);
-    if (AutoPilotType == EVO)
+    if (AutoPilotType != SMARTPILOT)
     {        
         dialog->m_checkParameters->Enable(false);
         dialog->m_SendNewAutoonStandby->SetLabel(_("Send PGN 126720 (keystroke) instead of PGN 126208 (set heading) in AutoMode"));
@@ -682,7 +685,7 @@ void raymarine_autopilot_pi::ShowPreferencesDialog(wxWindow* parent)
 		NoStandbyCounter = atoi(dialog->m_NoStandbyCounter->GetValue());
 		SelectCounterStandby = dialog->m_SelectCounterStandby->GetSelection();
         Skalefaktor = 1 + (double)((double)dialog->m_Skalefaktor->GetValue() / 10);
-        if (AutoPilotType == EVO)
+        if (AutoPilotType != SMARTPILOT)
         {
             ShowParameters = false;
             SendTrack = false;
@@ -702,7 +705,7 @@ void raymarine_autopilot_pi::ShowPreferencesDialog(wxWindow* parent)
 			SetCalculatorDialogY(p.y);
 			m_pDialog->Close();
             delete m_pDialog;
-			m_pDialog = new Dlg(m_parent_window,Skalefaktor);
+			m_pDialog = new Dlg(m_parent_window,Skalefaktor, DialogStyle);
 			m_pDialog->plugin = this;
 			m_pDialog->Move(wxPoint(m_route_dialog_x, m_route_dialog_y));
             if (Autopilot_Status == AUTO && allowautocog == true && AutoCOGStatus == false)
@@ -723,27 +726,51 @@ void raymarine_autopilot_pi::ShowPreferencesDialog(wxWindow* parent)
 void raymarine_autopilot_pi::SetAutopilotparametersChangeable()
 {
 	// Parameterbar visible or not
+    int xSize;
+    int ySize;
+
 	if (ShowParameters)
 	{
 		// Visible
+        ySize = 220;
+        xSize = 158;
+        if (!DialogStyle) // Without caption and docked
+        {
+            ySize -= 36;
+            xSize -= 13;
+            m_pDialog->SetBackgroundColour(wxColour(224, 224, 224));
+        }
+        else
+            m_pDialog->SetBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_MENU));
 		m_pDialog->ParameterChoise->Show();
 		m_pDialog->ParameterValue->Show();
 		m_pDialog->buttonSet->Show();
 		m_pDialog->StaticLine3->Show();
-		m_pDialog->SetMaxSize(Skalefaktor * m_pDialog->FromDIP(wxSize(160, 220)));
-		m_pDialog->SetSize(Skalefaktor * m_pDialog->FromDIP(wxSize(160, 220)));
-		m_pDialog->SetMinSize(Skalefaktor * m_pDialog->FromDIP(wxSize(160, 220)));
+		m_pDialog->SetMaxSize(Skalefaktor * m_pDialog->FromDIP(wxSize(xSize, ySize)));
+		m_pDialog->SetSize(Skalefaktor * m_pDialog->FromDIP(wxSize(xSize, ySize)));
+		m_pDialog->SetMinSize(Skalefaktor * m_pDialog->FromDIP(wxSize(xSize, ySize)));
 	}
 	else
 	{
+        ySize = 194;
+        xSize = 155;
+        if (!DialogStyle) // Without caption and docked
+        {
+            ySize -= 36;
+            xSize -= 13;
+            m_pDialog->SetBackgroundColour(wxColour(224, 224, 224));
+        }
+        else
+            m_pDialog->SetBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_MENU));
 		m_pDialog->ParameterChoise->Show(FALSE);
 		m_pDialog->ParameterValue->Show(FALSE);
 		m_pDialog->buttonSet->Show(FALSE);
 		m_pDialog->StaticLine3->Show(FALSE);
-		m_pDialog->SetSize(Skalefaktor * m_pDialog->FromDIP(wxSize(160, 194)));
-		m_pDialog->SetMinSize(Skalefaktor * m_pDialog->FromDIP(wxSize(160, 194)));
-		m_pDialog->SetMaxSize(Skalefaktor * m_pDialog->FromDIP(wxSize(160, 194)));
+		m_pDialog->SetSize(Skalefaktor * m_pDialog->FromDIP(wxSize(xSize, ySize)));
+		m_pDialog->SetMinSize(Skalefaktor * m_pDialog->FromDIP(wxSize(xSize, ySize)));
+		m_pDialog->SetMaxSize(Skalefaktor * m_pDialog->FromDIP(wxSize(xSize, ySize)));
 	}
+
 }
 
 void raymarine_autopilot_pi::OnautopilotDialogClose()
@@ -768,7 +795,7 @@ void raymarine_autopilot_pi::SetPluginMessage(wxString &message_id, wxString &me
 		r.Parse(message_body, &v);
 		BoatVariation = v[_T("Decl")].AsDouble();
         WMM_receive_count = 0;
-        if (AutoPilotType == EVO)
+        if (AutoPilotType != SMARTPILOT)
             SendBoatVariationToN2k();
 	}	
 }
@@ -806,6 +833,14 @@ void raymarine_autopilot_pi::SetNMEASentence(wxString& sentence_incomming)
             AddVariationToRMCanSendOut(sentence);
             return;
         }
+    }
+    if (AutoPilotType == EVOSEASMART)
+    {
+        if (sentence.Mid(1, 5) == "PCDIN")
+        {
+            CheckSeasartSentence(sentence);
+        }
+        return;
     }
     if (AutoPilotType != SMARTPILOT)
         return;
@@ -1124,7 +1159,7 @@ void raymarine_autopilot_pi::ToUpdateAutoPilotControlDisplay(wxString sentence)
 			if (WriteDebug) wxLogInfo(("Received Auto-Track %s"), sentence);
 			if (Autopilot_Status_Before != Autopilot_Status)
 			{
-				// Nur fÃ¼r Logging
+				// Nur für Logging
 				if (WriteMessages) wxLogMessage("Auto-Status changed to AUTO-TRACK");
                 if (allowautocog)
                 {
@@ -1459,7 +1494,7 @@ void raymarine_autopilot_pi::ToUpdateAutoPilotControlDisplay(wxString sentence)
 
 bool raymarine_autopilot_pi::ConfirmNextWaypoint(const wxString &sentence)
 {
-	if (sentence.Mid(28, 2) == "02" || AutoPilotType == EVO) // Don't know how to do with EVO
+	if (sentence.Mid(28, 2) == "02" || AutoPilotType != SMARTPILOT) // Don't know how to do with EVO
 	{
 		// Autopilot is in normal Mode
 		GoneTimeToSendNewWaypoint = 0;
@@ -1950,10 +1985,10 @@ void raymarine_autopilot_pi::SendGotoAuto()
         wxString sentence = "$" + STALKSendName + ",86,21,01,FE";
         SendNMEASentence(sentence);
     }
-    if (AutoPilotType == EVO)
+    else
     {
         tN2kMsg N2kMsg;
-        SetN2kPGN126208(N2kMsg, AUTO, 255); // Send to all dont know if 204 is alway correct
+        SetN2kPGN126208(N2kMsg, AUTO, 204); // Send to all dont know if 204 is alway correct
         SendN2kMessage(N2kMsg);
     }
     MyLastSend = AUTO;    
@@ -1966,10 +2001,10 @@ void raymarine_autopilot_pi::SendGotoStandby()
         wxString sentence = "$" + STALKSendName + ",86,21,02,FD";
         SendNMEASentence(sentence);
     }
-    if (AutoPilotType == EVO)
+    else
     {
         tN2kMsg N2kMsg;
-        SetN2kPGN126208(N2kMsg, STANDBY, 255);
+        SetN2kPGN126208(N2kMsg, STANDBY, 204);
         SendN2kMessage(N2kMsg);
     }
     MyLastSend = STANDBY;    
@@ -1982,10 +2017,10 @@ void raymarine_autopilot_pi::SendGotoAutoWind()
         wxString sentence = "$" + STALKSendName + ",86,21,23,DC";
         SendNMEASentence(sentence);
     }
-    if (AutoPilotType == EVO)
+    else
     {
         tN2kMsg N2kMsg;
-        SetN2kPGN126208(N2kMsg, AUTOWIND, 255);
+        SetN2kPGN126208(N2kMsg, AUTOWIND, 204);
         SendN2kMessage(N2kMsg);
     }
     MyLastSend = AUTOWIND;    
@@ -1998,10 +2033,10 @@ void raymarine_autopilot_pi::SendGotoAutoTrack()
         wxString sentence = "$" + STALKSendName + ",86,21,03,FC";
         SendNMEASentence(sentence);
     }
-    if (AutoPilotType == EVO)
+    else
     {
         tN2kMsg N2kMsg;
-        SetN2kPGN126208(N2kMsg, AUTOTRACK, 255);
+        SetN2kPGN126208(N2kMsg, AUTOTRACK, 204);
         SendN2kMessage(N2kMsg);
     }
     MyLastSend = AUTOTRACK;
@@ -2014,9 +2049,10 @@ void raymarine_autopilot_pi::SendIncrementOne()
         wxString sentence = "$" + STALKSendName + ",86,21,07,F8";
         SendNMEASentence(sentence);
     }
-    if (AutoPilotType == EVO)
+    else
     {
         tN2kMsg N2kMsg;
+        N2kMsg.Destination = 204;  // Default address of EVO1 Pilot.
         if (Autopilot_Status == AUTO  && NewAutoOnStandby == false)  // NewAutoOnStandby is now send better Keystroke
         {
             if (EVOLockeHeading != N2kDoubleNA)
@@ -2029,7 +2065,7 @@ void raymarine_autopilot_pi::SendIncrementOne()
                return;
         }
         else
-            SetRaymarineKeyCommandPGN126720(N2kMsg, 255, 0x07F8);
+            SetRaymarineKeyCommandPGN126720(N2kMsg, 204, 0x07F8);
         SendN2kMessage(N2kMsg);
     }
     MyLastSend = IncrementOne;
@@ -2042,9 +2078,10 @@ void raymarine_autopilot_pi::SendIncrementTen()
         wxString sentence = "$" + STALKSendName + ",86,21,08,F7";
         SendNMEASentence(sentence);
     }
-    if (AutoPilotType == EVO)
+    else
     {
         tN2kMsg N2kMsg;
+        N2kMsg.Destination = 204;  // Default address of EVO1 Pilot.
         if (Autopilot_Status == AUTO && NewAutoOnStandby == false) // NewAutoOnStandby is now send better Keystroke
         {
             if (EVOLockeHeading != N2kDoubleNA)
@@ -2057,7 +2094,7 @@ void raymarine_autopilot_pi::SendIncrementTen()
                 return;
         }
         else
-            SetRaymarineKeyCommandPGN126720(N2kMsg, 255, 0x08F7);
+            SetRaymarineKeyCommandPGN126720(N2kMsg, 204, 0x08F7);
         SendN2kMessage(N2kMsg);
     }
     MyLastSend = IncrementTen;
@@ -2070,9 +2107,10 @@ void raymarine_autopilot_pi::SendDecrementOne()
         wxString sentence = "$" + STALKSendName + ",86,21,05,FA";
         SendNMEASentence(sentence);
     }
-    if (AutoPilotType == EVO)
+    else
     {
         tN2kMsg N2kMsg;
+        N2kMsg.Destination = 204;  // Default address of EVO1 Pilot.
         if (Autopilot_Status == AUTO && NewAutoOnStandby == false) // NewAutoOnStandby is now send better Keystroke
         {
             if (EVOLockeHeading != N2kDoubleNA)
@@ -2085,7 +2123,7 @@ void raymarine_autopilot_pi::SendDecrementOne()
                 return;
         }
         else
-            SetRaymarineKeyCommandPGN126720(N2kMsg, 255, 0x05FA);
+            SetRaymarineKeyCommandPGN126720(N2kMsg, 204, 0x05FA);
         SendN2kMessage(N2kMsg);
     }
     MyLastSend = DecrementOne;
@@ -2098,9 +2136,10 @@ void raymarine_autopilot_pi::SendDecrementTen()
         wxString sentence = "$" + STALKSendName + ",86,21,06,F9";
         SendNMEASentence(sentence);
     }
-    if (AutoPilotType == EVO)
+    else
     {
         tN2kMsg N2kMsg;
+        N2kMsg.Destination = 204;  // Default address of EVO1 Pilot.
         if (Autopilot_Status == AUTO && NewAutoOnStandby == false) // NewAutoOnStandby is now send better Keystroke
         {
             if (EVOLockeHeading != N2kDoubleNA)
@@ -2113,7 +2152,7 @@ void raymarine_autopilot_pi::SendDecrementTen()
                 return;
         }
         else
-            SetRaymarineKeyCommandPGN126720(N2kMsg, 255, 0x06F9);
+            SetRaymarineKeyCommandPGN126720(N2kMsg, 204, 0x06F9);
         SendN2kMessage(N2kMsg);
     }
     MyLastSend = DecrementTen;
@@ -2442,7 +2481,7 @@ void AutoCogTimer::Notify()
     {
         if (pAutopilot->LastChange == -1)
         {
-            // Nicht gleich wieder zurÃ¼cktoggeln.
+            // Nicht gleich wieder zurücktoggeln.
             pAutopilot->LastChange = 0;
             return;
         }
@@ -2461,7 +2500,7 @@ void AutoCogTimer::Notify()
     {
         if (pAutopilot->LastChange == 1)
         {
-            // Nicht gleich wieder zurÃ¼cktoggeln.
+            // Nicht gleich wieder zurücktoggeln.
             pAutopilot->LastChange = 0;
             return;
         }
@@ -2521,6 +2560,27 @@ void localTimer::Notify()
 //
 // N2k
 //
+
+void raymarine_autopilot_pi::CheckSeasartSentence(wxString sentence)
+{
+    tN2kMsg N2kMsg;
+    uint32_t timestamp = 42; // not used only a dummy
+    SeasmartToN2k((const char*)sentence.mb_str(wxConvUTF8), timestamp, N2kMsg);
+    switch (N2kMsg.PGN)
+    {
+    case 65360 : HandleN2kMsg_65360(N2kMsg);  break; // Pilot heading
+    case 126208: HandleN2kMsg_126208(N2kMsg); break; // Set Set pilot heading or set auto/standby
+    case 126720: HandleN2kMsg_126720(N2kMsg); break; // From EV1 indicating auto or standby state  ... and more !!!
+    case 65379 : HandleN2kMsg_65379(N2kMsg);  break; // Pilot State
+    case 65288 : HandleN2kMsg_65288(N2kMsg);  break; // Pilot Alarm
+    case 65359 : HandleN2kMsg_65359(N2kMsg);  break; // Vessel heading, proprietary
+    case 127250: HandleN2kMsg_127250(N2kMsg); break; // Vessel heading, standerd NMEA2000 
+    case 129026: HandleN2kMsg_129026(N2kMsg); break; // COG SOG for AutoCOG 
+    case 126992: HandleN2kMsg_126992(N2kMsg); break; // SystemTime
+    case 129029: HandleN2kMsg_129029(N2kMsg); break; // Position
+    default : if (WriteMessages) wxLogMessage("Unkown $PCDIN PGN %lu", N2kMsg.PGN);
+    }
+}
 
 void SetN2kPGN126208(tN2kMsg& N2kMsg, uint8_t mode, uint8_t PilotSourceAddress) {
     N2kMsg.SetPGN(126208UL);
@@ -2792,14 +2852,33 @@ bool ParseN2kPGN65288(const tN2kMsg& N2kMsg, unsigned char& AlarmStatus, unsigne
 // Send N2k Message
 void raymarine_autopilot_pi::SendN2kMessage(tN2kMsg N2kMsg)
 {
-    std::shared_ptr<std::vector<uint8_t>> payload(new std::vector<uint8_t>((uint8_t)N2kMsg.DataLen));
-    for (int i = 0; i < N2kMsg.DataLen; i++)
-        payload->at(i) = *(N2kMsg.Data + i);    
-    N2kContainer *pH = pHandleN2k;
-    while (pH != NULL)
+    if (AutoPilotType == EVO)
     {
-        WriteCommDriverN2K(pH->HandleN2k, N2kMsg.PGN, N2kMsg.Destination, N2kMsg.Priority, payload);
-        pH = pH->pNext;
+        std::shared_ptr<std::vector<uint8_t>> payload(new std::vector<uint8_t>((uint8_t)N2kMsg.DataLen));
+        for (int i = 0; i < N2kMsg.DataLen; i++)
+            payload->at(i) = *(N2kMsg.Data + i);
+        N2kContainer* pH = pHandleN2k;
+        while (pH != NULL)
+        {
+            WriteCommDriverN2K(pH->HandleN2k, N2kMsg.PGN, N2kMsg.Destination, N2kMsg.Priority, payload);
+            pH = pH->pNext;
+        }
+    }
+    else
+    {
+        // Use Seasmart
+        char buffer[MAX_NMEA0183_MSG_LEN];        
+        size_t mgslen = N2kToSeasmart(N2kMsg, N2kMsg.MsgTime, buffer, sizeof(buffer));
+        if (mgslen)
+        {            
+            wxString sentence(buffer);
+            sentence = sentence.Append(wxT("\r\n"));
+            PushNMEABuffer(sentence);
+        }
+        else
+        {
+            if (WriteMessages) wxLogMessage("Not enought space for sending $PCDIN Sentence");
+        }            
     }
 }
 
@@ -2817,28 +2896,38 @@ void raymarine_autopilot_pi::SendBoatVariationToN2k()
 
 void raymarine_autopilot_pi::HandleN2K_129026(ObservedEvt ev) // COG SOG for AutoCOG
 {
-    NMEA2000Id id_129026(129026);
+    NMEA2000Id id_129026(129026);    
+    std::vector<uint8_t> msg = GetN2000Payload(id_129026, ev);
+    tN2kMsg N2kMsg = MakeN2kMsg(msg);
+    HandleN2kMsg_129026(N2kMsg);
+}
+
+void raymarine_autopilot_pi::HandleN2kMsg_129026(tN2kMsg N2kMsg)
+{
     unsigned char SID;
     tN2kHeadingReference ref;
     double SpeedOverGroundKnots;
     double TrackMadeGoodDegreesTrue;
-    std::vector<uint8_t> msg = GetN2000Payload(id_129026, ev);
 
-    if (ParseN2kPGN129026(msg, SID, ref, TrackMadeGoodDegreesTrue, SpeedOverGroundKnots)) {
+    if (ParseN2kPGN129026(N2kMsg, SID, ref, TrackMadeGoodDegreesTrue, SpeedOverGroundKnots)) {
         MakeCOGSOG((SpeedOverGroundKnots * 1.9438444924406) , (int)(TrackMadeGoodDegreesTrue * 180.0 / M_PI) );
     }
 }
 
 void raymarine_autopilot_pi::HandleN2K_126992(ObservedEvt ev) // System Time
 {
-    unsigned char SID;
     NMEA2000Id id_126992(126992);
+    std::vector<uint8_t> msg = GetN2000Payload(id_126992, ev);
+    tN2kMsg N2kMsg = MakeN2kMsg(msg);
+    HandleN2kMsg_126992(N2kMsg);
+
+}
+void raymarine_autopilot_pi::HandleN2kMsg_126992(tN2kMsg N2kMsg)
+{
+    unsigned char SID;
     uint16_t SystemDate;
     double SystemTime;
     tN2kTimeSource TimeSource;
-
-    std::vector<uint8_t> msg = GetN2000Payload(id_126992, ev);
-    tN2kMsg  N2kMsg = MakeN2kMsg(msg);
 
     if (ParseN2kPGN126992(N2kMsg, SID, SystemDate, SystemTime,TimeSource)) {
         DaysSince1970 = SystemDate;
@@ -2847,8 +2936,15 @@ void raymarine_autopilot_pi::HandleN2K_126992(ObservedEvt ev) // System Time
 
 void raymarine_autopilot_pi::HandleN2K_129029(ObservedEvt ev) // Position Data ... only need Dayssince1970
 {
+    NMEA2000Id id_126992(126992);    
+    std::vector<uint8_t> msg = GetN2000Payload(id_126992, ev);
+    tN2kMsg N2kMsg = MakeN2kMsg(msg);
+    HandleN2kMsg_129029(N2kMsg);
+}
+
+void raymarine_autopilot_pi::HandleN2kMsg_129029(tN2kMsg N2kMsg)
+{
     unsigned char SID;
-    NMEA2000Id id_126992(126992);
     uint16_t SystemDate;
     double SecondsSinceMidnight;
     double Latitude;
@@ -2863,9 +2959,8 @@ void raymarine_autopilot_pi::HandleN2K_129029(ObservedEvt ev) // Position Data .
     tN2kGNSStype ReferenceStationType;
     uint16_t ReferenceSationID;
     double AgeOfCorrection;
-    std::vector<uint8_t> msg = GetN2000Payload(id_126992, ev);
 
-    if (ParseN2kPGN129029(msg, SID, SystemDate, SecondsSinceMidnight, Latitude, Longitude, Altitude, GNSStype, GNSSmethod,
+    if (ParseN2kPGN129029(N2kMsg, SID, SystemDate, SecondsSinceMidnight, Latitude, Longitude, Altitude, GNSStype, GNSSmethod,
         nSatellites, HDOP, PDOP, GeoidalSeparation, nReferenceStations, ReferenceStationType, ReferenceSationID, AgeOfCorrection)) {
         DaysSince1970 = SystemDate;
     }
@@ -2873,13 +2968,17 @@ void raymarine_autopilot_pi::HandleN2K_129029(ObservedEvt ev) // Position Data .
 
 void raymarine_autopilot_pi::HandleN2K_65360(ObservedEvt ev) // Pilot heading
 {
-    if (AutoPilotType != EVO) return;
+    if (AutoPilotType == SMARTPILOT) return;
 
     NMEA2000Id id_65360(65360);
-    double HeadingTrue, HeadingMagnetic;
     std::vector<uint8_t> msg = GetN2000Payload(id_65360, ev);
     tN2kMsg N2kMsg = MakeN2kMsg(msg);
+    HandleN2kMsg_65360(N2kMsg);
+}
 
+void raymarine_autopilot_pi::HandleN2kMsg_65360(tN2kMsg N2kMsg)
+{
+    double HeadingTrue, HeadingMagnetic;
     if (ParseN2kPGN65360(N2kMsg, HeadingTrue, HeadingMagnetic))
     {
         EVOLockeHeading = (int)RadToDeg(HeadingMagnetic);
@@ -2894,15 +2993,20 @@ void raymarine_autopilot_pi::HandleN2K_65360(ObservedEvt ev) // Pilot heading
 
 void raymarine_autopilot_pi::HandleN2K_126208(ObservedEvt ev) // Received Set pilot heading or set auto/standby received keystroke, keystroke could also be 126720 with Command "86"
 {
-    if (AutoPilotType != EVO) return;
+    if (AutoPilotType == SMARTPILOT) return;
 
-    NMEA2000Id id_126208(126208);
+    NMEA2000Id id_126208(126208);    
+    std::vector<uint8_t> msg = GetN2000Payload(id_126208, ev);
+    tN2kMsg N2kMsg = MakeN2kMsg(msg);
+    HandleN2kMsg_126208(N2kMsg);
+}
+
+void raymarine_autopilot_pi::HandleN2kMsg_126208(tN2kMsg N2kMsg)
+{
     uint8_t CommandMode;
     double Value;
     double NewLockedHeading;
     int Headingdiff;
-    std::vector<uint8_t> msg = GetN2000Payload(id_126208, ev);
-    tN2kMsg N2kMsg = MakeN2kMsg(msg);
 
     if (ParseN2kPGN126208(N2kMsg, CommandMode, Value))
     {
@@ -2962,13 +3066,18 @@ void raymarine_autopilot_pi::HandleN2K_126208(ObservedEvt ev) // Received Set pi
 
 void raymarine_autopilot_pi::HandleN2K_126720(ObservedEvt ev) // From EV1 indicating auto or standby state only when not 65379 this PGN has same Syntax as from SmartPilot Seatalk1
 {
-    if (AutoPilotType != EVO) return;
+    if (AutoPilotType == SMARTPILOT) return;
 
-    uint8_t Mode, Submode;
-    uint16_t commandValues;
     NMEA2000Id id_126720(126720);
     std::vector<uint8_t> msg = GetN2000Payload(id_126720, ev);
     tN2kMsg N2kMsg = MakeN2kMsg(msg);
+    HandleN2kMsg_126720(N2kMsg);
+}
+
+void raymarine_autopilot_pi::HandleN2kMsg_126720(tN2kMsg N2kMsg)
+{
+    uint8_t Mode, Submode;
+    uint16_t commandValues;
 
     if (ParseN2kPGN126720(N2kMsg, Mode, Submode, commandValues)) 
     {
@@ -3073,12 +3182,17 @@ void raymarine_autopilot_pi::HandleN2K_126720(ObservedEvt ev) // From EV1 indica
 
 void raymarine_autopilot_pi::HandleN2K_65379(ObservedEvt ev)  // Autopilot State
 {
-    if (AutoPilotType != EVO) return;
+    if (AutoPilotType == SMARTPILOT) return;
 
-    unsigned char Mode, Submode;
     NMEA2000Id id_65379(65379);
     std::vector<uint8_t> msg = GetN2000Payload(id_65379, ev);
-    tN2kMsg N2kMsg = MakeN2kMsg(msg);    
+    tN2kMsg N2kMsg = MakeN2kMsg(msg);
+    HandleN2kMsg_65379(N2kMsg);
+}
+
+void raymarine_autopilot_pi::HandleN2kMsg_65379(tN2kMsg N2kMsg)
+{
+    unsigned char Mode, Submode;
 
     if (ParseN2kPGN65379(N2kMsg, Mode, Submode))
     {
@@ -3114,12 +3228,17 @@ void raymarine_autopilot_pi::HandleN2K_65379(ObservedEvt ev)  // Autopilot State
 
 void raymarine_autopilot_pi::HandleN2K_65288(ObservedEvt ev) // Pilot Alarm
 {
-    if (AutoPilotType != EVO) return;
+    if (AutoPilotType == SMARTPILOT) return;
 
-    unsigned char AlarmStatus, AlarmCode, AlarmGroup;
     NMEA2000Id id_65288(65288);
     std::vector<uint8_t> msg = GetN2000Payload(id_65288, ev);
     tN2kMsg N2kMsg = MakeN2kMsg(msg);
+    HandleN2kMsg_65288(N2kMsg);
+}
+
+void raymarine_autopilot_pi::HandleN2kMsg_65288(tN2kMsg N2kMsg)
+{
+    unsigned char AlarmStatus, AlarmCode, AlarmGroup;
 
     if (ParseN2kPGN65288(N2kMsg, AlarmStatus, AlarmCode, AlarmGroup))
     {
@@ -3145,12 +3264,17 @@ void raymarine_autopilot_pi::HandleN2K_65288(ObservedEvt ev) // Pilot Alarm
 
 void raymarine_autopilot_pi::HandleN2K_65359(ObservedEvt ev) // Vessel heading, SeatalkNG 
 {
-    if (AutoPilotType != EVO) return;
+    if (AutoPilotType == SMARTPILOT) return;
 
     NMEA2000Id id_65359(65359);
-    double HeadingTrue, HeadingMagnetic;
     std::vector<uint8_t> msg = GetN2000Payload(id_65359, ev);
     tN2kMsg N2kMsg = MakeN2kMsg(msg);
+    HandleN2kMsg_65359(N2kMsg);
+}
+
+void raymarine_autopilot_pi::HandleN2kMsg_65359(tN2kMsg N2kMsg)
+{
+    double HeadingTrue, HeadingMagnetic;
 
     if (ParseN2kPGN65360(N2kMsg, HeadingTrue, HeadingMagnetic))
     {
@@ -3175,16 +3299,22 @@ void raymarine_autopilot_pi::HandleN2K_65359(ObservedEvt ev) // Vessel heading, 
 
 void raymarine_autopilot_pi::HandleN2K_127250(ObservedEvt ev) // Vessel heading, standard NMEA2000
 {
-    if (AutoPilotType != EVO || GetHeadingFromSeatalkNG == true) return;
+    if (AutoPilotType == SMARTPILOT) return;
 
-    NMEA2000Id id_127250(127250);
+    NMEA2000Id id_127250(127250);    
+    std::vector<uint8_t> msg = GetN2000Payload(id_127250, ev);
+    tN2kMsg N2kMsg = MakeN2kMsg(msg);
+}
+
+void raymarine_autopilot_pi::HandleN2kMsg_127250(tN2kMsg N2kMsg)
+{
+    if (GetHeadingFromSeatalkNG == true) return;
+
     unsigned char SID;
     double Heading, Deviation, Variation;
     tN2kHeadingReference ref;
-    std::vector<uint8_t> msg = GetN2000Payload(id_127250, ev);
 
-
-    if (ParseN2kPGN127250(msg, SID, Heading, Deviation, Variation, ref))
+    if (ParseN2kPGN127250(N2kMsg, SID, Heading, Deviation, Variation, ref))
     {
         if (Heading != N2kDoubleNA)
         {

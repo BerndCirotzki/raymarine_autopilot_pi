@@ -7,7 +7,10 @@ this Version 2.x works only since OpenCPN Version 5.8.x and up. (NMEA2000 is nee
 
 The Type of Autopilot can be selected in the preferences.
 
-The Raymarine EVO Pilot must be connected over NMEA2000 (SeatlakNG) to OpenCPN.
+The Raymarine EVO Pilot must be connected over NMEA2000 (SeatalkNG) to OpenCPN or, new in this Version 2.2.x.x
+it could also be connected over NMEA0183 using the Seasmart protocol. ($PCDIN......)
+(When using Seasmart over NMEA0183 Serial, there is also the problem with the mirroring of the NMEA $PCDIN Sentence on the Serial Port. see below)
+
 when a new NMEA2000 Connection is activated in the Option Connections, OpenCPN must be restated once.
 - The Track function can be activated, but OpenCPN is not sending out NMEA2000 messages when a route is activ. So I think it will not work at the moment.
 

@@ -38,6 +38,7 @@
 
 #include "ocpn_plugin.h" //Required for OCPN plugin functions
 #include "autopilotgui_impl.h"
+#include "Seasmart.h"
 
 #include "wx/jsonreader.h"
 #include "wx/jsonwriter.h"
@@ -63,6 +64,8 @@
 #define Nothing     0
 #define SMARTPILOT  0
 #define EVO         1
+#define EVOSEASMART 2
+#define MAX_NMEA0183_MSG_LEN 81  // According to NMEA 3.01
 
 class Dlg;
 class localTimer;
@@ -119,7 +122,8 @@ public:
       void SetCalculatorDialogX         (int x){ m_route_dialog_x = x;};
       void SetCalculatorDialogY         (int x){ m_route_dialog_y = x;};
       void SetCalculatorDialogWidth     (int x){ m_route_dialog_width = x;};
-      void SetCalculatorDialogHeight    (int x){ m_route_dialog_height = x;};      
+      void SetCalculatorDialogHeight    (int x){ m_route_dialog_height = x;};
+      void SetAutopilotparametersChangeable();
 	  void OnautopilotDialogClose();
 	  void AddVariationToRMCanSendOut(wxString &sentence_incomming);
       void ActivateAutoCOG();
@@ -154,6 +158,7 @@ public:
 	  bool			   ModyfyRMC;
       int			   LastCompassCourse;
 	  bool             NewStandbyNoStandbyReceived;
+      bool             m_bShowautopilot;
 	  wxString	       STALKSendName;
 	  wxString		   STALKReceiveName;
 	  bool			   StandbySelfPressed;
@@ -195,6 +200,9 @@ public:
       bool             Received_AUTO_126208;
       bool             Received_LockedHeading_inStandby;
       int              AutoCOGHeadingChange;
+      // Dialog Style
+      int              m_route_dialog_x, m_route_dialog_y;
+      long             DialogStyle;
 
 private:
       
@@ -204,15 +212,14 @@ private:
 	  wxString GetAutopilotCompassCourse(wxString &sentence);
 	  wxString GetAutopilotMAGCourse(wxString &sentence);
 	  wxString GetAutopilotCompassDifferenz(wxString &sentence);
-	  char GetHexValue(char AsChar);
-	  void SetAutopilotparametersChangeable();
+	  char GetHexValue(char AsChar);	  
       void ActualisateCOGSOG(wxString &sentence);
       void WriteCOGStatus();
       void MakeCOGSOG(double SpeedOverGroundKnots, int TrackMadeGoodDegreesTrue);
       void SendBoatVariationToN2k();
       void SendN2kMessage(tN2kMsg N2kMsg);
       void ToUpdateAutoPilotControlDisplay(wxString sentence = "EVO");
-      
+      void CheckSeasartSentence(wxString sentence);
 	  raymarine_autopilot_pi *plugin;
 
       // Thanks for that from AutoTrackRaymarine Plugin !
@@ -238,18 +245,28 @@ private:
       std::shared_ptr<ObservableListener> listener_126992; // SystemTime
       std::shared_ptr<ObservableListener> listener_129029; // Position
 
+      void HandleN2kMsg_65360(tN2kMsg N2kMsg); // Pilot heading
+      void HandleN2kMsg_126208(tN2kMsg N2kMsg); // Set Set pilot heading or set auto/standby
+      void HandleN2kMsg_126720(tN2kMsg N2kMsg); // From EV1 indicating auto or standby state  ... and more !!!
+      void HandleN2kMsg_65379(tN2kMsg N2kMsg); // Pilot State
+      void HandleN2kMsg_65288(tN2kMsg N2kMsg); // Pilot Alarm
+      void HandleN2kMsg_65359(tN2kMsg N2kMsg); // Vessel heading, proprietary
+      void HandleN2kMsg_127250(tN2kMsg N2kMsg); // Vessel heading, standerd NMEA2000 
+      void HandleN2kMsg_129026(tN2kMsg N2kMsg); // COG SOG for AutoCOG 
+      void HandleN2kMsg_126992(tN2kMsg N2kMsg); // SystemTime
+      void HandleN2kMsg_129029(tN2kMsg N2kMsg); // Position
+
 	  wxLog				*pLogger;
 	  wxFileConfig      *m_pconfig;
       wxWindow          *m_parent_window;
       bool              LoadConfig(void);
       bool              SaveConfig(void);      
-      int               m_route_dialog_x, m_route_dialog_y,m_route_dialog_width,m_route_dialog_height;
+      int               m_route_dialog_width,m_route_dialog_height;
       int               m_display_width, m_display_height;      
       int               m_leftclick_tool_id;
       bool              m_ShowHelp,m_bCaptureCursor,m_bCaptureShip;
       double			m_ship_lon,m_ship_lat,m_cursor_lon,m_cursor_lat;
 	  bool              m_bautopilotShowIcon;
-	  bool              m_bShowautopilot;
 	  wxTimer		   *p_Resettimer;
       wxTimer          *p_AutoCogTimer;	  
       int               WMM_receive_count;
