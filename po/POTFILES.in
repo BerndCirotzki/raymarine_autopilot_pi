@@ -2,7 +2,9 @@ src/icons.cpp
 src/autopilot_pi.cpp
 src/autopilotgui.cpp
 src/autopilotgui_impl.cpp
+src/Seasmart.cpp
 include/autopilot_pi.h
 include/icons.h
 include/autopilotgui.h
 include/autopilotgui_impl.h
+include/Seasmart.h
