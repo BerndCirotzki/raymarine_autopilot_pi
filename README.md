@@ -1,4 +1,4 @@
-Plugin for OpenCPN to control a Raymarine Autopilots
+Plugin for OpenCPN to control Raymarine Autopilots
 ----------------------------------------------------
 for Raymarine Seatalk1 (S1,S2,S3 ...)
 and NEW for Raymarine EVO Autopilots  ( OpenCPN now can NMEA2000 ) 
@@ -55,5 +55,11 @@ If you don't want that, build your own OPENCPN and change the following line in 
 if (params.Type == SERIAL || driver->iface != source_iface) {
   ... change to    
 if (driver->iface != source_iface) {
+
+or edit manual the opencpn.ini config file.
+change the 23th value in the DataConnections from 0 to 1
+example :
+old : DataConnections=0;0;;0;0;COM21;115200;1;1;0;;0;;0;0;1;0;1;test;1;;0;0;
+new : DataConnections=0;0;;0;0;COM21;115200;1;1;0;;0;;0;0;1;0;1;test;1;;0;1;
 	
 
