@@ -58,8 +58,10 @@ if (driver->iface != source_iface) {
 
 or edit manual the opencpn.ini config file.
 change the 23th value in the DataConnections from 0 to 1
+
 example :
+
 old : DataConnections=0;0;;0;0;COM21;115200;1;1;0;;0;;0;0;1;0;1;test;1;;0;0;
+
 new : DataConnections=0;0;;0;0;COM21;115200;1;1;0;;0;;0;0;1;0;1;test;1;;0;1;
-	
 
