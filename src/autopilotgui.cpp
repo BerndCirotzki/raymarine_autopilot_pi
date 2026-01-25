@@ -354,7 +354,7 @@ m_Parameterdialog::m_Parameterdialog( wxWindow* parent, wxWindowID id, const wxS
 	m_STALKreceivename->SetMaxLength( 5 );
 	}
 	#else
-	m_STALKreceivename->SetMaxLength( 5 );
+	m_STALKreceivename->SetMaxLength( 6 ); // To support $PSMDST 
 	#endif
 	fgSizer1->Add( m_STALKreceivename, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 
@@ -369,7 +369,7 @@ m_Parameterdialog::m_Parameterdialog( wxWindow* parent, wxWindowID id, const wxS
 	m_STALKsendname->SetMaxLength( 5 );
 	}
 	#else
-	m_STALKsendname->SetMaxLength( 5 );
+	m_STALKsendname->SetMaxLength( 6 ); // To support $PSMDST
 	#endif
 	fgSizer1->Add( m_STALKsendname, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 

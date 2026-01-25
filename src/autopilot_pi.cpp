@@ -851,7 +851,7 @@ void raymarine_autopilot_pi::SetNMEASentence(wxString& sentence_incomming)
 
     if (STALKSendName != STALKReceiveName)
         MyLastSend = Nothing;
-    if (sentence.Left(9) == Lsentence_Response)
+    if (sentence.Left(STALKReceiveName.length() + 4) == Lsentence_Response)
     {
         if (WriteDebug) wxLogInfo(("Response %s"), sentence);
         // Response Ermittlung.
@@ -865,7 +865,7 @@ void raymarine_autopilot_pi::SetNMEASentence(wxString& sentence_incomming)
         if (WriteMessages) wxLogMessage(("Get Responce"));
         return;
     }
-    if (sentence.Left(9) == Lsentence_Rudder)
+    if (sentence.Left(STALKReceiveName.length() + 4) == Lsentence_Rudder)
     {
         if (WriteDebug) wxLogInfo(("Rudder %s"), sentence);
         // Rudder Ermittlung. 
@@ -879,12 +879,12 @@ void raymarine_autopilot_pi::SetNMEASentence(wxString& sentence_incomming)
         if (WriteMessages) wxLogMessage((" Get Rudder Gain"));
         return;
     }
-    if (sentence.Left(9) == Lsentence_Command)
+    if (sentence.Left(STALKReceiveName.length() + 4) == Lsentence_Command)
     {
         if (WriteDebug) wxLogInfo(("Keystroke %s"), sentence);
         // Commandos von anderem St6002 erkennen
-        if (sentence.Mid(11, 7) == "1,02,FD" ||   // Standby pressed
-            sentence.Mid(11, 7) == "1,42,BD")    // Standby pressed longer ab Version 0.4
+        if (sentence.Mid(STALKReceiveName.length() + 6, 7) == "1,02,FD" ||   // Standby pressed
+            sentence.Mid(STALKReceiveName.length() + 6, 7) == "1,42,BD")    // Standby pressed longer ab Version 0.4
         {
             if (MyLastSend != STANDBY)
             {
@@ -902,7 +902,7 @@ void raymarine_autopilot_pi::SetNMEASentence(wxString& sentence_incomming)
         }
         if (Autopilot_Status == AUTO && allowautocog)
         {
-            if (sentence.Mid(11, 7) == "1,01,FE" && MyLastSend != AUTO) // Auto
+            if (sentence.Mid(STALKReceiveName.length() + 6, 7) == "1,01,FE" && MyLastSend != AUTO) // Auto
             {
                 ActivateAutoCOG();
                 if (WriteMessages) wxLogMessage(("Received Auto pressed in Auto Mode from ST6001 %s"), sentence);
@@ -915,25 +915,25 @@ void raymarine_autopilot_pi::SetNMEASentence(wxString& sentence_incomming)
             MyLastSend = Nothing;
             return;
         }
-        if (sentence.Mid(11, 7) == "1,07,F8" && MyLastSend != IncrementOne) // +1
+        if (sentence.Mid(STALKReceiveName.length() + 6, 7) == "1,07,F8" && MyLastSend != IncrementOne) // +1
         {
             COGCourse++;
             AutoCOGHeadingChange = 0;
             if (WriteMessages) wxLogMessage(("Received +1 pressed in AutoCOG Mode from ST6001 %s"), sentence);
         }
-        if (sentence.Mid(11, 7) == "1,08,F7" && MyLastSend != IncrementTen) // +10
+        if (sentence.Mid(STALKReceiveName.length() + 6, 7) == "1,08,F7" && MyLastSend != IncrementTen) // +10
         {
             COGCourse += 10;
             AutoCOGHeadingChange = 0;
             if (WriteMessages) wxLogMessage(("Received +10 pressed in AutoCOG Mode from ST6001 %s"), sentence);
         }
-        if (sentence.Mid(11, 7) == "1,05,FA" && MyLastSend != DecrementOne) // -1
+        if (sentence.Mid(STALKReceiveName.length() + 6, 7) == "1,05,FA" && MyLastSend != DecrementOne) // -1
         {
             COGCourse--;
             AutoCOGHeadingChange = 0;
             if (WriteMessages) wxLogMessage(("Received -1 pressed in AutoCOG Mode from ST6001 %s"), sentence);
         }
-        if (sentence.Mid(11, 7) == "1,06,F9" && MyLastSend != DecrementTen) // -10
+        if (sentence.Mid(STALKReceiveName.length() + 6, 7) == "1,06,F9" && MyLastSend != DecrementTen) // -10
         {
             COGCourse -= 10;
             AutoCOGHeadingChange = 0;
@@ -944,7 +944,7 @@ void raymarine_autopilot_pi::SetNMEASentence(wxString& sentence_incomming)
         MyLastSend = Nothing;
         return;
     }
-    if (sentence.Left(9) != Lsentence) // Comes in 1 Second delay
+    if (sentence.Left(STALKReceiveName.length() + 4) != Lsentence) // Comes in 1 Second delay
         return;
     MyLastSend = Nothing;
     if (CounterStandbySentencesReceived == 0) // falls noch kein Kommando gekommen ist, bleibt der alte Status.
@@ -1494,7 +1494,7 @@ void raymarine_autopilot_pi::ToUpdateAutoPilotControlDisplay(wxString sentence)
 
 bool raymarine_autopilot_pi::ConfirmNextWaypoint(const wxString &sentence)
 {
-	if (sentence.Mid(28, 2) == "02" || AutoPilotType != SMARTPILOT) // Don't know how to do with EVO
+	if (sentence.Mid(STALKReceiveName.length() + 23, 2) == "02" || AutoPilotType != SMARTPILOT) // Don't know how to do with EVO
 	{
 		// Autopilot is in normal Mode
 		GoneTimeToSendNewWaypoint = 0;
@@ -1503,11 +1503,11 @@ bool raymarine_autopilot_pi::ConfirmNextWaypoint(const wxString &sentence)
 
 	char c,b;
 
-	if (-1 == (c = GetHexValue((char)(sentence.Mid(28, 1)).GetChar(0))))
+	if (-1 == (c = GetHexValue((char)(sentence.Mid(STALKReceiveName.length() + 23, 1)).GetChar(0))))
 	{
 		return false;
 	}
-	if (-1 == (b = GetHexValue((char)(sentence.Mid(20, 1)).GetChar(0))))
+	if (-1 == (b = GetHexValue((char)(sentence.Mid(STALKReceiveName.length() + 15, 1)).GetChar(0))))
 	{
 		return false;
 	}
@@ -1541,7 +1541,7 @@ bool raymarine_autopilot_pi::ConfirmNextWaypoint(const wxString &sentence)
 		}
 		return true;
 	}
-	if (-1 == (c = GetHexValue((char)(sentence.Mid(29, 1)).GetChar(0))))
+	if (-1 == (c = GetHexValue((char)(sentence.Mid(STALKReceiveName.length() + 24, 1)).GetChar(0))))
 	{
 		return false;
 	}

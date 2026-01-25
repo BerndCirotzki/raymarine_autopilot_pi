@@ -56,10 +56,10 @@ set(SHORT_DESCRIPTION "Control a Raymarine Autopilot")
 set(LONG_DESCRIPTION "Control Raymarine Autopilot using a NMEA0183 to ST1 Converter or NMEA2000 for EVO")
 
 set(VERSION_MAJOR "2")
-set(VERSION_MINOR "2")
-set(VERSION_PATCH "2")
+set(VERSION_MINOR "3")
+set(VERSION_PATCH "0")
 set(VERSION_TWEAK "0")
-set(VERSION_DATE  "20/01/2025")#DD/MM/YYYY format
+set(VERSION_DATE  "13/05/2025")#DD/MM/YYYY format
 set(OCPN_MIN_VERSION "ov58")
 
 set(OCPN_API_VERSION_MAJOR "1")
