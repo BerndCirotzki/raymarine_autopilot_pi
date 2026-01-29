@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: raymarine_autopilot_pi 0.3\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-11-30 15:37+0100\n"
-"PO-Revision-Date: 2023-11-30 15:48+0100\n"
+"POT-Creation-Date: 2026-01-26 16:55+0100\n"
+"PO-Revision-Date: 2026-01-26 16:59+0100\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: de_DE\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.2.2\n"
+"X-Generator: Poedit 3.4.2\n"
 
 #
 msgid "Allow use AUTO-COG function"
@@ -29,7 +29,7 @@ msgstr "Raymarine Autopilot"
 
 #
 msgid "Autopilot Control"
-msgstr ""
+msgstr "Autopilot Bedienteil"
 
 #
 msgid "Autopilot Control display zoom factor          "
@@ -79,6 +79,10 @@ msgstr ""
 "hatte, bevor das Auto Signal verloren ging"
 
 #
+msgid "Close Window"
+msgstr "Fenster schließen"
+
+#
 msgid ""
 "Counter for Autopilot is in Standby Mode, but without \"Standby\" Command "
 "received"
@@ -89,6 +93,10 @@ msgstr ""
 #
 msgid "Debug all \"$STALK\" Messages into OPENCPN Logfile"
 msgstr "Schreibe alle \"$STALK\" Nachrichten in OPENCPN Logfile"
+
+#
+msgid "Dock Window"
+msgstr "Fenster andocken"
 
 #
 msgid ""
@@ -124,9 +132,12 @@ msgid "No Value selected"
 msgstr "Kein Wert ausgewählt"
 
 #
+msgid "Preferences..."
+msgstr "Autopilot Eigenschaften"
+
 #
 #
-#, fuzzy
+#
 msgid "Raymarine Autopilot"
 msgstr "Raymarine Autopilot"
 
@@ -139,6 +150,18 @@ msgid "Raymarine EVO Autopilot (connected over N2K / SeatalkNG)"
 msgstr "Raymarine EVO Autopilot (angeschlossen an N2K / SeatalkNG)"
 
 #
+msgid "Raymarine EVO Autopilot (connected over Seasmart NMEA0183 $PCDIN)"
+msgstr "Raymarine EVO Autopilot (angeschlossen über NMEA0183 Seasmart $PCDIN)"
+
+#
+msgid ""
+"Raymarine Seatalk1 Autopilot  connected over N2K/SeatalkNG Raymarine E22158 "
+"converter"
+msgstr ""
+"Raymarine Seatalk1 Autopilot (angeschlossen über N2k/SeatalkNG Raymarine "
+"E22158 Converter)"
+
+#
 msgid ""
 "Raymarine Seatalk1 Autopilots (S1,S2,S3, ...), connected over NMEA0183/"
 "Seatalk1 translater"
@@ -148,7 +171,7 @@ msgstr ""
 
 #
 msgid "Reset"
-msgstr ""
+msgstr "Reset"
 
 #
 msgid ""
@@ -196,12 +219,6 @@ msgstr ""
 
 #
 msgid ""
-"Send variation PGN 127258 to N2K/SeatalkNG with the value from WMM Plugin"
-msgstr ""
-"Sende Missweisung PGN 127258 über N2K/SeatalkNG mit dem Wert vom WMM Plugin"
-
-#
-msgid ""
 "Send variation PNG 127258 to N2K/SeatalkNG with the value from WMM Plugin"
 msgstr ""
 "Sende Missweisung PGN 127258 über N2K/SeatalkNG mit dem Wert vom WMM Plugin"
@@ -212,12 +229,16 @@ msgstr "Empfindlichkeit "
 
 #
 msgid "Set"
-msgstr ""
+msgstr "setzen"
 
 #
 msgid "Time in seconds to wait before sending \"Track\" sentence."
 msgstr ""
 "Zeit in Sekunden, die gewartet wird, bis \"Track\" Sequenz gesendet wird."
+
+#
+msgid "Undock Window"
+msgstr "Fenster lösen"
 
 #
 msgid ""
@@ -266,6 +287,14 @@ msgstr ""
 "Der Autopilot Controller erhält +1 oder -1 Tasten Informationen um den Kurs "
 "über Grund zu halten."
 
+#
+#
+#~ msgid ""
+#~ "Send variation PGN 127258 to N2K/SeatalkNG with the value from WMM Plugin"
+#~ msgstr ""
+#~ "Sende Missweisung PGN 127258 über N2K/SeatalkNG mit dem Wert vom WMM Plugin"
+
+#
 #
 #
 #

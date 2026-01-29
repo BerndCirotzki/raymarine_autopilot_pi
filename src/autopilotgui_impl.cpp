@@ -49,7 +49,7 @@ void ParameterDialog::OnStandbyCounterReset(wxCommandEvent& event)
 
 void ParameterDialog::OnNewAuto(wxCommandEvent& event)
 {
-    if (m_AutopilotType->GetSelection() != SMARTPILOT)
+  if (m_AutopilotType->GetSelection() != SMARTPILOT && m_AutopilotType->GetSelection() != SMARTPILOTN2K)
         return;
 	if (m_SendNewAutoonStandby->GetValue() == TRUE)
 	{
@@ -125,8 +125,16 @@ void ParameterDialog::OnChoiceAutoPilot(wxCommandEvent& event)
         m_staticText21->Enable(false);
         m_Text1->Enable(false);
         m_NoStandbyCounterValueText1->Enable(false);
-        m_ModyfyRMC->SetLabel(_("Send variation PNG 127258 to N2K/SeatalkNG with the value from WMM Plugin"));
-        m_SendNewAutoonStandby->SetLabel(_("Send PGN 126720 (keystroke) instead of PGN 126208 (set heading) in AutoMode"));
+        if (m_AutopilotType->GetSelection() == EVO) {        
+            m_ModyfyRMC->SetLabel(_("Send variation PNG 127258 to N2K/SeatalkNG with the value from WMM Plugin"));
+            m_SendNewAutoonStandby->SetLabel(_("Send PGN 126720 (keystroke) instead of PGN 126208 (set heading) in AutoMode"));
+        }
+        else
+        {
+          m_ModyfyRMC->SetLabel(_("Modify RMC Sentence as \"$ECRMC\" and replace or fill with Variationfield with the value from WMM Plugin"));
+          m_SendNewAutoonStandby->SetLabel(_("Send PGN 126720 (keystroke) instead of PGN 126208 (set heading) in AutoMode"));
+
+        }
     }
     else
     {        
@@ -147,8 +155,13 @@ void ParameterDialog::OnChoiceAutoPilot(wxCommandEvent& event)
         m_staticText21->Enable(true);
         m_Text1->Enable(true);
         m_NoStandbyCounterValueText1->Enable(true);
-        m_ModyfyRMC->SetLabel(_("Modify RMC Sentence as \"$ECRMC\" and replace or fill with Variationfield with the value from WMM Plugin"));
-        m_SendNewAutoonStandby->SetLabel(_("Send new \"Auto\" or \"Auto - Wind\" Command, when \"Standby\" is not send from here, but the \"Auto\" was from here"));
+        if (m_AutopilotType->GetSelection() == SMARTPILOTN2K) {
+          m_ModyfyRMC->SetLabel(_("Send variation PNG 127258 to N2K/SeatalkNG with the value from WMM Plugin"));
+          m_SendNewAutoonStandby->SetLabel(_("Send new \"Auto\" or \"Auto - Wind\" Command, when \"Standby\" is not send from here, but the \"Auto\" was from here"));
+        } else {
+          m_ModyfyRMC->SetLabel(_("Modify RMC Sentence as \"$ECRMC\" and replace or fill with Variationfield with the value from WMM Plugin"));
+          m_SendNewAutoonStandby->SetLabel(_("Send new \"Auto\" or \"Auto - Wind\" Command, when \"Standby\" is not send from here, but the \"Auto\" was from here"));
+        }
     }
 }
 
@@ -352,7 +365,7 @@ void Dlg::OnActiveApp(wxCommandEvent& event)
 
 void Dlg::OnSetParameterValue(wxCommandEvent& event)
 {
-    if (plugin->AutoPilotType != SMARTPILOT)
+  if (plugin->AutoPilotType != SMARTPILOT && plugin->AutoPilotType != SMARTPILOTN2K)
         return;
 	int Value;
 
@@ -381,30 +394,21 @@ void Dlg::OnSetParameterValue(wxCommandEvent& event)
 
 	switch (this->ParameterChoise->GetSelection())
 	{
-	case	1:	// Response
-		Sentence = "$" + plugin->STALKSendName + ",92,02,12,0" + wxString::Format(wxT("%i"), Value) + ",00";
-		plugin->SendNMEASentence(Sentence);
-		// Anzeige auf ST6002 Display für 5 Sekunden
-		Sentence = "$" + plugin->STALKSendName + ",86,21,2E,D1";
-		plugin->SendNMEASentence(Sentence);
+	case	1:	// Response		
+		plugin->GetParameterResponse(Value);
 		break;
 	case	2:	// WindTrim
-		Sentence = "$" + plugin->STALKSendName + ",92,02,11,0" + wxString::Format(wxT("%i"), Value) + ",00";
-		plugin->SendNMEASentence(Sentence);
+          plugin->GetParameterWindTrim(Value);
 		break;
-	case	3:  // Ruddergain
-		Sentence = "$" + plugin->STALKSendName + ",92,02,01,0" + wxString::Format(wxT("%i"), Value) + ",00";
-		plugin->SendNMEASentence(Sentence);
-		// Anzeige auf ST6002 Display für 5 Sekunden
-		Sentence = "$" + plugin->STALKSendName + ",86,21,6E,91";
-		plugin->SendNMEASentence(Sentence);
+	case	3:  // Ruddergain		
+		plugin->GetParameterRudderGain(Value);
 		break;
 	}
 }
 
 void Dlg::OnSelectParameter(wxCommandEvent& event)
 {
-    if (plugin->AutoPilotType != SMARTPILOT)
+  if (plugin->AutoPilotType != SMARTPILOT && plugin->AutoPilotType != SMARTPILOTN2K)
         return;
 	wxString Sentence;
 	// Set To DefaultValue because the aktive is not konwn.
@@ -414,19 +418,13 @@ void Dlg::OnSelectParameter(wxCommandEvent& event)
 		this->ParameterValue->SetSelection(0);
 		break;
 	case	1:	// Response
-		// old : this->ParameterValue->SetSelection(plugin->ResponseLevel);
-		// Anzeige auf ST6002 Display für 5 Sekunden
-		Sentence = "$" + plugin->STALKSendName + ",86,21,2E,D1"; // (Response Display)
-		plugin->SendNMEASentence(Sentence);
+		plugin->SelectParameterResponse();
 		break;
 	case	2:	// WindTrim
 		this->ParameterValue->SetSelection(5);
 		break;
-	case	3:  // Ruddergain
-		// old : this->ParameterValue->SetSelection(2);
-		// Anzeige auf ST6002 Display für 5 Sekunden
-		Sentence = "$" + plugin->STALKSendName + ",86,21,6E,91"; // (Rudder Gain Display)
-		plugin->SendNMEASentence(Sentence);
+	case	3:  // Ruddergain		
+		plugin->SelectParameterRudderGain();
 		break;
 	}
 }

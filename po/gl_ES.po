@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: opencpn\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-10-21 12:51+0200\n"
+"POT-Creation-Date: 2026-01-26 16:55+0100\n"
 "PO-Revision-Date: 2023-11-09 21:22\n"
 "Last-Translator: \n"
 "Language-Team: Galician\n"
@@ -14,167 +14,182 @@ msgstr ""
 "X-Crowdin-Project: opencpn\n"
 "X-Crowdin-Project-ID: 49843\n"
 "X-Crowdin-Language: gl\n"
-"X-Crowdin-File: /plugins/raymarine_autopilot_pi/po/raymarine_autopilot_pi.pot\n"
+"X-Crowdin-File: /plugins/raymarine_autopilot_pi/po/raymarine_autopilot_pi."
+"pot\n"
 "X-Crowdin-File-ID: 454\n"
-
-#: include/autopilotgui.h:79 include/autopilotgui_impl.h:60
-msgid "Autopilot Control"
+#
+msgid "Allow use AUTO-COG function"
 msgstr ""
-
-#: include/autopilotgui.h:132
+#
 msgid "Autopilot"
 msgstr ""
-
-#: src/autopilot_pi.cpp:130
-msgid "Raymarine Autopilot"
+#
+msgid "Autopilot Control"
 msgstr ""
-
-#: src/autopilot_pi.cpp:248
-msgid "Raymarine autopilot"
-msgstr ""
-
-#: src/autopilot_pi.cpp:254
-msgid "Raymarine autopilot Control for Raymarine Smartpilot"
-msgstr ""
-
-#: src/autopilot_pi.cpp:259
-msgid "Autopilot Control for Raymarine Smartpilot\r\n"
-"Simulates a Remote Control (Commandos from ST600x), by sending Seatalk(1) Data.\r\n"
-"Requires Seatalk <-> NMEA Converter. The Sentences must be in the format\r\n"
-"$SENTENCENAME,Seatalkbytes in Hex. ( $STALK,84,36,9D,88,40,00,FF,02,06*02 )\r\n"
-"send to the NMEA Output Port. $SENTENCENAME named in the Preferences."
-msgstr ""
-
-#: src/autopilot_pi.cpp:401
-msgid "Autopilot Preferences"
-msgstr ""
-
-#: src/autopilotgui.cpp:70
-msgid "Set"
-msgstr ""
-
-#: src/autopilotgui.cpp:198
-msgid "Autopilot Parameters changeable"
-msgstr ""
-
-#: src/autopilotgui.cpp:210
+#
 msgid "Autopilot Control display zoom factor          "
 msgstr ""
-
-#: src/autopilotgui.cpp:222
-msgid "Send new \"Auto-Wind\" Command when \"Wind Shift\""
+#
+msgid ""
+"Autopilot Control for Raymarine Smartpilot and Raymarine EVO\r\n"
+"Simulates a Remote Control (Commandos from ST600x), by sending Seatalk(1) or "
+"SeatalkNG\r\n"
+"Data. Requires Seatalk <-> NMEA Converter. The Sentences must be in the format"
+"\r\n"
+"$SENTENCENAME,Seatalkbytes in Hex. ( $STALK,84,36,9D,88,40,00,"
+"FF,02,06*02 )\r\n"
+"send to the NMEA Output Port. $SENTENCENAME named in the Preferences.\r\n"
+"Or Send N2k Data to Raymarine EVO over NMEA2000 Connector mounted to OpenCPN."
 msgstr ""
-
-#: src/autopilotgui.cpp:225
-msgid "Send new \"Auto\" or \"Auto-Wind\" Command, when \"Standby\" is not send from here, but the \"Auto\" was from here"
+#
+msgid "Autopilot Parameters changeable"
 msgstr ""
-
-#: src/autopilotgui.cpp:230
-msgid "Send new \"Auto\" Command, when No Standby-Information is received from other Instrument or from here"
+#
+msgid "Autopilot Preferences"
 msgstr ""
-
-#: src/autopilotgui.cpp:242
-msgid "0"
+#
+msgid "Autopilot Type  :"
 msgstr ""
-
-#: src/autopilotgui.cpp:253
-msgid "Counter for Autopilot is in Standby Mode, but without \"Standby\" Command received"
-msgstr ""
-
-#: src/autopilotgui.cpp:257
-msgid "Reset"
-msgstr ""
-
-#: src/autopilotgui.cpp:265
-msgid "1"
-msgstr ""
-
-#: src/autopilotgui.cpp:265 src/autopilotgui.cpp:303
-msgid "10"
-msgstr ""
-
-#: src/autopilotgui.cpp:265
-msgid "2"
-msgstr ""
-
-#: src/autopilotgui.cpp:265
-msgid "3"
-msgstr ""
-
-#: src/autopilotgui.cpp:265
-msgid "4"
-msgstr ""
-
-#: src/autopilotgui.cpp:265
-msgid "5"
-msgstr ""
-
-#: src/autopilotgui.cpp:265
-msgid "6"
-msgstr ""
-
-#: src/autopilotgui.cpp:265
-msgid "7"
-msgstr ""
-
-#: src/autopilotgui.cpp:265
-msgid "8"
-msgstr ""
-
-#: src/autopilotgui.cpp:265
-msgid "9"
-msgstr ""
-
-#: src/autopilotgui.cpp:271
-msgid "Value, for maximum  \"Not recived Standby Commands\" not sending \"Auto\" Command again"
-msgstr ""
-
-#: src/autopilotgui.cpp:285
-msgid "Change course value back to the last Compass course value, the Course Computer\n"
+#
+msgid ""
+"Change course value back to the last Compass course value, the Course "
+"Computer\n"
 "had, before the Auto Signal lost"
 msgstr ""
-
-#: src/autopilotgui.cpp:292
-msgid "Send \"Track\" automatic when Autopilot has new Waypoint. Be careful with this normaly you have to accept yourself."
+#
+msgid "Close Window"
 msgstr ""
-
-#: src/autopilotgui.cpp:314
-msgid "Time in seconds to wait before sending \"Track\" sentence."
+#
+msgid ""
+"Counter for Autopilot is in Standby Mode, but without \"Standby\" Command "
+"received"
 msgstr ""
-
-#: src/autopilotgui.cpp:326 src/autopilotgui.cpp:341
-msgid "STALK"
-msgstr ""
-
-#: src/autopilotgui.cpp:337
-msgid "NMEA Sentencename from  Seatalk bus converted by SeatalkLink"
-msgstr ""
-
-#: src/autopilotgui.cpp:352
-msgid "NMEA Sentencename to Seatalk bus converted by SeatalkLink"
-msgstr ""
-
-#: src/autopilotgui.cpp:359
-msgid "Write Message Info to OPENCPN Logfile"
-msgstr ""
-
-#: src/autopilotgui.cpp:362
+#
 msgid "Debug all \"$STALK\" Messages into OPENCPN Logfile"
 msgstr ""
-
-#: src/autopilotgui.cpp:365
-msgid "Modify RMC Sentence as \"$ECRMC\" and replace or fill with Variationfield with the value from WMM Plugin"
+#
+msgid "Dock Window"
 msgstr ""
-
-#: src/autopilotgui_impl.cpp:264
-msgid "No Value selected"
+#
+msgid ""
+"For use EVO Pilot, define NMEA2000/SeatalkNG connection and restart OpenCPN"
 msgstr ""
-
-#: src/autopilotgui_impl.cpp:269
+#
+msgid ""
+"Modify RMC Sentence as \"$ECRMC\" and replace or fill with Variationfield "
+"with the value from WMM Plugin"
+msgstr ""
+#
+msgid "NMEA Sentencename from  Seatalk bus converted by SeatalkLink"
+msgstr ""
+#
+msgid "NMEA Sentencename to Seatalk bus converted by SeatalkLink"
+msgstr ""
+#
 msgid "No Parameter selected"
 msgstr ""
-
-#: src/autopilotgui_impl.cpp:272
+#
+msgid "No Value selected"
+msgstr ""
+#
+msgid "Preferences..."
+msgstr ""
+#
+msgid "Raymarine Autopilot"
+msgstr ""
+#
+msgid "Raymarine Autopilot Control for Raymarine Smartpilot and EVO Pilots"
+msgstr ""
+#
+msgid "Raymarine EVO Autopilot (connected over N2K / SeatalkNG)"
+msgstr ""
+#
+msgid "Raymarine EVO Autopilot (connected over Seasmart NMEA0183 $PCDIN)"
+msgstr ""
+#
+msgid ""
+"Raymarine Seatalk1 Autopilot  connected over N2K/SeatalkNG Raymarine E22158 "
+"converter"
+msgstr ""
+#
+msgid ""
+"Raymarine Seatalk1 Autopilots (S1,S2,S3, ...), connected over NMEA0183/"
+"Seatalk1 translater"
+msgstr ""
+#
+msgid "Reset"
+msgstr ""
+#
+msgid ""
+"Send \"Track\" automatic when Autopilot has new Waypoint. Be careful with "
+"this normaly you have to accept yourself."
+msgstr ""
+#
+msgid ""
+"Send PGN 126720 (keystroke) instead of PGN 126208 (set heading) in AutoMode"
+msgstr ""
+#
+msgid ""
+"Send new \"Auto\" Command, when No Standby-Information is received from other "
+"Instrument or from here"
+msgstr ""
+#
+msgid ""
+"Send new \"Auto\" or \"Auto - Wind\" Command, when \"Standby\" is not send "
+"from here, but the \"Auto\" was from here"
+msgstr ""
+#
+msgid ""
+"Send new \"Auto\" or \"Auto-Wind\" Command, when \"Standby\" is not send from "
+"here, but the \"Auto\" was from here"
+msgstr ""
+#
+msgid "Send new \"Auto-Wind\" Command when \"Wind Shift\""
+msgstr ""
+#
+msgid ""
+"Send variation PNG 127258 to N2K/SeatalkNG with the value from WMM Plugin"
+msgstr ""
+#
+msgid "Sensibility "
+msgstr ""
+#
+msgid "Set"
+msgstr ""
+#
+msgid "Time in seconds to wait before sending \"Track\" sentence."
+msgstr ""
+#
+msgid "Undock Window"
+msgstr ""
+#
+msgid ""
+"Value, for maximum  \"Not recived Standby Commands\" not sending \"Auto\" "
+"Command again"
+msgstr ""
+#
+msgid "Write Message Info to OPENCPN Logfile"
+msgstr ""
+#
+msgid "fast"
+msgstr ""
+#
 msgid "is set to  "
 msgstr ""
-
+#
+msgid "maximum change of the \"is set pilot heading\" from last set in degrees"
+msgstr ""
+#
+msgid "maximum difference between COG and magnetic heading in degrees"
+msgstr ""
+#
+msgid "minimun speed in nodes (SOG) for using AUTO-COG function"
+msgstr ""
+#
+msgid "slow"
+msgstr ""
+#
+msgid ""
+"the autopilot controller will get new +1 or -1 keystroke information to hold "
+"the Course Over Ground."
+msgstr ""

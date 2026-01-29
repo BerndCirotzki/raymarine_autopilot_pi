@@ -62,9 +62,10 @@
 #define DecrementOne 10
 #define DecrementTen 11
 #define Nothing     0
-#define SMARTPILOT  0
-#define EVO         1
-#define EVOSEASMART 2
+#define SMARTPILOT    0
+#define SMARTPILOTN2K 1
+#define EVO           2
+#define EVOSEASMART   3
 #define MAX_NMEA0183_MSG_LEN 81  // According to NMEA 3.01
 
 class Dlg;
@@ -139,7 +140,14 @@ public:
       void SendDecrementOne();
       void SendDecrementTen();
       bool EnableEVOEvents();
+      bool EnableSMARTPILOTN2KEvents();
+      void DisableSMARTPILOTN2KEvents();
       void DisableEVOEvents();
+      void GetParameterResponse(int Value);
+      void GetParameterWindTrim(int Value);
+      void GetParameterRudderGain(int Value);
+      void SelectParameterResponse();
+      void SelectParameterRudderGain();
 
       wxTimer          *p_GPSTimer;
       uint8_t          AutoPilotType;
@@ -205,7 +213,8 @@ public:
       long             DialogStyle;
 
 private:
-      
+      void SendN2kSeatal1kKeyStroke(uint8_t a, uint8_t b, uint8_t c, uint8_t d, uint8_t e = 0xff); // Smartpilot N2k
+      void ToAnalyseSentence(wxString& sentence_incomming);
 	  int GetAutopilotMode(wxString &sentence);
 	  bool ConfirmNextWaypoint(const wxString &sentence);
 	  void GetWaypointBearing(const wxString &sentence);
@@ -244,7 +253,7 @@ private:
       std::shared_ptr<ObservableListener> listener_129026; // COG SOG for AutoCOG
       std::shared_ptr<ObservableListener> listener_126992; // SystemTime
       std::shared_ptr<ObservableListener> listener_129029; // Position
-
+      
       void HandleN2kMsg_65360(tN2kMsg N2kMsg); // Pilot heading
       void HandleN2kMsg_126208(tN2kMsg N2kMsg); // Set Set pilot heading or set auto/standby
       void HandleN2kMsg_126720(tN2kMsg N2kMsg); // From EV1 indicating auto or standby state  ... and more !!!
@@ -255,6 +264,7 @@ private:
       void HandleN2kMsg_129026(tN2kMsg N2kMsg); // COG SOG for AutoCOG 
       void HandleN2kMsg_126992(tN2kMsg N2kMsg); // SystemTime
       void HandleN2kMsg_129029(tN2kMsg N2kMsg); // Position
+      void HandleN2kMsg_Smartpilot126720(tN2kMsg N2kMsg); // Smartpilot over N2K
 
 	  wxLog				*pLogger;
 	  wxFileConfig      *m_pconfig;
