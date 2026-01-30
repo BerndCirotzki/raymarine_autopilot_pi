@@ -2860,6 +2860,12 @@ bool ParseN2kPGN126720(const tN2kMsg& N2kMsg, uint8_t& Mode, uint8_t& SubMode, u
         commandValues |= *(Values + 3);
         return true;       
     }
+    if (0x91 == *Values || 0x87 == *Values) // RudderGain and Response Answer from Autopilot.
+    {
+      *(Values + 1) = N2kMsg.GetByte(Index);
+      *(Values + 2) = N2kMsg.GetByte(Index);
+      return true;
+    }
     return false;
 }
 
@@ -3450,21 +3456,35 @@ void raymarine_autopilot_pi::HandleN2kMsg_Smartpilot126720(tN2kMsg N2kMsg)
   uint8_t Mode, Submode;
   uint16_t commandValues;
   uint8_t Value[9];
-  wxString command = "$" + STALKReceiveName;
+  uint8_t Length = 0;
+  wxString command = "$" + STALKReceiveName + ",";
   if (ParseN2kPGN126720(N2kMsg, Mode, Submode, commandValues, Value)) {
-    for (uint8_t i = 0; i < 9; i++) {
+    uint8_t uV = Value[0] / 16;
+    uint8_t lV = Value[0] - (uV * 16);
+    command += wxString::Format("%x", uV);
+    command += wxString::Format("%x", lV);
+    switch (Value[0]) {
+      case 0x84: Length = 9;  break;
+      case 0x86: Length = 4; break;
+      case 0x91:
+      case 0x87: Length = 3; break;
+      default: Length = 0; // Not used Sentence
+    }
+    for (uint8_t i = 1; i < Length; i++) {
       command += ",";
       uint8_t uV = Value[i] / 16;
       uint8_t lV = Value[i] - (uV * 16);
       command += wxString::Format("%x", uV);
-      command += wxString::Format("%x", lV);
+      command += wxString::Format("%x", lV);      
     }
-    command.MakeUpper();
-    wxString Checksum = ComputeChecksum(command);
-    command = command.Append(wxT("*"));
-    command = command.Append(Checksum);
-    command = command.Append(wxT("\r\n"));
-    ToAnalyseSentence(command);
+    if (Length != 0) {
+      command.MakeUpper();
+      wxString Checksum = ComputeChecksum(command);
+      command = command.Append(wxT("*"));
+      command = command.Append(Checksum);
+      command = command.Append(wxT("\r\n"));
+      ToAnalyseSentence(command);
+    }
   }
 }
 
