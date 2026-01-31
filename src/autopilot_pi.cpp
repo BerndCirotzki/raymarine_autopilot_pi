@@ -3269,7 +3269,7 @@ void raymarine_autopilot_pi::HandleN2kMsg_126720(tN2kMsg N2kMsg)
             MyLastSend = Nothing;
             return;
         }
-        if (Received_65379 == true)
+        if (Received_65379 == true || Values[0] != 0x84)
             return;
         // Autopilot Staus Received
         Autopilot_Status_Before = Autopilot_Status;
