@@ -6,11 +6,19 @@
 #include <wx/mstream.h>
 #include "icons.h"
 
-wxBitmap *_img_autopilot;
-wxBitmap *_img_autopilot_pi;
+wxBitmap *_img_autopilot = 0;
+wxBitmap *_img_autopilot_pi = 0;
+
+#ifdef PLUGIN_USE_SVG
+#include "ocpn_plugin.h"
+wxString _svg_raymarine_autopilot;
+wxString _svg_raymarine_autopilot_rollover;
+wxString _svg_raymarine_autopilot_toggled;
+#endif
 
 void initialize_images(void)
 {
+#ifndef PLUGIN_USE_SVG
 	{
 		wxMemoryInputStream sm("\211PNG\r\n\032\n\000\000\000\rIHDR\000\000\000 \000\000\000 \002\003\000\000\000\016\024\222g\000\000\000\011PLTE\000\000\177\377\000\000\177\177\177J7\3047\000\000\000\001bKGD\000\210\005\035H\000\000\000\011pHYs\000\000\013\023\000\000\013\023\001\000\232\234\030\000\000\000\atIME\a\341\006\033\r\033*c\301\326\246\000\000\000\206IDAT\030\323m\320;\n\3030\014\006`\343)\344\030\231L\357\343\014\3313X\247\350\030\272\267PO%`c\375\247\214\037\nIJ\264\350CHHHAB\035\370\000|\205c\314\343\233*\034\310\253\222\376`\005\021_\026\370\221\352\324\261\202c\005[d\370\014\320\016\027\303d\251\302G\2514X\336+w\bS8\255H\332\364\372\371{\250\224:\014\0132`\372\006m^\303\222\362\031k\301Z\232\273\326|\363\004\211\r\2012\220\361\001\270\235\220\000\000\000\000IEND\256B`\202", 265);
 		_img_autopilot = new wxBitmap(wxImage(sm));
@@ -19,5 +27,17 @@ void initialize_images(void)
 		wxMemoryInputStream sm("\211PNG\r\n\032\n\000\000\000\rIHDR\000\000\000 \000\000\000 \002\003\000\000\000\016\024\222g\000\000\000\011PLTE\000\000\177\377\000\000\177\177\177J7\3047\000\000\000\001bKGD\000\210\005\035H\000\000\000\011pHYs\000\000\013\023\000\000\013\023\001\000\232\234\030\000\000\000\atIME\a\341\006\033\r\033*c\301\326\246\000\000\000\206IDAT\030\323m\320;\n\3030\014\006`\343)\344\030\231L\357\343\014\3313X\247\350\030\272\267PO%`c\375\247\214\037\nIJ\264\350CHHHAB\035\370\000|\205c\314\343\233*\034\310\253\222\376`\005\021_\026\370\221\352\324\261\202c\005[d\370\014\320\016\027\303d\251\302G\2514X\336+w\bS8\255H\332\364\372\371{\250\224:\014\0132`\372\006m^\303\222\362\031k\301Z\232\273\326|\363\004\211\r\2012\220\361\001\270\235\220\000\000\000\000IEND\256B`\202", 265);
 		_img_autopilot_pi = new wxBitmap(wxImage(sm));
 	}
-	return;
+#else
+        wxFileName fn;
+        fn.SetPath(GetPluginDataDir("raymarine_autopilot_pi"));
+        fn.AppendDir(_T("data"));
+        fn.SetFullName(_T("RaymarineAuto_pi.svg"));
+        _svg_raymarine_autopilot = fn.GetFullPath();
+        fn.SetFullName(_T("RaymarineAuto_rollover_pi.svg"));
+        _svg_raymarine_autopilot_rollover = fn.GetFullPath();
+        fn.SetFullName(_T("RaymarineAuto_toggled_pi.svg"));
+        _svg_raymarine_autopilot_toggled = fn.GetFullPath();      
+#endif
+     return;
 }
+

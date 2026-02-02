@@ -68,15 +68,42 @@ raymarine_autopilot_pi::raymarine_autopilot_pi(void *ppimgr) :opencpn_plugin_118
 	  StandbySelfPressed = FALSE;
 	  LastCompassCourse = -1; // Nicht g?ltig
 	  NeedCompassCorrection = false;
-	  wxLogMessage(("    Creating Raymarine Autopilot Plugin"));
+
+#ifdef PLUGIN_USE_SVG
+      wxFileName fn;
+      auto path = GetPluginDataDir("raymarine_autopilot_pi");
+      fn.SetPath(path);
+      fn.AppendDir("data");
+      fn.SetFullName("RaymarineAuto_panel.png");
+
+      path = fn.GetFullPath();
+
+      wxInitAllImageHandlers();
+
+      wxLogDebug(wxString("Using icon path: ") + path);
+      if (!wxImage::CanRead(path)) {
+         wxLogDebug("Initiating image handlers.");
+         wxInitAllImageHandlers();
+      }
+      wxImage panelIcon(path);
+      if (panelIcon.IsOk())
+        _img_autopilot_pi = new wxBitmap(panelIcon);
+      else
+         wxLogWarning("Raymarine Autopilot Panel icon has NOT been loaded");
+#endif
+      wxLogMessage(("    Creating Raymarine Autopilot Plugin"));
 }
 
 raymarine_autopilot_pi::~raymarine_autopilot_pi(void)
 {
-     delete _img_autopilot_pi;
-     _img_autopilot_pi = NULL;
-     delete _img_autopilot;
-     _img_autopilot = NULL;
+  if (_img_autopilot_pi) {
+    delete _img_autopilot_pi;
+    _img_autopilot_pi = NULL;
+  }
+  if (_img_autopilot) {
+    delete _img_autopilot;
+    _img_autopilot = NULL;
+  }
 	 wxLogMessage(("    Deleting Raymarine Autopilot Plugin"));
 }
 
@@ -141,11 +168,21 @@ int raymarine_autopilot_pi::Init(void)
 	  if (Skalefaktor < 1 || Skalefaktor > 2.1)
 		  Skalefaktor = 1;
 	  //    This PlugIn needs a toolbar icon, so request its insertion
-	  if(m_bautopilotShowIcon)
-		m_leftclick_tool_id  = InsertPlugInTool(_T(""), _img_autopilot, _img_autopilot, wxITEM_CHECK,
-            _("Raymarine Autopilot"), _T(""), NULL,
-             CALCULATOR_TOOL_POSITION, 0, this);
-
+      if (m_bautopilotShowIcon)
+#ifndef PLUGIN_USE_SVG
+            m_leftclick_tool_id =
+                InsertPlugInTool(_T(""), _img_autopilot, _img_autopilot,
+                                 wxITEM_CHECK, _("Raymarine Autopilot"), _T(""),
+                                 NULL, CALCULATOR_TOOL_POSITION, 0, this);
+#else
+      // Scaleable Vector Graphics (SVG) icons are stored in the following
+      // path.
+      {   
+        wxInitAllImageHandlers();
+        m_leftclick_tool_id = InsertPlugInToolSVG("Raymarine Autopilot", _svg_raymarine_autopilot,_svg_raymarine_autopilot_rollover,_svg_raymarine_autopilot_toggled,
+                              wxITEM_CHECK, _("Raymarine Autopilot"), wxEmptyString, NULL, CALCULATOR_TOOL_POSITION, 0, this);
+      }
+#endif
       m_pDialog = NULL;
 	  DisplayShow = 0;
 	  m_pDialog = new Dlg(m_parent_window, Skalefaktor, DialogStyle);
@@ -177,7 +214,7 @@ int raymarine_autopilot_pi::Init(void)
 			  p_Resettimer = NULL;
 		  }
 	  }
-
+      SetToolbarItemState(m_leftclick_tool_id, m_bShowautopilot);
       // initialize NavMsg listeners
       //-----------------------------
       Received_65379 = false;

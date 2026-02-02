@@ -7,9 +7,18 @@
 #	include <wx/wx.h>
 #endif
 
+#include <wx/filename.h>
+#include <wx/mstream.h>
+
 extern void initialize_images(void);
 
 extern wxBitmap *_img_autopilot;
 extern wxBitmap *_img_autopilot_pi;
+
+#ifdef PLUGIN_USE_SVG
+extern wxString _svg_raymarine_autopilot;
+extern wxString _svg_raymarine_autopilot_rollover;
+extern wxString _svg_raymarine_autopilot_toggled;
+#endif
 
 #endif /* ICONS_H */
