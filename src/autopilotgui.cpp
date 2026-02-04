@@ -5,6 +5,7 @@
 ///////////////////////////////////////////////////////////////////////////
 
 #include "autopilotgui.h"
+#include "ocpn_plugin.h"
 
 ///////////////////////////////////////////////////////////////////////////
 
@@ -201,19 +202,23 @@ m_Parameterdialog::m_Parameterdialog( wxWindow* parent, wxWindowID id, const wxS
 
 	fgSizer12->SetMinSize( FromDIP(wxSize( -1,40 )) );
 
-	fgSizer12->Add( 12, 0, 1, wxEXPAND, 5 );
+    wxString Emblem = GetPluginDataDir("raymarine_autopilot_pi") + wxFileName::GetPathSeparator() + _T("data") + wxFileName::GetPathSeparator() + _T("RaymarineAuto_emblem.png");
+        
+    m_bitmap1 = new wxStaticBitmap(this, wxID_ANY, wxBitmap(Emblem, wxBITMAP_TYPE_ANY), wxDefaultPosition, wxDefaultSize, 0);
+    m_bitmap1->SetFont(wxFont(wxNORMAL_FONT->GetPointSize(), wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, wxEmptyString));
+    fgSizer12->Add(m_bitmap1, 0, wxALL, 5);
 
 	m_AutopilotTypeText = new wxStaticText( this, wxID_ANY, _("Autopilot Type  :"), wxDefaultPosition, FromDIP(wxSize( -1,-1 )), 0 );
 	m_AutopilotTypeText->Wrap( -1 );
 	m_AutopilotTypeText->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD, false, wxEmptyString ) );
 
-	fgSizer12->Add( m_AutopilotTypeText, 0, wxALL, 14 );
+	fgSizer12->Add(m_AutopilotTypeText, 0, wxALIGN_CENTER_VERTICAL | wxBOTTOM | wxTOP, 14);
 
 	wxString m_AutopilotTypeChoices[] = { _("Raymarine Seatalk1 Autopilots (S1,S2,S3, ...), connected over NMEA0183/Seatalk1 translater"), _("Raymarine Seatalk1 Autopilot  connected over N2K/SeatalkNG Raymarine E22158 converter"), _("Raymarine EVO Autopilot (connected over N2K / SeatalkNG)"), _("Raymarine EVO Autopilot (connected over Seasmart NMEA0183 $PCDIN)") };
 	int m_AutopilotTypeNChoices = sizeof( m_AutopilotTypeChoices ) / sizeof( wxString );
 	m_AutopilotType = new wxChoice( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_AutopilotTypeNChoices, m_AutopilotTypeChoices, 0 );
 	m_AutopilotType->SetSelection( 0 );
-	fgSizer12->Add( m_AutopilotType, 0, wxALL, 11 );
+    fgSizer12->Add(m_AutopilotType, 0, wxALIGN_CENTER_VERTICAL | wxALL, 11);
 
 
 	bSizer2->Add( fgSizer12, 0, wxEXPAND, 20 );

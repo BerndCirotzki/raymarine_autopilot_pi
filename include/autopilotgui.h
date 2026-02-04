@@ -8,6 +8,10 @@
 #include <wx/artprov.h>
 #include <wx/xrc/xmlres.h>
 #include <wx/intl.h>
+#include <wx/bitmap.h>
+#include <wx/image.h>
+#include <wx/icon.h>
+#include <wx/statbmp.h>
 #include <wx/statline.h>
 #include <wx/gdicmn.h>
 #include <wx/font.h>
@@ -36,7 +40,7 @@ class m_dialog : public wxDialog
 {
 	private:
 
-	protected:
+	protected:        
 		wxStaticLine* StaticLine1;
 		wxTextCtrl* TextStatus;
 		wxTextCtrl* TextCompass;
@@ -89,6 +93,7 @@ class m_Parameterdialog : public wxDialog
 	private:
 
 	protected:
+        wxStaticBitmap* m_bitmap1;
 		wxStaticLine* m_staticline42;		
 		wxStaticLine* m_staticline4;
 		wxStaticLine* m_staticline41;
@@ -147,7 +152,7 @@ class m_Parameterdialog : public wxDialog
 #ifndef __WXMSW__
 		wxSize FromDIP(wxSize dummy) { return dummy; };
 #endif  
-		m_Parameterdialog( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Autopilot"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 737,718 ), long style = wxDEFAULT_DIALOG_STYLE );
+		m_Parameterdialog( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Autopilot"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 770,718 ), long style = wxDEFAULT_DIALOG_STYLE );
 
 		~m_Parameterdialog();
 
