@@ -313,8 +313,28 @@ m_Parameterdialog::m_Parameterdialog( wxWindow* parent, wxWindowID id, const wxS
 
 	m_Text1 = new wxStaticText( this, wxID_ANY, _("Change course value back to the last Compass course value, the Course Computer\nhad, before the Auto Signal lost"), wxDefaultPosition, FromDIP(wxSize( 500,-1 )), 0 );
 	m_Text1->Wrap( -1 );
-	fgSizer2->Add( m_Text1, 0, wxALL|wxALIGN_CENTER_VERTICAL, 3 );
+    fgSizer2->Add(m_Text1, 0, wxALL | wxALIGN_CENTER_VERTICAL, 3);
 
+    fgSizer2->Add(0, 0, 1, wxEXPAND, 5);
+    fgSizer2->Add(18, 0, 1, wxEXPAND, 5);
+    fgSizer2->Add(40, 20, 1, wxEXPAND, 5);
+
+    wxFlexGridSizer* fgSizer13;
+    fgSizer13 = new wxFlexGridSizer(0, 2, 0, 0);
+    fgSizer13->SetFlexibleDirection(wxBOTH);
+    fgSizer13->SetNonFlexibleGrowMode(wxFLEX_GROWMODE_SPECIFIED);
+
+    m_staticText18 = new wxStaticText(this, wxID_ANY, _("Max course change (deg) : "),  wxDefaultPosition, wxDefaultSize, 0);
+    m_staticText18->Wrap(-1);
+    fgSizer13->Add(m_staticText18, 0, wxALIGN_CENTER_VERTICAL | wxALL, 3);
+
+    MaxNewAutoValue = new wxTextCtrl(this, wxID_ANY, _("40"), wxDefaultPosition, wxDefaultSize, wxTE_CENTER);
+    MaxNewAutoValue->SetMaxLength(3);
+    MaxNewAutoValue->SetMaxSize(wxSize(40, -1));
+
+    fgSizer13->Add(MaxNewAutoValue, 0, wxALL, 0);
+
+    fgSizer2->Add(fgSizer13, 1, wxEXPAND, 0);
 
 	bSizer2->Add( fgSizer2, 0, wxEXPAND, 5 );
 
@@ -553,7 +573,9 @@ m_Parameterdialog::m_Parameterdialog( wxWindow* parent, wxWindowID id, const wxS
 	m_checkParameters->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( m_Parameterdialog::OnParameterChanged ), NULL, this );
 	m_SendNewAutoWind->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( m_Parameterdialog::OnAutoWindNew ), NULL, this );
 	m_SendNewAutoonStandby->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( m_Parameterdialog::OnNewAuto ), NULL, this );
+    m_NewStandbyNoStandbyReceived->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler(m_Parameterdialog::OnNewAutoNoStandby), NULL, this);
 	m_ResetStandbyCounter->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( m_Parameterdialog::OnStandbyCounterReset ), NULL, this );
+    m_ChangeValueToLast->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler(m_Parameterdialog::OnChangeValueToLast), NULL, this);
 	m_allowautocog->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( m_Parameterdialog::OnAutoCogchange ), NULL, this );
 }
 
@@ -564,6 +586,8 @@ m_Parameterdialog::~m_Parameterdialog()
 	m_checkParameters->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( m_Parameterdialog::OnParameterChanged ), NULL, this );
 	m_SendNewAutoWind->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( m_Parameterdialog::OnAutoWindNew ), NULL, this );
 	m_SendNewAutoonStandby->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( m_Parameterdialog::OnNewAuto ), NULL, this );
+    m_NewStandbyNoStandbyReceived->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler(m_Parameterdialog::OnNewAutoNoStandby), NULL, this);
 	m_ResetStandbyCounter->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( m_Parameterdialog::OnStandbyCounterReset ), NULL, this );
+    m_ChangeValueToLast->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler(m_Parameterdialog::OnChangeValueToLast), NULL, this);
 	m_allowautocog->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( m_Parameterdialog::OnAutoCogchange ), NULL, this );
 }

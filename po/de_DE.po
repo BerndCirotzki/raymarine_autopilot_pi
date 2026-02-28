@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: raymarine_autopilot_pi 0.3\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-01-26 16:55+0100\n"
-"PO-Revision-Date: 2026-01-26 16:59+0100\n"
+"POT-Creation-Date: 2026-02-28 15:18+0100\n"
+"PO-Revision-Date: 2026-02-28 15:20+0100\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: de_DE\n"
@@ -19,11 +19,14 @@ msgstr ""
 "X-Generator: Poedit 3.4.2\n"
 
 #
+msgid "40"
+msgstr ""
+
+#
 msgid "Allow use AUTO-COG function"
 msgstr "Aktiviere AUTO-COG Funktion"
 
 #
-#, fuzzy
 msgid "Autopilot"
 msgstr "Raymarine Autopilot"
 
@@ -106,6 +109,10 @@ msgstr ""
 "erstellen und OpenCPN neu starten"
 
 #
+msgid "Max course change (deg) : "
+msgstr "Maximale Kursabweichung (deg) : "
+
+#
 msgid ""
 "Modify RMC Sentence as \"$ECRMC\" and replace or fill with Variationfield "
 "with the value from WMM Plugin"
@@ -133,7 +140,7 @@ msgstr "Kein Wert ausgewählt"
 
 #
 msgid "Preferences..."
-msgstr "Autopilot Eigenschaften"
+msgstr "Eigenschaften..."
 
 #
 #
@@ -289,11 +296,15 @@ msgstr ""
 
 #
 #
+#
+#
 #~ msgid ""
 #~ "Send variation PGN 127258 to N2K/SeatalkNG with the value from WMM Plugin"
 #~ msgstr ""
 #~ "Sende Missweisung PGN 127258 über N2K/SeatalkNG mit dem Wert vom WMM Plugin"
 
+#
+#
 #
 #
 #

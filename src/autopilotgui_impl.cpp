@@ -60,18 +60,83 @@ void ParameterDialog::OnNewAuto(wxCommandEvent& event)
 		m_ResetStandbyCounter->Enable(false);
 		m_SelectCounterStandby->Enable(false);
 		m_Text->Enable(false);
+        m_ChangeValueToLast->Enable(false);
+        m_Text1->Enable(false);
+        m_staticText18->Enable(false);
+        MaxNewAutoValue->Enable(false);        
 		ptoPlugin->NewStandbyNoStandbyReceived = FALSE;
 	}
 	else
 	{
 		m_NewStandbyNoStandbyReceived->Enable(true);
-		m_NoStandbyCounter->Enable(true);
-		m_NoStandbyCounterValueText->Enable(true);
-		m_SelectCounterStandby->Enable(true);
-		m_ResetStandbyCounter->Enable(true);
-		m_SelectCounterStandby->Enable(true);
-		m_Text->Enable(true);
+        if (m_NewStandbyNoStandbyReceived->IsChecked())
+        {                
+		  m_NoStandbyCounter->Enable(true);
+		  m_NoStandbyCounterValueText->Enable(true);
+		  m_SelectCounterStandby->Enable(true);
+		  m_ResetStandbyCounter->Enable(true);
+		  m_SelectCounterStandby->Enable(true);
+		  m_Text->Enable(true);
+          m_ChangeValueToLast->Enable(true);
+          m_Text1->Enable(true);
+          if (m_ChangeValueToLast->IsChecked()) {        
+            m_staticText18->Enable(true);
+            MaxNewAutoValue->Enable(true);
+          } else {
+            m_staticText18->Enable(false);
+            MaxNewAutoValue->Enable(false);
+          }
+        }
 	}
+}
+
+void ParameterDialog::OnNewAutoNoStandby(wxCommandEvent& event)
+{
+  if (m_AutopilotType->GetSelection() != SMARTPILOT &&  m_AutopilotType->GetSelection() != SMARTPILOTN2K)
+    return;
+
+  if (!m_NewStandbyNoStandbyReceived->GetValue()) {
+    m_NoStandbyCounter->Enable(false);
+    m_NoStandbyCounterValueText->Enable(false);
+    m_SelectCounterStandby->Enable(false);
+    m_ResetStandbyCounter->Enable(false);
+    m_SelectCounterStandby->Enable(false);
+    m_Text->Enable(false);
+    m_ChangeValueToLast->Enable(false);
+    m_Text1->Enable(false);
+    m_staticText18->Enable(false);
+    MaxNewAutoValue->Enable(false);
+    ptoPlugin->NewStandbyNoStandbyReceived = FALSE;
+  } else {
+    m_NoStandbyCounter->Enable(true);
+    m_NoStandbyCounterValueText->Enable(true);
+    m_SelectCounterStandby->Enable(true);
+    m_ResetStandbyCounter->Enable(true);
+    m_SelectCounterStandby->Enable(true);
+    m_Text->Enable(true);
+    m_ChangeValueToLast->Enable(true);
+    m_Text1->Enable(true);
+    if (m_ChangeValueToLast->IsChecked()) {
+      m_staticText18->Enable(true);
+      MaxNewAutoValue->Enable(true);
+    } else {
+      m_staticText18->Enable(false);
+      MaxNewAutoValue->Enable(false);
+    }
+  }
+}
+
+void ParameterDialog::OnChangeValueToLast(wxCommandEvent& event)
+{
+  if (m_AutopilotType->GetSelection() != SMARTPILOT &&   m_AutopilotType->GetSelection() != SMARTPILOTN2K)
+    return;
+  if (m_ChangeValueToLast->IsChecked()) {
+    m_staticText18->Enable(true);
+    MaxNewAutoValue->Enable(true);
+  } else {
+    m_staticText18->Enable(false);
+    MaxNewAutoValue->Enable(false);
+  }
 }
 
 void ParameterDialog::OnAutoCogchange(wxCommandEvent& event)
@@ -119,6 +184,10 @@ void ParameterDialog::OnChoiceAutoPilot(wxCommandEvent& event)
         m_ResetStandbyCounter->Enable(false);
         m_SelectCounterStandby->Enable(false);
         m_Text->Enable(false);
+        m_ChangeValueToLast->Enable(false);
+        m_Text1->Enable(false);
+        m_staticText18->Enable(false);
+        MaxNewAutoValue->Enable(false);
         m_STALKreceivename->Enable(false);
         m_staticText11->Enable(false);
         m_STALKsendname->Enable(false);
@@ -142,13 +211,31 @@ void ParameterDialog::OnChoiceAutoPilot(wxCommandEvent& event)
         m_ChangeValueToLast->Enable(true);
         m_SendTrack->Enable(true);
         m_TimeToSendNewWaypiont->Enable(true);
-        m_NewStandbyNoStandbyReceived->Enable(true);
-        m_NoStandbyCounter->Enable(true);
-        m_NoStandbyCounterValueText->Enable(true);
-        m_SelectCounterStandby->Enable(true);
-        m_ResetStandbyCounter->Enable(true);
-        m_SelectCounterStandby->Enable(true);
-        m_Text->Enable(true);
+        if (m_SendNewAutoonStandby->IsChecked()) {
+          m_NewStandbyNoStandbyReceived->Enable(false);
+          m_NoStandbyCounter->Enable(false);
+          m_NoStandbyCounterValueText->Enable(false);
+          m_SelectCounterStandby->Enable(false);
+          m_ResetStandbyCounter->Enable(false);
+          m_SelectCounterStandby->Enable(false);
+          m_Text->Enable(false);
+          m_ChangeValueToLast->Enable(false);
+          m_Text1->Enable(false);
+          m_staticText18->Enable(false);
+          MaxNewAutoValue->Enable(false);
+        } else {        
+          m_NewStandbyNoStandbyReceived->Enable(true);
+          m_NoStandbyCounter->Enable(true);
+          m_NoStandbyCounterValueText->Enable(true);
+          m_SelectCounterStandby->Enable(true);
+          m_ResetStandbyCounter->Enable(true);
+          m_SelectCounterStandby->Enable(true);
+          m_Text->Enable(true);
+          m_ChangeValueToLast->Enable(true);
+          m_Text1->Enable(true);
+          m_staticText18->Enable(true);
+          MaxNewAutoValue->Enable(true);
+        }
         m_STALKreceivename->Enable(true);
         m_staticText11->Enable(true);
         m_STALKsendname->Enable(true);
@@ -454,7 +541,10 @@ void Dlg::OnContextMenuSelect(wxCommandEvent& event)
 {
     switch (event.GetId()) {
     case 0: {
+        plugin->Autopilot_Status_toolbar = UNKNOWNSWITCH;
+        plugin->m_bShowautopilot = !IsShown();
         Hide();
+        plugin->CacheSetToolbarToolBitmaps();
         return;
     }
     case 1: {

@@ -94,7 +94,7 @@ class m_Parameterdialog : public wxDialog
 
 	protected:
         wxStaticBitmap* m_bitmap1;
-		wxStaticLine* m_staticline42;		
+		wxStaticLine* m_staticline42;        		
 		wxStaticLine* m_staticline4;
 		wxStaticLine* m_staticline41;
 		wxStdDialogButtonSizer* m_sdbSizer1;
@@ -106,18 +106,22 @@ class m_Parameterdialog : public wxDialog
 		virtual void OnParameterChanged( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnAutoWindNew( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnNewAuto( wxCommandEvent& event ) { event.Skip(); }
+        virtual void OnNewAutoNoStandby(wxCommandEvent& event) { event.Skip(); }
 		virtual void OnStandbyCounterReset( wxCommandEvent& event ) { event.Skip(); }
+        virtual void OnChangeValueToLast(wxCommandEvent& event) { event.Skip(); }
 		virtual void OnAutoCogchange( wxCommandEvent& event ) { event.Skip(); }
 
 
 	public:
+        wxTextCtrl* MaxNewAutoValue;
 		wxStaticText* m_AutopilotTypeText;
-		wxChoice* m_AutopilotType;			
+		wxChoice* m_AutopilotType;
 		wxCheckBox* m_checkParameters;
 		wxStaticText* m_NoStandbyCounterValueText11;
 		wxSlider* m_Skalefaktor;
 		wxCheckBox* m_SendNewAutoWind;
 		wxCheckBox* m_SendNewAutoonStandby;
+        wxStaticText* m_staticText18;
 		wxCheckBox* m_NewStandbyNoStandbyReceived;
 		wxTextCtrl* m_NoStandbyCounter;
 		wxStaticText* m_NoStandbyCounterValueText;
@@ -129,10 +133,10 @@ class m_Parameterdialog : public wxDialog
 		wxCheckBox* m_SendTrack;
 		wxTextCtrl* m_TimeToSendNewWaypiont;
 		wxStaticText* m_NoStandbyCounterValueText1;
-        wxStaticText* m_staticText11;
-        wxStaticText* m_staticText21;
 		wxTextCtrl* m_STALKreceivename;
+		wxStaticText* m_staticText11;
 		wxTextCtrl* m_STALKsendname;
+		wxStaticText* m_staticText21;
 		wxCheckBox* m_WriteMessages;
 		wxCheckBox* m_WriteDebug;
 		wxCheckBox* m_ModyfyRMC;
@@ -147,12 +151,12 @@ class m_Parameterdialog : public wxDialog
 		wxTextCtrl* m_minspeedcog;
 		wxStaticText* m_minspeed;
 		wxTextCtrl* m_maxchangehdg;
-		wxStaticText* m_maxchangehdgtext;					 
+		wxStaticText* m_maxchangehdgtext;			 
 
 #ifndef __WXMSW__
 		wxSize FromDIP(wxSize dummy) { return dummy; };
 #endif  
-		m_Parameterdialog( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Autopilot"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 770,718 ), long style = wxDEFAULT_DIALOG_STYLE );
+		m_Parameterdialog( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Autopilot"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 776,738 ), long style = wxDEFAULT_DIALOG_STYLE );
 
 		~m_Parameterdialog();
 

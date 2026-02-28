@@ -129,6 +129,7 @@ int raymarine_autopilot_pi::Init(void)
 	  SendTrack = FALSE;
 	  GoneTimeToSendNewWaypoint = 0;
 	  TimeToSendNewWaypiont = 10; // Default 10 Sekunden.
+      MaxAutoLostValue = 40;
 	  WriteMessages = FALSE;
 	  WriteDebug = FALSE;
 	  ModyfyRMC = FALSE;
@@ -157,6 +158,8 @@ int raymarine_autopilot_pi::Init(void)
       p_AutoCogTimer = NULL;
       p_GPSTimer = NULL;
       MAGcourse = -1;
+      AutoCOGMagCourse = -1;
+      COGMAG_islocked = false;
       MyLastSend = Nothing;
       AutoPilotType = SMARTPILOT;
       DaysSince1970 = N2kUInt16NA;
@@ -164,6 +167,9 @@ int raymarine_autopilot_pi::Init(void)
       AutoCOGHeadingChange = 0;
       DialogStyle = wxDEFAULT_DIALOG_STYLE;
       //    And load the configuration items
+      m_shareLocn = GetPluginDataDir("raymarine_autopilot_pi") +
+                    wxFileName::GetPathSeparator() + _T("data") +
+                    wxFileName::GetPathSeparator();
       LoadConfig();
 	  if (Skalefaktor < 1 || Skalefaktor > 2.1)
 		  Skalefaktor = 1;
@@ -519,9 +525,10 @@ void raymarine_autopilot_pi::OnToolbarToolCallback(int id)
 	  }
 	  m_pDialog->Fit();
 	  //Toggle 
-	  m_bShowautopilot = !m_pDialog->IsShown();
+	  m_bShowautopilot = m_pDialog->IsShown();
+      Autopilot_Status_toolbar = UNKNOWNSWITCH;
       //    Toggle dialog? 
-      if(m_bShowautopilot) {
+      if(!m_bShowautopilot) {
           m_pDialog->Show();
 		  if (NoStandbyCounter != 0)
 		  {
@@ -546,8 +553,11 @@ void raymarine_autopilot_pi::OnToolbarToolCallback(int id)
 			  p_Resettimer = NULL;
 		  }
 	  }
+      m_bShowautopilot = m_pDialog->IsShown();
       // Toggle is handled by the toolbar but we must keep plugin manager b_toggle updated
       // to actual status to ensure correct status upon toolbar rebuild
+
+      CacheSetToolbarToolBitmaps();
       SetToolbarItemState( m_leftclick_tool_id, m_bShowautopilot );
 
       RequestRefresh(m_parent_window); // refresh main window
@@ -570,7 +580,8 @@ bool raymarine_autopilot_pi::LoadConfig(void)
 			NewAutoWindCommand = (bool) pConf->Read(_T("NewAutoWindCommand"), NewAutoWindCommand);
 			NewAutoOnStandby = (bool) pConf->Read(_T("NewAutoOnStandby"), NewAutoOnStandby);
 			SendTrack = (bool)pConf->Read(_T("SendTrack"), SendTrack);
-			TimeToSendNewWaypiont= pConf->Read(_T("TimeToSendNewWaypiont"), TimeToSendNewWaypiont);
+			TimeToSendNewWaypiont = pConf->Read(_T("TimeToSendNewWaypiont"), TimeToSendNewWaypiont);
+            MaxAutoLostValue = pConf->Read(_T("MaxAutoLostValue"), MaxAutoLostValue);
 			STALKSendName = pConf->Read(_T("STALKSendName"), STALKSendName);
 			STALKReceiveName = pConf->Read(_T("STALKReceiveName"), STALKReceiveName);
 			NewStandbyNoStandbyReceived = (bool) pConf->Read(_T("NewStandbyNoStandbyReceived"), NewStandbyNoStandbyReceived);
@@ -611,6 +622,7 @@ bool raymarine_autopilot_pi::SaveConfig(void)
 			pConf->Write(_T("NewAutoOnStandby"), NewAutoOnStandby);
 			pConf->Write(_T("SendTrack"), SendTrack);
 			pConf->Write(_T("TimeToSendNewWaypiont"), TimeToSendNewWaypiont);
+            pConf->Write(_T("MaxAutoLostValue"), MaxAutoLostValue);
 			pConf->Write(_T("STALKSendName"), STALKSendName);
 			pConf->Write(_T("STALKReceiveName"), STALKReceiveName);
 			pConf->Write(_T("NewStandbyNoStandbyReceived"), NewStandbyNoStandbyReceived);
@@ -645,13 +657,14 @@ void raymarine_autopilot_pi::ShowPreferencesDialog(wxWindow* parent)
         dialog->Move(wxPoint(x, y-200));
 	DimeWindow(dialog);
     dialog->m_AutopilotType->SetSelection(AutoPilotType);
-        if (AutoPilotType == EVO || AutoPilotType == EVOSEASMART)
+    if (AutoPilotType == EVO || AutoPilotType == EVOSEASMART)
     {        
         dialog->m_checkParameters->Enable(false);
         dialog->m_SendNewAutoonStandby->SetLabel(_("Send PGN 126720 (keystroke) instead of PGN 126208 (set heading) in AutoMode"));
         dialog->m_ChangeValueToLast->Enable(false);
         dialog->m_SendTrack->Enable(false);
         dialog->m_TimeToSendNewWaypiont->Enable(false);
+        dialog->m_staticText18->Enable(false);
         dialog->m_NewStandbyNoStandbyReceived->Enable(false);
         dialog->m_NoStandbyCounter->Enable(false);
         dialog->m_NoStandbyCounterValueText->Enable(false);
@@ -659,6 +672,10 @@ void raymarine_autopilot_pi::ShowPreferencesDialog(wxWindow* parent)
         dialog->m_ResetStandbyCounter->Enable(false);
         dialog->m_SelectCounterStandby->Enable(false);
         dialog->m_Text->Enable(false);
+        dialog->m_ChangeValueToLast->Enable(false);
+        dialog->m_Text1->Enable(false);
+        dialog->m_staticText18->Enable(false);
+        dialog->MaxNewAutoValue->Enable(false);
         dialog->m_STALKreceivename->Enable(false);
         dialog->m_staticText11->Enable(false);
         dialog->m_STALKsendname->Enable(false);
@@ -684,17 +701,21 @@ void raymarine_autopilot_pi::ShowPreferencesDialog(wxWindow* parent)
 	dialog->m_checkParameters->SetValue(ShowParameters);
 	dialog->m_SendNewAutoWind->SetValue(NewAutoWindCommand);
 	dialog->m_SendNewAutoonStandby->SetValue(NewAutoOnStandby);
+    dialog->m_NewStandbyNoStandbyReceived->SetValue(NewStandbyNoStandbyReceived);
 	dialog->m_ChangeValueToLast->SetValue(ChangeValueToLast);
 	dialog->m_SendTrack->SetValue(SendTrack);
 	dialog->m_TimeToSendNewWaypiont->SetValue(wxString::Format(wxT("%i"), TimeToSendNewWaypiont));
+    dialog->MaxNewAutoValue->SetValue(wxString::Format(wxT("%i"), MaxAutoLostValue));
 	dialog->m_WriteMessages->SetValue(WriteMessages);
 	dialog->m_WriteDebug->SetValue(WriteDebug);
 	dialog->m_ModyfyRMC->SetValue(ModyfyRMC);
 	dialog->m_STALKsendname->SetValue(STALKSendName);
 	dialog->m_STALKreceivename->SetValue(STALKReceiveName);
     dialog->m_Skalefaktor->SetValue(round((Skalefaktor - 1) * 10));
-	if (NewAutoOnStandby == TRUE)
-	{
+    if (AutoPilotType == SMARTPILOT || AutoPilotType == SMARTPILOTN2K)
+    { 
+	  if (NewAutoOnStandby == TRUE)
+	  {
 		dialog->m_NewStandbyNoStandbyReceived->Enable(false);
 		dialog->m_NoStandbyCounter->Enable(false);
 		dialog->m_NoStandbyCounterValueText->Enable(false);
@@ -702,9 +723,45 @@ void raymarine_autopilot_pi::ShowPreferencesDialog(wxWindow* parent)
 		dialog->m_ResetStandbyCounter->Enable(false);
 		dialog->m_SelectCounterStandby->Enable(false);
 		dialog->m_Text->Enable(false);
+        dialog->m_ChangeValueToLast->Enable(false);
+        dialog->m_Text1->Enable(false);
+        dialog->m_staticText18->Enable(false);
+        dialog->MaxNewAutoValue->Enable(false);
 		NewStandbyNoStandbyReceived = FALSE;
-	}
-	dialog->m_NewStandbyNoStandbyReceived->SetValue(NewStandbyNoStandbyReceived);
+	  } else {
+       dialog->m_NewStandbyNoStandbyReceived->Enable(true);
+       if (dialog->m_NewStandbyNoStandbyReceived->IsChecked()) {
+            dialog->m_NoStandbyCounter->Enable(true);
+            dialog->m_NoStandbyCounterValueText->Enable(true);
+            dialog->m_SelectCounterStandby->Enable(true);
+            dialog->m_ResetStandbyCounter->Enable(true);
+            dialog->m_SelectCounterStandby->Enable(true);
+            dialog->m_Text->Enable(true);
+            dialog->m_ChangeValueToLast->Enable(true);
+            dialog->m_Text1->Enable(true);
+            if (dialog->m_ChangeValueToLast->IsChecked()) {
+              dialog->m_staticText18->Enable(true);
+              dialog->MaxNewAutoValue->Enable(true);
+            } else {
+              dialog->m_staticText18->Enable(false);
+              dialog->MaxNewAutoValue->Enable(false);
+            }
+       } else {
+            dialog->m_NoStandbyCounter->Enable(false);
+            dialog->m_NoStandbyCounterValueText->Enable(false);
+            dialog->m_SelectCounterStandby->Enable(false);
+            dialog->m_ResetStandbyCounter->Enable(false);
+            dialog->m_SelectCounterStandby->Enable(false);
+            dialog->m_Text->Enable(false);
+            dialog->m_ChangeValueToLast->Enable(false);
+            dialog->m_Text1->Enable(false);
+            dialog->m_staticText18->Enable(false);
+            dialog->MaxNewAutoValue->Enable(false);
+            dialog->m_staticText18->Enable(false);
+            dialog->MaxNewAutoValue->Enable(false);
+       }
+      }
+    }	
 	dialog->m_NoStandbyCounter->SetValue(wxString::Format(wxT("%i"), NoStandbyCounter));
 	dialog->m_SelectCounterStandby->SetSelection(SelectCounterStandby);
     // Paramters Auto-COG
@@ -747,6 +804,7 @@ void raymarine_autopilot_pi::ShowPreferencesDialog(wxWindow* parent)
 		ChangeValueToLast = dialog->m_ChangeValueToLast->GetValue();
 		SendTrack = dialog->m_SendTrack->GetValue();
 		TimeToSendNewWaypiont = atoi(dialog->m_TimeToSendNewWaypiont->GetValue());
+        MaxAutoLostValue = atoi(dialog->MaxNewAutoValue->GetValue());
 		WriteMessages = dialog->m_WriteMessages->GetValue();
 		WriteDebug = dialog->m_WriteDebug->GetValue();
 		ModyfyRMC = dialog->m_ModyfyRMC->GetValue();
@@ -787,10 +845,11 @@ void raymarine_autopilot_pi::ShowPreferencesDialog(wxWindow* parent)
 			if (m_bShowautopilot)
 				m_pDialog->Show();
 			SetAutopilotparametersChangeable();
+            Autopilot_Status_toolbar = UNKNOWNSWITCH;
+            CacheSetToolbarToolBitmaps();
 		}
 		SaveConfig();
 	}
-
 	delete dialog;
 }
 
@@ -844,11 +903,46 @@ void raymarine_autopilot_pi::SetAutopilotparametersChangeable()
 
 }
 
+void raymarine_autopilot_pi::CacheSetToolbarToolBitmaps() {
+  if (Autopilot_Status == Autopilot_Status_toolbar && Autopilot_Status_toolbar_COG == AutoCOGStatus) {
+    return;  // no change needed
+  }
+
+  wxString icon;
+
+  switch (Autopilot_Status) {
+    case AUTOWIND:
+    case AUTO:
+    case AUTOTRACK:
+      if(AutoCOGStatus)
+          icon = m_shareLocn + wxT("RaymarineAuto_COG.svg");
+      else
+          icon = m_shareLocn + wxT("RaymarineAuto_Auto.svg");
+      break;
+    case STANDBY:
+      icon = m_shareLocn + wxT("RaymarineAuto_Standby.svg");
+      break;
+    default:
+      if (m_pDialog->IsShown())
+          icon = m_shareLocn + wxT("RaymarineAuto_rollover_pi.svg");
+      else
+          icon = m_shareLocn + wxT("RaymarineAuto_pi.svg");
+      break;    
+  }
+  if (!m_pDialog->IsShown())  // Autopilot ausgeblendet
+    icon = m_shareLocn + wxT("RaymarineAuto_pi.svg");
+  SetToolbarToolBitmapsSVG(m_leftclick_tool_id, icon, icon, icon);
+  SetToolbarItemState(m_leftclick_tool_id, m_bShowautopilot);
+  Autopilot_Status_toolbar = Autopilot_Status;
+  Autopilot_Status_toolbar_COG = AutoCOGStatus;
+}
+
 void raymarine_autopilot_pi::OnautopilotDialogClose()
 {
-    //m_bShowautopilot = false;
-    SetToolbarItemState( m_leftclick_tool_id, m_bShowautopilot );
+    Autopilot_Status_toolbar = UNKNOWNSWITCH;
     m_pDialog->Hide();
+    CacheSetToolbarToolBitmaps();
+    SetToolbarItemState( m_leftclick_tool_id, m_bShowautopilot );
 	SaveConfig();
     RequestRefresh(m_parent_window); // refresh main window
 }
@@ -1033,7 +1127,7 @@ void raymarine_autopilot_pi::ToAnalyseSentence(wxString& sentence_incomming)
 
 void raymarine_autopilot_pi::ToUpdateAutoPilotControlDisplay(wxString sentence)
 {
-    int tmp;
+    int SetCompassCourse;
 
 	if (NULL != p_Resettimer)
 	{
@@ -1048,10 +1142,12 @@ void raymarine_autopilot_pi::ToUpdateAutoPilotControlDisplay(wxString sentence)
 	m_pDialog->SetCopmpassTextColor(wxColour(0, 0, 64));
 	m_pDialog->SetTextStatusColor(wxColour(0, 0, 128));
 	Autopilot_Status = GetAutopilotMode(sentence);
+    CacheSetToolbarToolBitmaps();
 	switch (Autopilot_Status)
 	{
-		case	AUTO:
+		case AUTO:
 			if (WriteDebug) wxLogInfo(("Received Auto %s"), sentence);
+            GetAutopilotMAGCourse(sentence);  // Only to fill MAGCOG.
 			if (Autopilot_Status_Before != Autopilot_Status)
 			{
 				// Nur f?r Logging
@@ -1098,11 +1194,18 @@ void raymarine_autopilot_pi::ToUpdateAutoPilotControlDisplay(wxString sentence)
 				if (LastCompassCourse < 0 || LastCompassCourse > 360)
 				{
 					// Noch nicht gesetzt
-					if (WriteMessages) wxLogMessage("No Last Compass Course");
+                    if (WriteMessages) wxLogMessage("No or wrong last Compass Course %i", LastCompassCourse);
 					NeedCompassCorrection = false;
 					break;
 				}
-				if (atoi(GetAutopilotCompassCourse(sentence)) == LastCompassCourse)
+                SetCompassCourse = GetAutopilotSetCompassCourse(sentence);
+                if (SetCompassCourse < 0 || SetCompassCourse > 360) {
+                  // Error set Kompasscourse
+                  if (WriteMessages) wxLogMessage("Error : no correct set Compass Course %i", SetCompassCourse);
+                  NeedCompassCorrection = false;
+                  break;
+                }
+                if (SetCompassCourse == LastCompassCourse)
 				{
 					// Der alte Kurs ist eingestellt.
 					if (WriteMessages) wxLogMessage("Correct Compass ready");
@@ -1110,97 +1213,55 @@ void raymarine_autopilot_pi::ToUpdateAutoPilotControlDisplay(wxString sentence)
 				}
 				else
 				{
-					// Korrectur durchf?hren
-					// -------------------------------
-					tmp = atoi(GetAutopilotCompassCourse(sentence));
-					if (tmp < 0 || tmp > 360)
+					// Korrectur durchfuehren
+					// -------------------------------				
+                    int CompassDifferenz = abs(SetCompassCourse - LastCompassCourse);
+                    uint8_t ChangeValue = 0;
+                    if (CompassDifferenz > 180) // Anderung über 0 Grad
+                    {
+                      if ((SetCompassCourse - LastCompassCourse) < 0 ) // Compassänderung von 10 > 350 -> negativ
+                          ChangeValue = -1;   // Compassänderung von 10 > 350 -> negativ
+                      else 
+                          ChangeValue = 1;    // Compassänderung von 350 > 10 -> positiv
+                      CompassDifferenz = 360 - CompassDifferenz;
+                       
+                    }
+                    else { // Komassänderung nicht über 0 Grad
+                      if ((SetCompassCourse - LastCompassCourse) < 0)
+                        ChangeValue = 1;
+                      else
+                        ChangeValue = -1;
+                    }
+                    if (MaxAutoLostValue < CompassDifferenz || ChangeValue == 0)
 					{
-						//Fehler
-						if (WriteMessages) wxLogMessage("Compass Error");
+						// Nicht mehr als MaxAutoLostValue Grad Aenderung !!
+                      if (WriteMessages)
+                        wxLogMessage("No Correction more than %i degree", MaxAutoLostValue);
 						NeedCompassCorrection = false;
 						break;
 					}
-					if (180 > abs(tmp - LastCompassCourse) &&  30 < abs(tmp - LastCompassCourse))
-					{
-						// Nicht mehr als 30 Grad ?nderung !!
-						if (WriteMessages) wxLogMessage("No Correction more than 30 degree");
-						NeedCompassCorrection = false;
-						break;
-					}
-					if (WriteMessages) wxLogMessage(("Correct Compass course from %i to %i"),tmp, LastCompassCourse);
-					if (180 < abs(tmp - LastCompassCourse))
-					{
-						// ?ber Nodern ?ndern
-						if (tmp > LastCompassCourse)
-						{
-							// Compasskurs muss ?ber Norden mit PLus ver?ndert werden. (bis 0 Grad.)
-							if ((tmp - LastCompassCourse) >= 10)
-							{
-								// Mehr als 10 Grad differenz !! also +10 Grad ?ndern.
-								if (WriteMessages) wxLogMessage("Over North + 10");
-                                SendIncrementTen();
-							}
-							else
-							{
-								// Weniger als 10 Grad ?ndern.
-								if (WriteMessages) wxLogMessage("Over North + 1");
-                                SendIncrementOne();
-							}
-						}
-						else
-						{
-							// Compasskurs von z.B. 5 nach 340 ... ?ndern mit Minus
-							if ((LastCompassCourse - tmp) >= 10)
-							{
-								// Mehr als 10 Grad differenz !! also +10 Grad ?ndern.
-								if (WriteMessages) wxLogMessage("Over North - 10");
-                                SendDecrementTen();
-							}
-							else
-							{
-								// Weniger als 10 Grad ?ndern.
-								if (WriteMessages) wxLogMessage("Over North - 1");
-                                SendDecrementOne();
-							}
-						}
+                    if (WriteMessages) wxLogMessage(("Correct Compass course from %i to %i"), SetCompassCourse, LastCompassCourse);
+                    if (ChangeValue > 0)  // Change Course to right
+					{					  
+                      if (10 < CompassDifferenz){					
+						if (WriteMessages) wxLogMessage("Course correction +10");
+                        SendIncrementTen();
+					  } else {
+					    if(WriteMessages) wxLogMessage("Course correction + 1");
+                        SendIncrementOne();
+					  }
 					}
 					else
 					{
-						// Normale ?nderung nicht ?ber Norden.
-						if (tmp > LastCompassCourse)
-						{
-							// Der Neue Compasskurs ist gr?sser als der alte also Verkleineren.
-							if ((tmp - LastCompassCourse) >= 10)
-							{
-								// Mehr als 10 Grad differenz !! also +10 Grad ?ndern.
-								if (WriteMessages) wxLogMessage("Korrectur - 10");
-                                SendDecrementTen();
-							}
-							else
-							{
-								// Weniger als 10 Grad ?ndern.
-								if (WriteMessages) wxLogMessage("Korrectur - 1");
-                                SendDecrementOne();
-							}
-						}
-						else
-						{
-							// Der neue Compass kurs ist kleiner als der alte. also Vergr?ssern.
-							if ((LastCompassCourse - tmp) >= 10)
-							{
-								// Mehr als 10 Grad differenz !! also +10 Grad ?ndern.
-								if (WriteMessages) wxLogMessage("Korrectur + 10");
-                                SendIncrementTen();
-							}
-							else
-							{
-								// Weniger als 10 Grad ?ndern.
-								if (WriteMessages) wxLogMessage("Korrectur + 1");
-                                SendIncrementOne();
-							}
-						}
-					}
-				}
+                      if (10 < CompassDifferenz) {
+                        if (WriteMessages) wxLogMessage("Course correction -10");
+                        SendDecrementTen();
+                      } else {
+                        if (WriteMessages) wxLogMessage("Course correction -1");
+                        SendDecrementOne();
+                      }
+                    }
+				} // Ende Kurskorrectur durchführen.
 				if (m_pDialog != NULL && DisplayShow == 0)
 				{
 					m_pDialog->SetStatusText("Auto Correct");
@@ -1209,14 +1270,13 @@ void raymarine_autopilot_pi::ToUpdateAutoPilotControlDisplay(wxString sentence)
 			}
 			else
 			{
-				LastCompassCourse = atoi(GetAutopilotCompassCourse(sentence));
+                LastCompassCourse = GetAutopilotSetCompassCourse(sentence);
 				if (m_pDialog != NULL && DisplayShow == 0)
 				{
 					if (ConfirmNextWaypoint(sentence) == false) // Check if Print "NextWaypoint + Bearing"
 					{
-                        if (AutoCOGStatus == true)
-                        {
-                            GetAutopilotMAGCourse(sentence); // Only to fill MAGCOG.
+                        if (AutoCOGStatus == true)                        {
+                            
                             WriteCOGStatus();
                         }
                         else
@@ -1552,6 +1612,8 @@ void raymarine_autopilot_pi::ToUpdateAutoPilotControlDisplay(wxString sentence)
 			CounterStandbySentencesReceived = 0;
 			NeedCompassCorrection = false;
             MAGcourse = -1;
+            AutoCOGMagCourse = -1;
+            COGMAG_islocked = false;
             Received_65379 = false;
             GetHeadingFromSeatalkNG = false;
             EVOLockeHeading = N2kDoubleNA;
@@ -1760,16 +1822,26 @@ char raymarine_autopilot_pi::GetHexValue(char AsChar)
 }
 
 // This is the Set Value of Smartpilot
-wxString raymarine_autopilot_pi::GetAutopilotCompassCourse(wxString &sentence)
+wxString raymarine_autopilot_pi::GetAutopilotCompassCourse(wxString& sentence)
+{
+  int Course = GetAutopilotSetCompassCourse(sentence);
+  if (Course == -1)
+      return ("---");
+  if (Course < 0)
+      return(wxString::Format(wxT("Err - %i"),Course));
+  return (wxString::Format(wxT("%i"), Course));
+}
+
+int raymarine_autopilot_pi::GetAutopilotSetCompassCourse(wxString &sentence)
 {
     if (AutoPilotType != SMARTPILOT && AutoPilotType != SMARTPILOTN2K)
     {
         if (EVOLockeHeading != N2kDoubleNA)
         {
-            return(wxString::Format(wxT("%i"), (int)EVOLockeHeading));
+            return(int)EVOLockeHeading;
         }
         else
-            return ("-");
+            return -1;
     }
 	wxString s = sentence, HexValue;
 
@@ -1783,7 +1855,7 @@ wxString raymarine_autopilot_pi::GetAutopilotCompassCourse(wxString &sentence)
 		sLenght = sLenght - s.find(wxT(",")) - 1;
 		if (sLenght <= 0)
 		{
-			return ("---");
+			return -1;
 		}
 		s = s.Right(sLenght);
 		HexValue = s.Left(s.find(wxT(",")));
@@ -1791,40 +1863,43 @@ wxString raymarine_autopilot_pi::GetAutopilotCompassCourse(wxString &sentence)
 		if (i == 3) // High Bit
 		{
 			if (HexValue.Length() != 2)
-				return ("Err - 1");
+				return -2;
 			if (-1 == (parameter[0] = GetHexValue((char)HexValue.GetChar(0))))
-				return ("Err - 2");
+				return -3;
 		}
 		if (i == 4)
 		{
 			if (HexValue.Length() != 2)
-				return ("Err - 3");
+				return -4;
 			if (-1 == (parameter[1] = GetHexValue((char)HexValue.GetChar(0))))
-				return ("Err - 4");
+				return -5;
 			if (-1 == (parameter[2] = GetHexValue((char)HexValue.GetChar(1))))
-				return ("Err - 5");
+				return -6;
 			parameter[1] = (parameter[1] << 4) | parameter[2];
 		    if (360 <= (CompassValue = (int)((parameter[0] & 0x0c) >> 2) * 90 + parameter[1] / 2 + parameter[1] % 2)) // Very good checked with St6002
             {
                 CompassValue = 0;
             }
-			return(wxString::Format(wxT("%i"), CompassValue));
+			return CompassValue;
 		}
 	} 
-	return ("---"); // Nicht def
+	return -1; // Nicht def
 }
 
 // This ist the aktuelle MAG Compass Course of Boat
 wxString raymarine_autopilot_pi::GetAutopilotMAGCourse(wxString &sentence)
 {
-    if (AutoPilotType != SMARTPILOT && AutoPilotType != SMARTPILOTN2K)
-    {
-        if (MAGcourse != -1)
+      if (AutoPilotType != SMARTPILOT && AutoPilotType != SMARTPILOTN2K)
+      {        
+        MakeAutoCOGMagCourse(MAGcourse);
+        if (MAGcourse >= 0)
         {
             return(wxString::Format(wxT("%i"), MAGcourse));
+        } else {
+          if (MAGcourse > -3)  // more than one time not valid
+              MAGcourse--;          
+          return ("---");  // Nicht def
         }
-        else
-            return ("-"); // Nicht def
     }
 	wxString s = sentence, HexValue;
 
@@ -1867,11 +1942,48 @@ wxString raymarine_autopilot_pi::GetAutopilotMAGCourse(wxString &sentence)
                 CompassValue = 0;
             }
             MAGcourse = CompassValue;
+            MakeAutoCOGMagCourse(MAGcourse);
 			return(wxString::Format(wxT("%i"), CompassValue));
 		}
 	}
-    MAGcourse = -1;
+    if (MAGcourse < 0 && MAGcourse > -3)  // more than one time not valid
+       MAGcourse--;
+    else
+       MAGcourse = -1;
+    MakeAutoCOGMagCourse(MAGcourse);
 	return ("---"); // Nicht def
+}
+
+void raymarine_autopilot_pi::MakeAutoCOGMagCourse(int MagCourse)
+{
+  // save the last 3 Magcourses for Autocog
+  if (MagCourse < 0) {
+    if (MagCourse < -2)
+    {
+      AutoCOGMagCourse = -1;
+      AutoCOGMag_valid = 0;
+      AutoCOGMag_counter = 0;
+    }
+    return;
+  }
+  if (AutoCOGMag_counter >= 3) AutoCOGMag_counter = 0;
+  if (AutoCOGMag_valid < 3) AutoCOGMag_valid++;
+  int bmag = 0;
+
+  AutoCOGMag[AutoCOGMag_counter] = MagCourse;
+  COGMAG_islocked = true;  // Don't notify the AutoCOG when donin this here.
+  AutoCOGMagCourse = 0;
+  for (uint8_t i = 0; i < AutoCOGMag_valid; i++) {
+    if (AutoCOGMag[i] >= bmag) bmag = AutoCOGMag[i];
+  }
+  for (uint8_t i = 0; i < AutoCOGMag_valid; i++) {
+    AutoCOGMagCourse += AutoCOGMag[i];
+    if (AutoCOGMag[i] <= (bmag - 180)) AutoCOGMagCourse += 360;
+  }
+  AutoCOGMagCourse /= AutoCOGMag_valid;
+  while (AutoCOGMagCourse >= 360) AutoCOGMagCourse -= 360;
+  AutoCOGMag_counter++;
+  COGMAG_islocked = false;
 }
 
 wxString raymarine_autopilot_pi::GetAutopilotCompassDifferenz(wxString &sentence)
@@ -2307,11 +2419,18 @@ void raymarine_autopilot_pi::ResetAUTOCOGValues()
     DaysSince1970 = N2kUInt16NA;
     SOG_counter = 0;
     COG_counter = 0;
+    AutoCOGMag_counter = 0;
+    AutoCOGMag_valid = 0;
     SOG_valid = 0;
     COG_valid = 0;
-    for (i = 0; i < 3; i++) SOGA[i] = -1;
+    AutoCOGMagCourse = -1;
+    COGMAG_islocked = false;
+    for (i = 0; i < 3; i++) {
+      SOGA[i] = -1;
+      AutoCOGMag[i] = -1;
+    }
     SOG = 0;
-    for (i = 0; i < 30; i++)COGA[i] = -1;
+    for (i = 0; i < 30; i++) COGA[i] = -1;
     COG = -1;
     if (cogsensibility > 30 || cogsensibility < 1)
         cogsensibility = 15;
@@ -2385,6 +2504,7 @@ void raymarine_autopilot_pi::MakeCOGSOG(double SpeedOverGroundKnots, int TrackMa
     if (SOG_valid < 3 ) SOG_valid++;
     if (COG_valid < cogsensibility) COG_valid++;
     // SOG
+    COGMAG_islocked = true;  // Want a valid Value in Autocog Notify
     SOGA[SOG_counter] = SpeedOverGroundKnots;
     SOG = 0;
     for (i = 0; i < SOG_valid; i++) SOG += SOGA[i];
@@ -2403,9 +2523,10 @@ void raymarine_autopilot_pi::MakeCOGSOG(double SpeedOverGroundKnots, int TrackMa
             COG += 360;
     }
     COG /= COG_valid;
-    if (COG >= 360) COG -= 360;
+    while (COG >= 360) COG -= 360;
     SOG_counter++;
     COG_counter++;
+    COGMAG_islocked = false;
 }
 
 void raymarine_autopilot_pi::ActivateAutoCOG()
@@ -2433,6 +2554,13 @@ void raymarine_autopilot_pi::ActivateAutoCOG()
             DisplayShow = 4;
         }
         return;
+    }
+    if (AutoCOGMagCourse == -1) {
+      if (m_pDialog != NULL && DisplayShow == 0) {
+        m_pDialog->SetStatusText("No HDM");
+        DisplayShow = 4;
+      }
+      return;
     }
     AutoCOGStatus = true;
     LastChange = 0;
@@ -2491,9 +2619,9 @@ void raymarine_autopilot_pi::WriteCOGStatus()
 
 void AutoCogTimer::Notify()
 {
-    if (pAutopilot->Autopilot_Status != AUTO)
+  if (pAutopilot->Autopilot_Status != AUTO || pAutopilot->COGMAG_islocked)  
         return;
-    if (pAutopilot->COG == -1)
+  if (pAutopilot->COG == -1 || pAutopilot->AutoCOGMagCourse == -1)
     {
         pAutopilot->AutoCOGStatus = false;
         if (pAutopilot->p_GPSTimer != NULL)
@@ -2501,7 +2629,7 @@ void AutoCogTimer::Notify()
             delete (pAutopilot->p_GPSTimer);
             pAutopilot->p_GPSTimer = NULL;
         }
-        if (pAutopilot->WriteMessages) wxLogMessage(" COG lost for AutoCOG");
+        if (pAutopilot->WriteMessages) wxLogMessage(" COG or HDM lost for AutoCOG");
         if (pAutopilot->m_pDialog != 0)
         {
             if (pAutopilot->allowautocog)
@@ -2545,18 +2673,16 @@ void AutoCogTimer::Notify()
         return;
     }
     // Check COG and HDM
-    int MAGCOGdiff = pAutopilot->COG - pAutopilot->MAGcourse;
-    if (abs(MAGCOGdiff) > 180)
+    int MAGCOGdiff = abs(pAutopilot->COG - pAutopilot->AutoCOGMagCourse);
+    if (MAGCOGdiff > 180)
     {
-        if (pAutopilot->COG > pAutopilot->MAGcourse)
-            MAGCOGdiff = (pAutopilot->MAGcourse + 360) - pAutopilot->COG;
-        else
-            MAGCOGdiff = pAutopilot->MAGcourse - (pAutopilot->COG + 360);
+      MAGCOGdiff = 360 - MAGCOGdiff;
     }
-    if (abs(MAGCOGdiff) > pAutopilot->maxdegreediff && pAutopilot->MAGcourse != -1)
+    if (MAGCOGdiff > pAutopilot->maxdegreediff && pAutopilot->AutoCOGMagCourse != -1)
     {
         // diff between COG and MAG too big
-        if (pAutopilot->WriteMessages) wxLogMessage(" COG-HDM big");
+      if (pAutopilot->WriteMessages)
+          wxLogMessage(" COG-HDM big Diff: %i COG: %i HDM: %i", MAGCOGdiff, pAutopilot->COG, pAutopilot->AutoCOGMagCourse);
         pAutopilot->AutoCOGStatus = false;
         if (pAutopilot->p_GPSTimer != NULL)
         {
@@ -2583,7 +2709,8 @@ void AutoCogTimer::Notify()
     if (abs(pAutopilot->AutoCOGHeadingChange) > pAutopilot->maxchangehdg)
     {
         // Set HDG of Autopilot too big
-        if (pAutopilot->WriteMessages) wxLogMessage(" Set HDG too big");
+      if (pAutopilot->WriteMessages)
+        wxLogMessage(" Set HDG too big more than %i deg", abs(pAutopilot->AutoCOGHeadingChange));
         pAutopilot->AutoCOGStatus = false;
         if (pAutopilot->p_GPSTimer != NULL)
         {
@@ -2669,6 +2796,7 @@ void localTimer::Notify()
 	if (pAutopilot->WriteMessages) wxLogInfo("No Data from Autopilot Computer");
 	pAutopilot->Autopilot_Status = UNKNOWN;
     pAutopilot->MAGcourse = -1;
+    pAutopilot->AutoCOGMagCourse = -1;
     pAutopilot->Received_65379 = false;
     pAutopilot->GetHeadingFromSeatalkNG = false;
     pAutopilot->EVOLockeHeading = N2kDoubleNA;
@@ -2695,6 +2823,7 @@ void localTimer::Notify()
             pAutopilot->DeActivateAutoCOG();
         }
 	}
+    pAutopilot->CacheSetToolbarToolBitmaps();
 }
 
 //

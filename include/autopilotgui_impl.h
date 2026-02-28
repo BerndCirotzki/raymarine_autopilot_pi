@@ -44,6 +44,8 @@ public:
     void OnChoiceAutoPilot(wxCommandEvent& event);
 	void OnStandbyCounterReset(wxCommandEvent& event);
 	void OnNewAuto(wxCommandEvent& event);
+    void OnNewAutoNoStandby(wxCommandEvent& event);
+    void OnChangeValueToLast(wxCommandEvent& event);
     void OnAutoCogchange(wxCommandEvent& event);
 private:
 	raymarine_autopilot_pi* ptoPlugin;

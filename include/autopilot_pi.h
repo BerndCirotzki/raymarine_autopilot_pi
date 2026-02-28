@@ -57,6 +57,7 @@
 #define OFFCOURSE	7
 #define AUTOTURNWP  12
 #define UNKNOWN		0
+#define UNKNOWNSWITCH 13
 #define IncrementOne 8
 #define IncrementTen 9
 #define DecrementOne 10
@@ -148,10 +149,12 @@ public:
       void GetParameterRudderGain(int Value);
       void SelectParameterResponse();
       void SelectParameterRudderGain();
+      void CacheSetToolbarToolBitmaps();
 
       wxTimer          *p_GPSTimer;
       uint8_t          AutoPilotType;
 	  int			   Autopilot_Status;
+      int              Autopilot_Status_toolbar;
 	  int			   Autopilot_Status_Before;
 	  int			   DisplayShow; // Anzahl ser $STALK,84, ... Sequenzen, bis wieder Werte anzezeigt werden.
 	  bool			   ShowParameters;
@@ -160,6 +163,7 @@ public:
 	  bool			   ChangeValueToLast;
 	  bool			   SendTrack;
 	  int			   TimeToSendNewWaypiont;
+      int              MaxAutoLostValue;
 	  int		       GoneTimeToSendNewWaypoint;
 	  bool			   WriteMessages;
 	  bool			   WriteDebug;
@@ -183,9 +187,11 @@ public:
 	  Dlg			   *m_pDialog;
 	  wxString		   WayPointBearing;
       int              MAGcourse;
+      int              AutoCOGMagCourse;
       uint8_t          MyLastSend;
       // AUTO-COG
       bool             AutoCOGStatus;
+      bool             Autopilot_Status_toolbar_COG;
       bool             allowautocog;
       int              cogsensibility;
       int              maxdegreediff;
@@ -193,11 +199,16 @@ public:
       int              maxchangehdg;
       int              SOG_counter;
       int              COG_counter;
+      int              AutoCOGMag_counter;
       int              SOG_valid;
       int              COG_valid;
+      int              AutoCOGMag_valid;
       double           SOGA[3];
       double           SOG;
       int              COGA[30];
+      int              AutoCOGMag[3];
+      bool             COGMAG_islocked;
+
       int              COG;
       int              COGCourse;
       int8_t           LastChange;
@@ -211,14 +222,16 @@ public:
       // Dialog Style
       int              m_route_dialog_x, m_route_dialog_y;
       long             DialogStyle;
-
+      
 private:
+      void MakeAutoCOGMagCourse(int MagCourse);
       void SendN2kSeatal1kKeyStroke(uint8_t a, uint8_t b, uint8_t c, uint8_t d, uint8_t e = 0xff); // Smartpilot N2k
       void ToAnalyseSentence(wxString& sentence_incomming);
 	  int GetAutopilotMode(wxString &sentence);
 	  bool ConfirmNextWaypoint(const wxString &sentence);
 	  void GetWaypointBearing(const wxString &sentence);
 	  wxString GetAutopilotCompassCourse(wxString &sentence);
+      int GetAutopilotSetCompassCourse(wxString &sentence);
 	  wxString GetAutopilotMAGCourse(wxString &sentence);
 	  wxString GetAutopilotCompassDifferenz(wxString &sentence);
 	  char GetHexValue(char AsChar);	  
@@ -281,7 +294,9 @@ private:
       wxTimer          *p_AutoCogTimer;	  
       int               WMM_receive_count;
       N2kContainer*     pHandleN2k;
-      uint16_t          DaysSince1970;      
+      uint16_t          DaysSince1970;
+      // Icons
+      wxString          m_shareLocn;
 };
 
 class N2kContainer
