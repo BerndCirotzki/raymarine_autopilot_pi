@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: opencpn\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-02-28 15:18+0100\n"
+"POT-Creation-Date: 2026-03-29 15:15+0200\n"
 "PO-Revision-Date: 2023-11-09 21:22\n"
 "Last-Translator: \n"
 "Language-Team: Russian\n"
@@ -78,6 +78,9 @@ msgstr ""
 #
 msgid ""
 "For use EVO Pilot, define NMEA2000/SeatalkNG connection and restart OpenCPN"
+msgstr ""
+#
+msgid "Give sound message outputs"
 msgstr ""
 #
 msgid "Max course change (deg) : "

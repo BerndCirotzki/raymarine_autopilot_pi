@@ -138,6 +138,7 @@ class m_Parameterdialog : public wxDialog
 		wxTextCtrl* m_STALKsendname;
 		wxStaticText* m_staticText21;
 		wxCheckBox* m_WriteMessages;
+        wxCheckBox* m_Soundoutput;
 		wxCheckBox* m_WriteDebug;
 		wxCheckBox* m_ModyfyRMC;
 		wxCheckBox* m_allowautocog;
@@ -156,7 +157,7 @@ class m_Parameterdialog : public wxDialog
 #ifndef __WXMSW__
 		wxSize FromDIP(wxSize dummy) { return dummy; };
 #endif  
-		m_Parameterdialog( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Autopilot"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 776,738 ), long style = wxDEFAULT_DIALOG_STYLE );
+		m_Parameterdialog( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Autopilot"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 776,766 ), long style = wxDEFAULT_DIALOG_STYLE );
 
 		~m_Parameterdialog();
 

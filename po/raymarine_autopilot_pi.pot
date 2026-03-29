@@ -6,9 +6,9 @@
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: raymarine_autopilot_pi 2.4.1.0\n"
+"Project-Id-Version: raymarine_autopilot_pi 2.5.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-02-28 15:18+0100\n"
+"POT-Creation-Date: 2026-03-29 15:15+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -21,24 +21,24 @@ msgstr ""
 msgid "Autopilot Control"
 msgstr ""
 
-#: include/autopilotgui.h:159
+#: include/autopilotgui.h:160
 msgid "Autopilot"
 msgstr ""
 
-#: src/autopilot_pi.cpp:181 src/autopilot_pi.cpp:189
+#: src/autopilot_pi.cpp:182 src/autopilot_pi.cpp:190
 msgid "Raymarine Autopilot"
 msgstr ""
 
-#: src/autopilot_pi.cpp:311
+#: src/autopilot_pi.cpp:306
 msgid ""
 "For use EVO Pilot, define NMEA2000/SeatalkNG connection and restart OpenCPN"
 msgstr ""
 
-#: src/autopilot_pi.cpp:492
+#: src/autopilot_pi.cpp:487
 msgid "Raymarine Autopilot Control for Raymarine Smartpilot and EVO Pilots"
 msgstr ""
 
-#: src/autopilot_pi.cpp:497
+#: src/autopilot_pi.cpp:492
 msgid ""
 "Autopilot Control for Raymarine Smartpilot and Raymarine EVO\r\n"
 "Simulates a Remote Control (Commandos from ST600x), by sending Seatalk(1) or "
@@ -51,30 +51,30 @@ msgid ""
 "Or Send N2k Data to Raymarine EVO over NMEA2000 Connector mounted to OpenCPN."
 msgstr ""
 
-#: src/autopilot_pi.cpp:652
+#: src/autopilot_pi.cpp:649
 msgid "Autopilot Preferences"
 msgstr ""
 
-#: src/autopilot_pi.cpp:663 src/autopilotgui_impl.cpp:199
+#: src/autopilot_pi.cpp:660 src/autopilotgui_impl.cpp:199
 #: src/autopilotgui_impl.cpp:204
 msgid ""
 "Send PGN 126720 (keystroke) instead of PGN 126208 (set heading) in AutoMode"
 msgstr ""
 
-#: src/autopilot_pi.cpp:686 src/autopilot_pi.cpp:694
+#: src/autopilot_pi.cpp:683 src/autopilot_pi.cpp:691
 #: src/autopilotgui_impl.cpp:198 src/autopilotgui_impl.cpp:246
 msgid ""
 "Send variation PNG 127258 to N2K/SeatalkNG with the value from WMM Plugin"
 msgstr ""
 
-#: src/autopilot_pi.cpp:688 src/autopilot_pi.cpp:697 src/autopilotgui.cpp:414
+#: src/autopilot_pi.cpp:685 src/autopilot_pi.cpp:694 src/autopilotgui.cpp:417
 #: src/autopilotgui_impl.cpp:203 src/autopilotgui_impl.cpp:249
 msgid ""
 "Modify RMC Sentence as \"$ECRMC\" and replace or fill with Variationfield "
 "with the value from WMM Plugin"
 msgstr ""
 
-#: src/autopilot_pi.cpp:695 src/autopilot_pi.cpp:698
+#: src/autopilot_pi.cpp:692 src/autopilot_pi.cpp:695
 #: src/autopilotgui_impl.cpp:247 src/autopilotgui_impl.cpp:250
 msgid ""
 "Send new \"Auto\" or \"Auto - Wind\" Command, when \"Standby\" is not send "
@@ -187,40 +187,44 @@ msgid "Write Message Info to OPENCPN Logfile"
 msgstr ""
 
 #: src/autopilotgui.cpp:411
+msgid "Give sound message outputs"
+msgstr ""
+
+#: src/autopilotgui.cpp:414
 msgid "Debug all \"$STALK\" Messages into OPENCPN Logfile"
 msgstr ""
 
-#: src/autopilotgui.cpp:420
+#: src/autopilotgui.cpp:423
 msgid "Allow use AUTO-COG function"
 msgstr ""
 
-#: src/autopilotgui.cpp:431
+#: src/autopilotgui.cpp:434
 msgid ""
 "the autopilot controller will get new +1 or -1 keystroke information to hold "
 "the Course Over Ground."
 msgstr ""
 
-#: src/autopilotgui.cpp:446
+#: src/autopilotgui.cpp:449
 msgid "Sensibility "
 msgstr ""
 
-#: src/autopilotgui.cpp:453
+#: src/autopilotgui.cpp:456
 msgid "slow"
 msgstr ""
 
-#: src/autopilotgui.cpp:465
+#: src/autopilotgui.cpp:468
 msgid "fast"
 msgstr ""
 
-#: src/autopilotgui.cpp:494
+#: src/autopilotgui.cpp:497
 msgid "maximum difference between COG and magnetic heading in degrees"
 msgstr ""
 
-#: src/autopilotgui.cpp:520
+#: src/autopilotgui.cpp:523
 msgid "minimun speed in nodes (SOG) for using AUTO-COG function"
 msgstr ""
 
-#: src/autopilotgui.cpp:546
+#: src/autopilotgui.cpp:549
 msgid "maximum change of the \"is set pilot heading\" from last set in degrees"
 msgstr ""
 

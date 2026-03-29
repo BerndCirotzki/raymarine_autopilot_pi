@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: raymarine_autopilot_pi 1.0.2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-02-28 15:18+0100\n"
-"PO-Revision-Date: 2026-02-28 15:33+0100\n"
+"POT-Creation-Date: 2026-03-29 15:15+0200\n"
+"PO-Revision-Date: 2026-03-29 15:20+0200\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: nl\n"
@@ -106,6 +106,10 @@ msgid ""
 msgstr ""
 "Voor gebruik EVO Pilot, definieer NMEA2000/SeatalkNG verbinding en start "
 "OpenCPN opnieuw"
+
+#
+msgid "Give sound message outputs"
+msgstr "Geef geluidsberichten weer"
 
 #
 msgid "Max course change (deg) : "
@@ -302,10 +306,12 @@ msgstr ""
 #
 #
 #
+#
 #, fuzzy
 #~ msgid "Raymarine COG Autopilot"
 #~ msgstr "Raymarine Autopilot"
 
+#
 #
 #
 #
@@ -315,6 +321,7 @@ msgstr ""
 #~ msgstr ""
 #~ "Stuur variatie PGN 127258 naar N2K/SeatalkNG met de waarde van WMM Plugin"
 
+#
 #
 #
 #

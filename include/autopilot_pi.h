@@ -166,6 +166,7 @@ public:
       int              MaxAutoLostValue;
 	  int		       GoneTimeToSendNewWaypoint;
 	  bool			   WriteMessages;
+      bool             GiveSound;
 	  bool			   WriteDebug;
 	  bool			   ModyfyRMC;
       int			   LastCompassCourse;

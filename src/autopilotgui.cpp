@@ -408,6 +408,9 @@ m_Parameterdialog::m_Parameterdialog( wxWindow* parent, wxWindowID id, const wxS
 	m_WriteMessages = new wxCheckBox( this, wxID_ANY, _("Write Message Info to OPENCPN Logfile"), wxDefaultPosition, wxDefaultSize, 0 );
 	bSizer2->Add( m_WriteMessages, 0, wxALL, 5 );
 
+    m_Soundoutput = new wxCheckBox(this, wxID_ANY, _("Give sound message outputs"), wxDefaultPosition, wxDefaultSize, 0);
+    bSizer2->Add(m_Soundoutput, 0, wxALL, 5);
+  
 	m_WriteDebug = new wxCheckBox( this, wxID_ANY, _("Debug all \"$STALK\" Messages into OPENCPN Logfile"), wxDefaultPosition, wxDefaultSize, 0 );
 	bSizer2->Add( m_WriteDebug, 0, wxALL, 5 );
 

@@ -131,6 +131,7 @@ int raymarine_autopilot_pi::Init(void)
 	  TimeToSendNewWaypiont = 10; // Default 10 Sekunden.
       MaxAutoLostValue = 40;
 	  WriteMessages = FALSE;
+      GiveSound = FALSE;
 	  WriteDebug = FALSE;
 	  ModyfyRMC = FALSE;
 	  STALKSendName = "STALK";
@@ -282,24 +283,18 @@ int raymarine_autopilot_pi::Init(void)
           EnableEVOEvents();
       if (AutoPilotType == SMARTPILOTN2K)
           EnableSMARTPILOTN2KEvents();
+      if (GiveSound) {      
+          wxString fn = GetPluginDataDir("raymarine_autopilot_pi") +
+                        wxFileName::GetPathSeparator() + _T("data") +
+                        wxFileName::GetPathSeparator() + _T("Startup-Autopilotplugin.wav");      
+          PlugInPlaySound(fn);
+          wxSleep(1);
+      }
       return (WANTS_PREFERENCES |
 		      WANTS_TOOLBAR_CALLBACK |
 		      WANTS_NMEA_EVENTS |
 			  WANTS_NMEA_SENTENCES |
-			  WANTS_PLUGIN_MESSAGING);
-	
-	  /*
-	  return (WANTS_OVERLAY_CALLBACK |
-		  WANTS_OPENGL_OVERLAY_CALLBACK |
-		  WANTS_CURSOR_LATLON |
-		  WANTS_TOOLBAR_CALLBACK |
-		  INSTALLS_TOOLBAR_TOOL |
-		  WANTS_NMEA_EVENTS |
-		  WANTS_NMEA_SENTENCES |
-		  WANTS_PREFERENCES |
-		  WANTS_CONFIG |
-		  WANTS_PLUGIN_MESSAGING);
-        */ 
+			  WANTS_PLUGIN_MESSAGING);	  
 }
 
 
@@ -591,6 +586,7 @@ bool raymarine_autopilot_pi::LoadConfig(void)
 			SelectCounterStandby = pConf->Read(_T("SelectCounterStandby"), SelectCounterStandby);
             Skalefaktor = ((double)pConf->Read(_T("Skalefaktor"), Skalefaktor)) / 10;
 			WriteMessages = (bool)pConf->Read(_T("WriteMessages"), WriteMessages);
+            GiveSound = (bool)pConf->Read(_T("GiveSound"), GiveSound);
 			WriteDebug = (bool)pConf->Read(_T("WriteDebug"), WriteDebug);
 			ModyfyRMC = (bool)pConf->Read(_T("ModyfyRMC"), ModyfyRMC);
             allowautocog = (bool)pConf->Read(_T("allowautocog"), allowautocog);
@@ -632,6 +628,7 @@ bool raymarine_autopilot_pi::SaveConfig(void)
 			pConf->Write(_T("SelectCounterStandby"), SelectCounterStandby);
             pConf->Write(_T("Skalefaktor"), (int)(Skalefaktor * 10));
 			pConf->Write(_T("WriteMessages"), WriteMessages);
+            pConf->Write(_T("GiveSound"), GiveSound);
 			pConf->Write(_T("WriteDebug"), WriteDebug);
 			pConf->Write(_T("ModyfyRMC"), ModyfyRMC);
             pConf->Write(_T("allowautocog"), allowautocog);
@@ -707,6 +704,7 @@ void raymarine_autopilot_pi::ShowPreferencesDialog(wxWindow* parent)
 	dialog->m_TimeToSendNewWaypiont->SetValue(wxString::Format(wxT("%i"), TimeToSendNewWaypiont));
     dialog->MaxNewAutoValue->SetValue(wxString::Format(wxT("%i"), MaxAutoLostValue));
 	dialog->m_WriteMessages->SetValue(WriteMessages);
+    dialog->m_Soundoutput->SetValue(GiveSound);
 	dialog->m_WriteDebug->SetValue(WriteDebug);
 	dialog->m_ModyfyRMC->SetValue(ModyfyRMC);
 	dialog->m_STALKsendname->SetValue(STALKSendName);
@@ -806,6 +804,7 @@ void raymarine_autopilot_pi::ShowPreferencesDialog(wxWindow* parent)
 		TimeToSendNewWaypiont = atoi(dialog->m_TimeToSendNewWaypiont->GetValue());
         MaxAutoLostValue = atoi(dialog->MaxNewAutoValue->GetValue());
 		WriteMessages = dialog->m_WriteMessages->GetValue();
+        GiveSound = dialog->m_Soundoutput->GetValue();
 		WriteDebug = dialog->m_WriteDebug->GetValue();
 		ModyfyRMC = dialog->m_ModyfyRMC->GetValue();
 		STALKSendName = dialog->m_STALKsendname->GetValue();
@@ -1018,6 +1017,7 @@ void raymarine_autopilot_pi::ToAnalyseSentence(wxString& sentence_incomming)
     if (AutoPilotType != SMARTPILOT && AutoPilotType != SMARTPILOTN2K)
         return;
     wxString Lsentence = "$" + STALKReceiveName + ",84",
+    Lsentence_SettingMode = "$" + STALKReceiveName + ",95",
     Lsentence_Command = "$" + STALKReceiveName + ",86",
     Lsentence_Response = "$" + STALKReceiveName + ",87",
     Lsentence_Rudder = "$" + STALKReceiveName + ",91";
@@ -1117,7 +1117,8 @@ void raymarine_autopilot_pi::ToAnalyseSentence(wxString& sentence_incomming)
         MyLastSend = Nothing;
         return;
     }
-    if (sentence.Left(STALKReceiveName.length() + 4) != Lsentence) // Comes in 1 Second delay
+    if (sentence.Left(STALKReceiveName.length() + 4) != Lsentence &&
+        sentence.Left(STALKReceiveName.length() + 4) != Lsentence_SettingMode)  // Comes in 1 Second delay
         return;
     MyLastSend = Nothing;
     if (CounterStandbySentencesReceived == 0) // falls noch kein Kommando gekommen ist, bleibt der alte Status.
@@ -1489,10 +1490,16 @@ void raymarine_autopilot_pi::ToUpdateAutoPilotControlDisplay(wxString sentence)
 				
 			{
 				if (WriteMessages) wxLogMessage(("Standby received without StandbyCommand before %s"), sentence);
-				if (CounterStandbySentencesReceived < 3) // 4 Senteces warten, ob doch noch ein Commando kommt.
+				if (CounterStandbySentencesReceived < 2) // 3 Sentences warten, ob doch noch ein Commando kommt.
 				{
 					if (m_pDialog != NULL)
 					{
+                        if (GiveSound) {
+                           wxString fn = GetPluginDataDir("raymarine_autopilot_pi") +
+                                         wxFileName::GetPathSeparator() + _T("data") +
+                                         wxFileName::GetPathSeparator() + _T("error-autopilot-standby.wav");
+                                         PlugInPlaySound(fn);
+                        }
 						m_pDialog->SetStatusText("No Standby");
 						m_pDialog->SetCompassText("Error");
 					}
@@ -1635,7 +1642,9 @@ void raymarine_autopilot_pi::ToUpdateAutoPilotControlDisplay(wxString sentence)
 
 bool raymarine_autopilot_pi::ConfirmNextWaypoint(const wxString &sentence)
 {
-	if (sentence.Mid(STALKReceiveName.length() + 23, 2) == "02" || (AutoPilotType != SMARTPILOT && AutoPilotType != SMARTPILOTN2K)) // Don't know how to do with EVO
+  if (sentence.Mid(STALKReceiveName.length() + 23, 2) == "02" ||
+      sentence.Mid(STALKReceiveName.length() + 23, 2) == "00" ||        // Command 0x95 in Parameter setting mode
+      (AutoPilotType != SMARTPILOT && AutoPilotType != SMARTPILOTN2K))  // Don't know how to do with EVO
 	{
 		// Autopilot is in normal Mode
 		GoneTimeToSendNewWaypoint = 0;
@@ -1643,7 +1652,9 @@ bool raymarine_autopilot_pi::ConfirmNextWaypoint(const wxString &sentence)
 	}
 
 	char c,b;
-
+    wxString fn = GetPluginDataDir("raymarine_autopilot_pi") +
+                  wxFileName::GetPathSeparator() + _T("data") +
+                  wxFileName::GetPathSeparator();
 	if (-1 == (c = GetHexValue((char)(sentence.Mid(STALKReceiveName.length() + 23, 1)).GetChar(0))))
 	{
 		return false;
@@ -1657,6 +1668,10 @@ bool raymarine_autopilot_pi::ConfirmNextWaypoint(const wxString &sentence)
 	{ 
 		if (m_pDialog != NULL)
 		{
+            if (GiveSound) {             
+               fn += _T("next-waypoint.wav");
+               PlugInPlaySound(fn);
+            }
 			m_pDialog->SetStatusText("Next WayP.");
 			m_pDialog->SetCompassText(WayPointBearing);
 		}
@@ -1676,6 +1691,10 @@ bool raymarine_autopilot_pi::ConfirmNextWaypoint(const wxString &sentence)
 	{   
 		if (m_pDialog != NULL)
 		{
+            if (GiveSound) {
+              fn += _T("Waypoint-large-cross-track-error.wav");
+              PlugInPlaySound(fn);
+            }
 			m_pDialog->SetStatusText("WayPoint");
 			WayPointBearing = "large XTE";
 			m_pDialog->SetCompassText(WayPointBearing);
@@ -1690,6 +1709,10 @@ bool raymarine_autopilot_pi::ConfirmNextWaypoint(const wxString &sentence)
 	{
 		if (m_pDialog != NULL)
 		{
+            if (GiveSound) {
+              fn += _T("Waypoint-nodata.wav");
+              PlugInPlaySound(fn);
+            }
 			m_pDialog->SetStatusText("WayPoint");
 			WayPointBearing = "No Data";
 			m_pDialog->SetCompassText(WayPointBearing);
@@ -1733,8 +1756,18 @@ void raymarine_autopilot_pi::GetWaypointBearing(const wxString &sentence)
 
 int raymarine_autopilot_pi::GetAutopilotMode(wxString &sentence)
 {
-    if (AutoPilotType != SMARTPILOT && AutoPilotType != SMARTPILOTN2K)
-        return Autopilot_Status;
+    if (GiveSound && Autopilot_Status_Before == UNKNOWN) {
+       wxString fn = GetPluginDataDir("raymarine_autopilot_pi") +
+                  wxFileName::GetPathSeparator() + _T("data") +
+                  wxFileName::GetPathSeparator() + _T("connected-autopilot.wav");
+       PlugInPlaySound(fn);
+    }
+    if (WriteMessages && Autopilot_Status_Before == UNKNOWN)
+      wxLogInfo("connected to Autopilot");
+    if (AutoPilotType != SMARTPILOT && AutoPilotType != SMARTPILOTN2K) {
+       Autopilot_Status_Before = Autopilot_Status; 
+       return Autopilot_Status;
+    }
 
 	wxString s = sentence, HexValue;
 
@@ -1764,15 +1797,7 @@ int raymarine_autopilot_pi::GetAutopilotMode(wxString &sentence)
 			{
 				ReturnStatus = UNKNOWN;
 				break;
-			}
-		/*	if ((c & 0x08) == 0x08)
-				ReturnStatus = AUTOTRACK;
-			if ((c & 0x06) == 0x06 && ReturnStatus == UNKNOWN)
-				ReturnStatus = AUTOWIND;
-			if ((c & 0x02) == 0x02 && ReturnStatus == UNKNOWN)
-				ReturnStatus = AUTO;
-			if ((c & 0x02) == 0x00 && ReturnStatus == UNKNOWN)
-				ReturnStatus = STANDBY;  alte Version !! Fehler bei Standby und Autowind !   */
+			}		
 			if ((c & 0x02) == 0x00) // Wenn Bit 2 = 0 auf jeden Fall Standby.
 				ReturnStatus = STANDBY;
 			// Wenn Bit 2 gesetzt ist, ist auf jeden Fall ein Auto Mode.
@@ -2621,15 +2646,30 @@ void AutoCogTimer::Notify()
 {
   if (pAutopilot->Autopilot_Status != AUTO || pAutopilot->COGMAG_islocked)  
         return;
-  if (pAutopilot->COG == -1 || pAutopilot->AutoCOGMagCourse == -1)
-    {
+    wxString fn = GetPluginDataDir("raymarine_autopilot_pi") +
+                  wxFileName::GetPathSeparator() + _T("data") +
+                  wxFileName::GetPathSeparator();
+    if (pAutopilot->COG == -1 || pAutopilot->AutoCOGMagCourse == -1)    {
+       
         pAutopilot->AutoCOGStatus = false;
         if (pAutopilot->p_GPSTimer != NULL)
         {
             delete (pAutopilot->p_GPSTimer);
             pAutopilot->p_GPSTimer = NULL;
         }
-        if (pAutopilot->WriteMessages) wxLogMessage(" COG or HDM lost for AutoCOG");
+        if (pAutopilot->COG == -1 && pAutopilot->GiveSound) {
+            fn += _T("COG-lost.wav");
+            PlugInPlaySound(fn);
+        }
+        if (pAutopilot->COG == -1 && pAutopilot->WriteMessages)
+          wxLogMessage(" COG lost for AutoCOG");
+ 
+        if (pAutopilot->AutoCOGMagCourse == -1 && pAutopilot->GiveSound) {
+            fn += _T("HDM-lost.wav");
+            PlugInPlaySound(fn);
+        }
+        if (pAutopilot->AutoCOGMagCourse == -1 && pAutopilot->WriteMessages)
+          wxLogMessage(" HDM lost for AutoCOG");
         if (pAutopilot->m_pDialog != 0)
         {
             if (pAutopilot->allowautocog)
@@ -2639,7 +2679,7 @@ void AutoCogTimer::Notify()
             }
             if (pAutopilot->DisplayShow == 0)
             {
-                pAutopilot->m_pDialog->SetStatusText("COG lost");
+                pAutopilot->m_pDialog->SetStatusText("C/H lost");
                 pAutopilot->DisplayShow = 7;
             }
         }
@@ -2649,7 +2689,12 @@ void AutoCogTimer::Notify()
     // Check SOG too slow?
     if (pAutopilot->SOG < pAutopilot->minspeedcog)
     {
-        if (pAutopilot->WriteMessages) wxLogMessage(" SOG too slow");
+        if (pAutopilot->GiveSound) {
+           fn += _T("SOG-slow.wav");
+           PlugInPlaySound(fn);
+        }
+        if (pAutopilot->WriteMessages)
+           wxLogMessage(" SOG too slow");
         pAutopilot->AutoCOGStatus = false;
         if (pAutopilot->p_GPSTimer != NULL)
         {
@@ -2681,8 +2726,12 @@ void AutoCogTimer::Notify()
     if (MAGCOGdiff > pAutopilot->maxdegreediff && pAutopilot->AutoCOGMagCourse != -1)
     {
         // diff between COG and MAG too big
-      if (pAutopilot->WriteMessages)
-          wxLogMessage(" COG-HDM big Diff: %i COG: %i HDM: %i", MAGCOGdiff, pAutopilot->COG, pAutopilot->AutoCOGMagCourse);
+        if (pAutopilot->GiveSound) {
+          fn += _T("HDM-COG-difference.wav");
+          PlugInPlaySound(fn);
+        }
+        if (pAutopilot->WriteMessages)
+          wxLogMessage(" COG-HDM big Diff: %i COG: %i HDM: %i", MAGCOGdiff, pAutopilot->COG, pAutopilot->AutoCOGMagCourse);        
         pAutopilot->AutoCOGStatus = false;
         if (pAutopilot->p_GPSTimer != NULL)
         {
@@ -2709,8 +2758,12 @@ void AutoCogTimer::Notify()
     if (abs(pAutopilot->AutoCOGHeadingChange) > pAutopilot->maxchangehdg)
     {
         // Set HDG of Autopilot too big
-      if (pAutopilot->WriteMessages)
-        wxLogMessage(" Set HDG too big more than %i deg", abs(pAutopilot->AutoCOGHeadingChange));
+        if (pAutopilot->GiveSound) {
+           fn += _T("HDM-change.wav");
+           PlugInPlaySound(fn);
+        }
+        if (pAutopilot->WriteMessages)
+           wxLogMessage(" Set HDG too big more than %i deg", abs(pAutopilot->AutoCOGHeadingChange));
         pAutopilot->AutoCOGStatus = false;
         if (pAutopilot->p_GPSTimer != NULL)
         {
@@ -2793,8 +2846,17 @@ localTimer::localTimer(raymarine_autopilot_pi *pAuto)
 void localTimer::Notify()
 {
 	// Keine Informationen vom Kurscomputer
-	if (pAutopilot->WriteMessages) wxLogInfo("No Data from Autopilot Computer");
+    if (pAutopilot->GiveSound && pAutopilot->Autopilot_Status != UNKNOWN) {
+         wxString fn = GetPluginDataDir("raymarine_autopilot_pi") +
+                       wxFileName::GetPathSeparator() + _T("data") +
+                       wxFileName::GetPathSeparator() + _T("no-pilot.wav");
+         PlugInPlaySound(fn);
+    }
+    if (pAutopilot->WriteMessages && pAutopilot->Autopilot_Status != UNKNOWN) {     
+         wxLogInfo("No Data from Autopilot Computer");
+    }
 	pAutopilot->Autopilot_Status = UNKNOWN;
+    pAutopilot->Autopilot_Status_Before = UNKNOWN;
     pAutopilot->MAGcourse = -1;
     pAutopilot->AutoCOGMagCourse = -1;
     pAutopilot->Received_65379 = false;
@@ -3630,6 +3692,7 @@ void raymarine_autopilot_pi::HandleN2kMsg_Smartpilot126720(tN2kMsg N2kMsg)
     command += wxString::Format("%x", uV);
     command += wxString::Format("%x", lV);
     switch (Value[0]) {
+      case 0x95:
       case 0x84: Length = 9;  break;
       case 0x86: Length = 4; break;
       case 0x91:
