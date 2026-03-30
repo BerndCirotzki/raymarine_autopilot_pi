@@ -283,13 +283,13 @@ int raymarine_autopilot_pi::Init(void)
           EnableEVOEvents();
       if (AutoPilotType == SMARTPILOTN2K)
           EnableSMARTPILOTN2KEvents();
-      if (GiveSound) {      
+      /* if (GiveSound) {      
           wxString fn = GetPluginDataDir("raymarine_autopilot_pi") +
                         wxFileName::GetPathSeparator() + _T("data") +
                         wxFileName::GetPathSeparator() + _T("Startup-Autopilotplugin.wav");      
           PlugInPlaySound(fn);
           wxSleep(1);
-      }
+      } */
       return (WANTS_PREFERENCES |
 		      WANTS_TOOLBAR_CALLBACK |
 		      WANTS_NMEA_EVENTS |
