@@ -166,6 +166,7 @@ int raymarine_autopilot_pi::Init(void)
       DaysSince1970 = N2kUInt16NA;
       EVOLockeHeading = N2kDoubleNA;
       AutoCOGHeadingChange = 0;
+      inParameterSettingMode = 0;
       DialogStyle = wxDEFAULT_DIALOG_STYLE;
       //    And load the configuration items
       m_shareLocn = GetPluginDataDir("raymarine_autopilot_pi") +
@@ -1026,6 +1027,11 @@ void raymarine_autopilot_pi::ToAnalyseSentence(wxString& sentence_incomming)
         MyLastSend = Nothing;
     if (sentence.Left(STALKReceiveName.length() + 4) == Lsentence_Response)
     {
+        if (inParameterSettingMode > 0)
+        {
+           inParameterSettingMode--;
+           return;
+        }
         if (WriteDebug) wxLogInfo(("Response %s"), sentence);
         // Response Ermittlung.
         m_pDialog->SetCopmpassTextColor(wxColour(0, 0, 64));
@@ -1040,6 +1046,10 @@ void raymarine_autopilot_pi::ToAnalyseSentence(wxString& sentence_incomming)
     }
     if (sentence.Left(STALKReceiveName.length() + 4) == Lsentence_Rudder)
     {
+        if (inParameterSettingMode > 0) {
+          inParameterSettingMode--;
+          return;
+        }
         if (WriteDebug) wxLogInfo(("Rudder %s"), sentence);
         // Rudder Ermittlung. 
         m_pDialog->SetCopmpassTextColor(wxColour(0, 0, 64));
@@ -1120,6 +1130,21 @@ void raymarine_autopilot_pi::ToAnalyseSentence(wxString& sentence_incomming)
     if (sentence.Left(STALKReceiveName.length() + 4) != Lsentence &&
         sentence.Left(STALKReceiveName.length() + 4) != Lsentence_SettingMode)  // Comes in 1 Second delay
         return;
+    if ((sentence.Left(STALKReceiveName.length() + 4) == Lsentence ||
+         sentence.Left(STALKReceiveName.length() + 4) == Lsentence_SettingMode) &&
+         sentence.Length() != STALKReceiveName.length() + 31) // Autopilot sentence is not correct.So skip it
+    {
+      if (WriteMessages) wxLogMessage("Wrong Autopilot Statusmessage received %s", sentence);
+        return;
+    }
+    if (sentence.Left(STALKReceiveName.length() + 4) == Lsentence_SettingMode && inParameterSettingMode == 0)
+    {
+      inParameterSettingMode = 3;  // Only for toggle in Parameter setting Mode the Display
+      return;
+    }
+    if ((sentence.Left(STALKReceiveName.length() + 4) == Lsentence)) {
+      inParameterSettingMode = 0;
+    }
     MyLastSend = Nothing;
     if (CounterStandbySentencesReceived == 0) // falls noch kein Kommando gekommen ist, bleibt der alte Status.
         Autopilot_Status_Before = Autopilot_Status;
@@ -1159,7 +1184,6 @@ void raymarine_autopilot_pi::ToUpdateAutoPilotControlDisplay(wxString sentence)
                     m_pDialog->buttonAuto->SetFont(wxFont(Skalefaktor * 8, wxFONTFAMILY_SWISS, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD, false, wxT("Arial")));
                     m_pDialog->buttonAuto->SetForegroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_BTNTEXT));
                     m_pDialog->buttonAuto->SetBackgroundColour(wxColour(148, 88, 167));
-                    if (WriteMessages) wxLogMessage("Auto-Status changed to AUTOCOG");
                 }
 			}
 			if (StandbySelfPressed == TRUE)
@@ -1494,14 +1518,16 @@ void raymarine_autopilot_pi::ToUpdateAutoPilotControlDisplay(wxString sentence)
 				{
 					if (m_pDialog != NULL)
 					{
-                        if (GiveSound) {
+                        if (GiveSound && CounterStandbySentencesReceived == 1) {
                            wxString fn = GetPluginDataDir("raymarine_autopilot_pi") +
                                          wxFileName::GetPathSeparator() + _T("data") +
                                          wxFileName::GetPathSeparator() + _T("error-autopilot-standby.wav");
                                          PlugInPlaySound(fn);
                         }
-						m_pDialog->SetStatusText("No Standby");
-						m_pDialog->SetCompassText("Error");
+                        if (CounterStandbySentencesReceived == 1) {
+                           m_pDialog->SetStatusText("No Standby");
+						   m_pDialog->SetCompassText("Error");
+                        }
 					}
 					CounterStandbySentencesReceived++;
 					break;
@@ -1512,14 +1538,14 @@ void raymarine_autopilot_pi::ToUpdateAutoPilotControlDisplay(wxString sentence)
 					IS_standby = 0;
 					if (WriteMessages) wxLogMessage(("StandbyCommandreceived = False %s"), sentence);
 					CounterStandbySentencesReceived = 0;
-					Autopilot_Status = Autopilot_Status_Before; // Dadurch werden mehrere Seqnenzen gesendet, wenn n?tig.
+					Autopilot_Status = Autopilot_Status_Before; // Dadurch werden mehrere Seqenenzen gesendet, wenn noetig.
 					if (Autopilot_Status_Before == AUTO)
 					{
 						if (WriteMessages) wxLogMessage("---------------Send New Auto------------");
                         SendGotoAuto();
 						if (ChangeValueToLast == true)
 						{
-							// Kurskorrectur durchf?hren
+							// Kurskorrectur durchfuehren
 							if (WriteMessages) wxLogMessage("Course correction is enabled");
 							NeedCompassCorrection = true;
 						}
@@ -1763,7 +1789,7 @@ int raymarine_autopilot_pi::GetAutopilotMode(wxString &sentence)
        PlugInPlaySound(fn);
     }
     if (WriteMessages && Autopilot_Status_Before == UNKNOWN)
-      wxLogInfo("connected to Autopilot");
+      wxLogMessage("connected to Autopilot");
     if (AutoPilotType != SMARTPILOT && AutoPilotType != SMARTPILOTN2K) {
        Autopilot_Status_Before = Autopilot_Status; 
        return Autopilot_Status;
@@ -2793,9 +2819,9 @@ void AutoCogTimer::Notify()
     if (abs(COGdiff) > 180)
     {
         if (pAutopilot->COGCourse > pAutopilot->COG)
-            COGdiff = (pAutopilot->COG + 360) - pAutopilot->COGCourse;
+           COGdiff = pAutopilot->COG - (pAutopilot->COGCourse + 360);            
         else
-            COGdiff = pAutopilot->COG - (pAutopilot->COGCourse + 360);
+           COGdiff = (pAutopilot->COG + 360) - pAutopilot->COGCourse;
     }    
     if (COGdiff > 0) // Sollkurs ist gr?sser als istkurs  +1
     {
@@ -2853,7 +2879,7 @@ void localTimer::Notify()
          PlugInPlaySound(fn);
     }
     if (pAutopilot->WriteMessages && pAutopilot->Autopilot_Status != UNKNOWN) {     
-         wxLogInfo("No Data from Autopilot Computer");
+         wxLogMessage("No Data from Autopilot Computer");
     }
 	pAutopilot->Autopilot_Status = UNKNOWN;
     pAutopilot->Autopilot_Status_Before = UNKNOWN;

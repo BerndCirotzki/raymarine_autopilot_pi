@@ -298,6 +298,7 @@ private:
       uint16_t          DaysSince1970;
       // Icons
       wxString          m_shareLocn;
+      int               inParameterSettingMode;
 };
 
 class N2kContainer

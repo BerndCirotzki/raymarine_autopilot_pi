@@ -57,9 +57,9 @@ set(LONG_DESCRIPTION "Control Raymarine Autopilot using a NMEA0183 to ST1 Conver
 
 set(VERSION_MAJOR "2")
 set(VERSION_MINOR "5")
-set(VERSION_PATCH "0")
+set(VERSION_PATCH "1")
 set(VERSION_TWEAK "0")
-set(VERSION_DATE  "29/03/2026")#DD/MM/YYYY format
+set(VERSION_DATE  "16/08/2026")#DD/MM/YYYY format
 set(OCPN_MIN_VERSION "ov58")
 
 set(OCPN_API_VERSION_MAJOR "1")
